@@ -7,9 +7,8 @@
 
 import SwiftUI
 
-struct SignIn: App {
-    var body: some Scene {
-        WindowGroup {
-        }
+struct SignIn: View {
+    var body: some View {
+        Text("TODO: MAKE ME A SIGN ON PAGE")
     }
 }
