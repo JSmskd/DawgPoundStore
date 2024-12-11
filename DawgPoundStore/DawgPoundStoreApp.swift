@@ -12,7 +12,7 @@ struct DawgPoundStoreApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-            SignIn()
+            SignInView()
         }
     }
 }
