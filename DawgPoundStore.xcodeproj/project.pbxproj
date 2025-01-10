@@ -13,6 +13,9 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		585222602CFF731E0093499E /* DawgPoundStore */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			explicitFileTypes = {
+				DawgPoundLogo.png = image.png;
+			};
 			path = DawgPoundStore;
 			sourceTree = "<group>";
 		};
