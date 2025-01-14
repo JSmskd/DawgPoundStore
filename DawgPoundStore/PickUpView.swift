@@ -27,9 +27,9 @@ struct PickUpView: View {
                     // Cart Items with ScrollView
                     ScrollView {
                         VStack(spacing: 0) {
-                            CartItem()
+                            CartView()
                             Divider().background(Color.gray)
-                            CartItem()
+                            CartView()
                             Divider().background(Color.gray)
                         }
                         .padding(.horizontal)
