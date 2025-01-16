@@ -4,8 +4,8 @@
 <dict>
 	<key>UIAppFonts</key>
 	<array>
-		<string>Lexend/static/Lexend-Bold.ttf</string>
-		<string>Lexend/static/Lexend-Thin.ttf</string>
+		<string>Lexend-Bold.ttf</string>
+		<string>Lexand-Black.ttf</string>
 	</array>
 </dict>
 </plist>

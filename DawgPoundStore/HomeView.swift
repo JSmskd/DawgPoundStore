@@ -4,14 +4,14 @@ struct HomeView: View {
     let trendingItems = [
         ("Nike Hersey Classic Hoodie", "$55"),
         ("Nike Hersey Classic Tee", "$25"),
-        ("Nike Hersey Beanie", "$15"),
+        ("Nike Hersey Classic Tee", "$15"),
         ("Gildan Hersey Classic Sweatshirt", "$35"),
         ("Gildan Hersey Classic Sweatpants", "$25")
     ]
     
     let recentlyViewedItems = [
         ("Nike Hersey Classic Hoodie", "$55"),
-        ("Nike Hersey Beanie", "$15"),
+        ("Nike Hersey Classic Tee", "$15"),
         ("Gildan Hersey Classic Sweatpants", "$25")
     ]
     
@@ -20,10 +20,10 @@ struct HomeView: View {
             VStack(spacing: 40) {
                 // Header Section
                 ZStack(alignment: .bottomLeading) {
-                    Image("headerImage") // Replace with your header image
+                    Image("HeaderImage") // Replace with your header image
                         .resizable()
                         .scaledToFill()
-                        .frame(height: 400)
+                        .frame(height: 500)
                         .clipped()
                     
                     VStack(alignment: .leading) {
@@ -33,9 +33,10 @@ struct HomeView: View {
                         Text("Pound.")
                             .foregroundColor(.orange)
                     }
-                    .font(.custom("Lexend-Bold", size: 60))//.system(size: 60, weight: .bold))
+                    .font(.custom("Lexend-Bold", size: 90))//.system(size: 60, weight: .bold))
                     .padding(.leading)
-                    .padding(.bottom, 20)
+                    .padding(.bottom, 20
+)
                 }
                 
                 // Search Bar and Action Icons
