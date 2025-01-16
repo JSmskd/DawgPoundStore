@@ -12,15 +12,15 @@ This means all the styles are contained in a single file:
 If your app fully supports variable fonts, you can now pick intermediate styles
 that aren’t available as static fonts. Not all apps support variable fonts, and
 in those cases you can use the static font files for Lexend:
-  static/Lexend-Thin.ttf
-  static/Lexend-ExtraLight.ttf
-  static/Lexend-Light.ttf
-  static/Lexend-Regular.ttf
-  static/Lexend-Medium.ttf
-  static/Lexend-SemiBold.ttf
-  static/Lexend-Bold.ttf
-  static/Lexend-ExtraBold.ttf
-  static/Lexend-Black.ttf
+  Lexend/static/Lexend-Thin.ttf
+  Lexend/static/Lexend-ExtraLight.ttf
+  Lexend/static/Lexend-Light.ttf
+  Lexend/static/Lexend-Regular.ttf
+  Lexend/static/Lexend-Medium.ttf
+  Lexend/static/Lexend-SemiBold.ttf
+  Lexend/static/Lexend-Bold.ttf
+  Lexend/static/Lexend-ExtraBold.ttf
+  Lexend/static/Lexend-Black.ttf
 
 Get started
 -----------

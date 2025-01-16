@@ -28,13 +28,12 @@ struct HomeView: View {
                     
                     VStack(alignment: .leading) {
                         Text("The")
-                            .font(.system(size: 60, weight: .bold))
                             .foregroundColor(.white)
                         
                         Text("Pound.")
-                            .font(.system(size: 60, weight: .bold))
                             .foregroundColor(.orange)
                     }
+                    .font(.custom("Lexend-Bold", size: 60))//.system(size: 60, weight: .bold))
                     .padding(.leading)
                     .padding(.bottom, 20)
                 }
