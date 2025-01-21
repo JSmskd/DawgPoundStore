@@ -47,7 +47,7 @@ struct IndividualItemView: View {
                     // Color Options
                     VStack(alignment: .leading) {
                         Text("Gray")
-                            .font(Font.custom("Lexend", size: 16).weight(.light))
+                            .font(Font.custom("Lexend-Bold", size: 16).weight(.light))
                             .foregroundColor(.white)
 
                         HStack(spacing: 15) {
