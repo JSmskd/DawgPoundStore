@@ -8,12 +8,9 @@ struct CartView: View {
                     VStack {
                         // Header
                         HStack {
-                            Text("<")
-                                .font(.system(size: 48, weight: .bold))
-                                .foregroundColor(.white)
                             Spacer()
                             Text("My Cart")
-                                .font(.system(size: 24, weight: .bold))
+                                .font(Font.custom("Lexend-Bold", size: 24))
                                 .foregroundColor(.white)
                             Spacer()
                         }
@@ -31,26 +28,26 @@ struct CartView: View {
                         // Order Summary
                         VStack(alignment: .leading, spacing: 10) {
                             Text("Order Summary")
-                                .font(.system(size: 24, weight: .bold))
+                                .font(Font.custom("Lexend-Bold", size: 24))
                                 .foregroundColor(.white)
                             
                             HStack {
                                 Text("Clothing cost (2)")
-                                    .font(.system(size: 15))
+                                    .font(Font.custom("Lexend-Thin", size: 15))
                                     .foregroundColor(.white)
                                 Spacer()
                                 Text("$90")
-                                    .font(.system(size: 15))
+                                    .font(Font.custom("Lexend-Thin", size: 15))
                                     .foregroundColor(.white)
                             }
                             
                             HStack {
                                 Text("Maintenance fee")
-                                    .font(.system(size: 15))
+                                    .font(Font.custom("Lexend-Thin", size: 15))
                                     .foregroundColor(.white)
                                 Spacer()
                                 Text("$8")
-                                    .font(.system(size: 15))
+                                    .font(Font.custom("Lexend-Thin", size: 15))
                                     .foregroundColor(.white)
                             }
                             
@@ -59,11 +56,11 @@ struct CartView: View {
                             
                             HStack {
                                 Text("Total")
-                                    .font(.system(size: 24, weight: .bold))
+                                    .font(Font.custom("Lexend-Bold", size: 24))
                                     .foregroundColor(.white)
                                 Spacer()
                                 Text("$98.00")
-                                    .font(.system(size: 24, weight: .bold))
+                                    .font(Font.custom("Lexend-Bold", size: 24))
                                     .foregroundColor(.white)
                             }
                         }
@@ -77,7 +74,7 @@ struct CartView: View {
                             print("Pick up tapped")
                         }) {
                             Text("Pick up")
-                                .font(.system(size: 24, weight: .bold))
+                                .font(Font.custom("Lexend-Bold", size: 24))
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
                                 .padding()
