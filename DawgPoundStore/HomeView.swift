@@ -1,6 +1,7 @@
 import SwiftUI
 import MessageUI
 
+
 struct HomeView: View {
     let trendingItems = [
         ("Nike Hersey Classic Hoodie", "$55"),
@@ -159,12 +160,14 @@ struct HomeView: View {
                             .padding()
                         
                         // Add the link below the email text
-                        Link("dawgpound@d214.org", destination: URL(string: "mailto:dawgpound@d214.org")!)
+                        Link("dawgpound@d214.org", destination: URL(string:"mailto:dawgpound@d214.org")!)
+                       
                         //
                             .font(.footnote)
                             .foregroundColor(.blue)
                             .frame(maxWidth: .infinity, alignment: .center)
                             .padding(.top, 3)
+                        
                     }
                 }
 
@@ -205,4 +208,23 @@ struct DawgPoundInteractiveView_Previews: PreviewProvider {
         HomeView()
             .previewDevice("iPad Pro (11-inch) (4th generation)")
     }
+    
+    
+    
+    var body: some View {
+            Text("dawgpound@d214.org")
+                .foregroundColor(.blue)
+                .underline()
+                .onTapGesture {
+                    if let emailURL = URL(string: "mailto:dawgpound@d214.org") {
+                        if UIApplication.shared.canOpenURL(emailURL) {
+                            UIApplication.shared.open(emailURL)
+                        } else {
+                            print("Cannot open the email URL")
+                        }
+                    }
+                }
+        }
+
+    
 }
