@@ -12,11 +12,11 @@ struct YourApp: App {
 
   var body: some Scene {
     WindowGroup {
-      NavigationView {
+//      NavigationView {
           NavigationStack{
               HomeView()
           }
-      }
+//      }
     }
   }
 }
