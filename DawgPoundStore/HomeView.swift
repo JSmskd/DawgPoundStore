@@ -1,19 +1,16 @@
 import SwiftUI
+import MessageUI
 
 struct HomeView: View {
     let trendingItems = [
         ("Nike Hersey Classic Hoodie", "$55"),
-        ("Nike Hersey Classic Tee", "$25"),
-        ("Nike Hersey Classic Tee", "$15"),
-        ("Gildan Hersey Classic Sweatshirt", "$35"),
-        ("Gildan Hersey Classic Sweatpants", "$25")
+     
     ]
-    
-    let recentlyViewedItems = [
-        ("Nike Hersey Classic Hoodie", "$55"),
-        ("Nike Hersey Classic Tee", "$15"),
-        ("Gildan Hersey Classic Sweatpants", "$25")
-    ]
+//    PUT ME BACK LATER
+//    let recentlyViewedItems = [
+//        ("Nike Hersey Classic Hoodie", "$55"),
+//       
+//    ]
     
     var body: some View {
         ScrollView {
@@ -96,27 +93,28 @@ struct HomeView: View {
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)
                 
-                // Recently Viewed Section
-                VStack(alignment: .leading) {
-                    Text("Recently viewed")
-                        .font(.title2)
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                        .padding(.horizontal)
-                    
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 16) {
-                            ForEach(recentlyViewedItems, id: \.0) { item in
-                                Button(action: {
-                                    print("\(item.0) tapped")
-                                }) {
-                                    ProductCard(productName: item.0, productPrice: item.1)
-                                }
-                            }
-                        }
-                        .padding(.horizontal)
-                    }
-                }
+               // PUT ME BACK LATER!!
+//                // Recently Viewed Section
+//                VStack(alignment: .leading) {
+//                    Text("Recently viewed")
+//                        .font(.title2)
+//                        .fontWeight(.bold)
+//                        .foregroundColor(.white)
+//                        .padding(.horizontal)
+//                    
+//                    ScrollView(.horizontal, showsIndicators: false) {
+//                        HStack(spacing: 16) {
+//                            ForEach(recentlyViewedItems, id: \.0) { item in
+//                                Button(action: {
+//                                    print("\(item.0) tapped")
+//                                }) {
+//                                    ProductCard(productName: item.0, productPrice: item.1)
+//                                }
+//                            }
+//                        }
+//                        .padding(.horizontal)
+//                    }
+//                }
                 
                 // FAQ Section
                 VStack(alignment: .leading, spacing: 20) {
@@ -153,12 +151,23 @@ struct HomeView: View {
                 Button(action: {
                     print("Email footer tapped")
                 }) {
-                    Text("Email us with any other questions at dawgpound@d214.org")
-                        .font(.footnote)
-                        .foregroundColor(.gray)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .padding()
+                    VStack {
+                        Text("Email us with any other questions at")
+                            .font(.footnote)
+                            .foregroundColor(.gray)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .padding()
+                        
+                        // Add the link below the email text
+                        Link("dawgpound@d214.org", destination: URL(string: "mailto:dawgpound@d214.org")!)
+                        //
+                            .font(.footnote)
+                            .foregroundColor(.blue)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .padding(.top, 3)
+                    }
                 }
+
             }
         }
         .background(Color.black.edgesIgnoringSafeArea(.all))
