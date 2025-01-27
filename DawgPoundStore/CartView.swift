@@ -68,11 +68,8 @@ struct CartView: View {
                         .background(Color.gray.opacity(0.2))
                         .cornerRadius(10)
                         .padding(.horizontal)
-                        
-                        // Pickup Button
-                        Button(action: {
-                            print("Pick up tapped")
-                        }) {
+
+                        NavigationLink(destination: PickUpView()) {
                             Text("Pick up")
                                 .font(Font.custom("Lexend-Bold", size: 24))
                                 .foregroundColor(.white)
@@ -88,6 +85,7 @@ struct CartView: View {
         }
 
         struct CartItemView: View {
+            @State private var quantity: Int = 1
             var body: some View {
                 HStack {
                     Image(systemName: "photo")
@@ -112,19 +110,30 @@ struct CartView: View {
                     }
                     Spacer()
                     VStack {
-                        Button(action: { print("Decrease quantity") }) {
-                            Text("-")
-                                .font(.system(size: 24))
-                                .foregroundColor(Color.gray)
-                        }
-                        Text("1")
-                            .font(.system(size: 15))
-                            .foregroundColor(Color.gray)
-                        Button(action: { print("Increase quantity") }) {
-                            Text("+")
-                                .font(.system(size: 24))
-                                .foregroundColor(Color.gray)
-                        }
+                        HStack(spacing: 20) {
+                                    Button(action: {
+                                        if quantity > 1 {
+                                            quantity -= 1
+                                        }
+                                    }) {
+                                        Text("-")
+                                            .font(.system(size: 25))
+                                            .foregroundColor(Color.gray)
+                                    }
+
+                                    Text("\(quantity)")
+                                        .font(.system(size: 20))
+                                        .foregroundColor(Color.gray)
+
+                                    Button(action: {
+                                        quantity += 1
+                                    }) {
+                                        Text("+")
+                                            .font(.system(size: 25))
+                                            .foregroundColor(Color.gray)
+                                    }
+                                }
+                                .padding()
                     }
                 }
                 .padding()
