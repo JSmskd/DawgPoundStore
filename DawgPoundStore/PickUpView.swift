@@ -79,12 +79,8 @@ struct PickUpView: View {
                         .background(Color.gray.opacity(0.2))
                         .cornerRadius(10)
                         
-                        
-                        
-                        Button(action: {
-                            // Action for Pickup Button
-                        }) {
-                            Text("Pick up")
+                        NavigationLink(destination: FinalView()) {
+                            Text("Place order")
                                 .font(.headline)
                                 .font(Font.custom("Lexend-Regular", size: 24))
                                 .foregroundColor(.white)
@@ -92,15 +88,16 @@ struct PickUpView: View {
                                 .background(Color.orange)
                                 .cornerRadius(10)
                         }
+                        
+                        .frame(width: 200) // Fixed width for the right-side content
+                        .padding()
                     }
-                    .frame(width: 200) // Fixed width for the right-side content
-                    .padding()
                 }
             }
         }
     }
 }
-
-#Preview {
-    PickUpView()
-}
+    
+    #Preview {
+        PickUpView()
+    }
