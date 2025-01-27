@@ -49,14 +49,14 @@ struct HomeView: View {
                     
                     HStack(spacing: 20) {
                         Button(action: {
-                            print("Cart tapped")
+                            CartView()
                         }) {
                             Image(systemName: "cart")
                                 .font(.title)
                                 .foregroundColor(.white)
                         }
                         Button(action: {
-                            print("Favorites tapped")
+                            FavoritesView()
                         }) {
                             Image(systemName: "heart")
                                 .font(.title)

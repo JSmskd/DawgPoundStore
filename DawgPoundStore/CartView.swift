@@ -71,7 +71,7 @@ struct CartView: View {
                         
                         // Pickup Button
                         Button(action: {
-                            print("Pick up tapped")
+                            PickUpView()
                         }) {
                             Text("Pick up")
                                 .font(Font.custom("Lexend-Bold", size: 24))
