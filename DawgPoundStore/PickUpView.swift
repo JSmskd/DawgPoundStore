@@ -27,9 +27,26 @@ struct PickUpView: View {
                     // Cart Items with ScrollView
                     ScrollView {
                         VStack(spacing: 0) {
-                            CartView()
-                            Divider().background(Color.gray)
-                            CartView()
+                            Image(systemName: "photo")
+                                .resizable()
+                                .frame(width: 80, height: 80)
+                                .background(Color.gray.opacity(0.2))
+                                .cornerRadius(10)
+                            
+                            VStack(alignment: .leading, spacing: 5) {
+                                Text("Independent Trading Co.")
+                                    .font(.system(size: 10, weight: .light))
+                                    .foregroundColor(.white)
+                                Text("Hersey Hoodie with Husky Head")
+                                    .font(.system(size: 15, weight: .bold))
+                                    .foregroundColor(.white)
+                                Text("Gray")
+                                    .font(.system(size: 10))
+                                    .foregroundColor(.white)
+                                Text("Size S")
+                                    .font(.system(size: 10))
+                                    .foregroundColor(.white)
+                            }
                             Divider().background(Color.gray)
                         }
                         .padding(.horizontal)
