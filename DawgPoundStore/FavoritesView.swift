@@ -2,7 +2,7 @@ import SwiftUI
 
 struct FavoritesView: View {
     // Sample Product Data
-    let products = [
+    @State private var products = [
         Product(name: "Nike Hersey Classic Hoodie", price: "$55", isFavorite: true),
         Product(name: "Nike Hersey Beanie", price: "$15"),
         Product(name: "Gildan Hersey Classic Sweatpants", price: "$25", isFavorite: false),
@@ -23,10 +23,10 @@ struct FavoritesView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            
+            // Back Button and Title
             HStack {
                 Button(action: {
-                 
+                    print("Back button tapped")
                 }) {
                     Image(systemName: "chevron.left")
                         .foregroundColor(.white)
@@ -41,18 +41,18 @@ struct FavoritesView: View {
             .padding(.horizontal)
             .padding(.top)
 
-         
+            // Favorites Title
             Text("My Favorites")
                 .font(.custom("Lexend-Regular", size: 24))
                 .foregroundColor(.white)
                 .padding(.horizontal)
                 .padding(.top, 10)
 
-           
+            // Product Grid
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 20) {
-                    ForEach(products, id: \.id) { product in
-                        ProductView(product: product)
+                    ForEach($products) { $product in
+                        ProductView(product: $product)
                     }
                 }
                 .padding(.horizontal)
@@ -72,24 +72,29 @@ struct Product: Identifiable {
 
 // Single Product Card View
 struct ProductView: View {
-    let product: Product
+    @Binding var product: Product
     let cardHeight: CGFloat = 180
 
     var body: some View {
         VStack(spacing: 0) {
-            
+            // Product Image Placeholder with Favorite Button
             Rectangle()
                 .fill(Color.gray.opacity(0.5))
                 .frame(height: cardHeight)
                 .overlay(
-                    Image(systemName: product.isFavorite ? "heart.fill" : "heart")
-                        .foregroundColor(.white)
-                        .font(.system(size: 20, weight: .medium))
-                        .padding(8),
+                    Button(action: {
+                        product.isFavorite.toggle()
+                        print("\(product.name) favorite status: \(product.isFavorite)")
+                    }) {
+                        Image(systemName: product.isFavorite ? "heart.fill" : "heart")
+                            .foregroundColor(.white)
+                            .font(.system(size: 20, weight: .medium))
+                            .padding(8)
+                    },
                     alignment: .topTrailing
                 )
 
-     
+            // Product Info
             VStack(alignment: .leading, spacing: 4) {
                 Text(product.name)
                     .font(.custom("Lexend-Regular", size: 16))
@@ -101,9 +106,9 @@ struct ProductView: View {
             .padding(.horizontal, 8)
             .padding(.top, 4)
 
-          
+            // "Move to Cart" Button
             Button(action: {
-               
+                moveToCart()
             }) {
                 Text("Move to cart")
                     .font(.custom("Lexend-Bold", size: 16))
@@ -113,17 +118,22 @@ struct ProductView: View {
                     .background(Color.orange)
                     .cornerRadius(8)
             }
+            .padding(.horizontal, 8)
+            .padding(.bottom, 10)
         }
         .background(Color.black)
         .cornerRadius(10)
     }
-}
 
-
-struct FavoritesView_Previews: PreviewProvider {
-    static var previews: some View {
-        FavoritesView()
-          
+    // Move to Cart Function
+    private func moveToCart() {
+        print("\(product.name) moved to cart")
     }
 }
 
+// Preview
+struct FavoritesView_Previews: PreviewProvider {
+    static var previews: some View {
+        FavoritesView()
+    }
+}
