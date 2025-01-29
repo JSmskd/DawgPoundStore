@@ -45,20 +45,18 @@ struct HomeView: View {
                         .cornerRadius(12)
                         .padding(.horizontal)
                     
-                    HStack(spacing: 20) {
-                        Button(action: {
-                            print("Cart tapped")
-                        }) {
+                    HStack(spacing: 15) {
+                        NavigationLink(destination: CartView()) {
                             Image(systemName: "cart")
                                 .font(.title)
                                 .foregroundColor(.white)
+                                .padding()
                         }
-                        Button(action: {
-                            print("Favorites tapped")
-                        }) {
+                        NavigationLink(destination: FavoritesView()) {
                             Image(systemName: "heart")
                                 .font(.title)
                                 .foregroundColor(.white)
+                                .padding()
                         }
                     }
                     .padding(.trailing)

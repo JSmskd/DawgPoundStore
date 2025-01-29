@@ -3,9 +3,9 @@ import SwiftUI
 struct FavoritesView: View {
     // Sample Product Data
     let products = [
-        Product(name: "Nike Hersey Classic Hoodie", price: "$55"),
+        Product(name: "Nike Hersey Classic Hoodie", price: "$55", isFavorite: true),
         Product(name: "Nike Hersey Beanie", price: "$15"),
-        Product(name: "Gildan Hersey Classic Sweatpants", price: "$25"),
+        Product(name: "Gildan Hersey Classic Sweatpants", price: "$25", isFavorite: false),
         Product(name: "Gildan Hersey Classic Sweatshirt", price: "$35"),
         Product(name: "Nike Hersey Classic Hoodie", price: "$55"),
         Product(name: "Nike Hersey Beanie", price: "$15"),
@@ -67,6 +67,7 @@ struct Product: Identifiable {
     let id = UUID()
     let name: String
     let price: String
+    var isFavorite: Bool = false
 }
 
 // Single Product Card View
@@ -81,7 +82,7 @@ struct ProductView: View {
                 .fill(Color.gray.opacity(0.5))
                 .frame(height: cardHeight)
                 .overlay(
-                    Image(systemName: "heart")
+                    Image(systemName: product.isFavorite ? "heart.fill" : "heart")
                         .foregroundColor(.white)
                         .font(.system(size: 20, weight: .medium))
                         .padding(8),
