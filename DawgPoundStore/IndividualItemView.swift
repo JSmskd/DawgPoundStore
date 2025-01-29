@@ -1,32 +1,33 @@
-
-
 import SwiftUI
 
 struct IndividualItemView: View {
+    @State private var selectedColor: Color = .gray
+    @State private var selectedSize: String? = nil
+    @State private var showSizePicker = false
+    @State private var isFavorite = false
+
+    let colors: [Color] = [.white, Color(red: 0.43, green: 0.33, blue: 0.24), .gray]
+    let sizes: [String] = ["S", "M", "L", "XL", "XXL"]
+
     var body: some View {
         ZStack {
-            Color.black
-                .ignoresSafeArea()
+            Color.black.ignoresSafeArea()
 
             HStack(spacing: 30) {
-               
                 VStack {
-                    Image("hoodie_image") //HOODIE?
+                    Image("hoodie_image") // Ensure image is in assets
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(maxWidth: 500, maxHeight: 500)
                 }
 
-               
                 VStack(alignment: .leading, spacing: 20) {
-                   
                     Text("DAWG\nPOUND")
                         .font(Font.custom("Lexend", size: 36).weight(.bold))
                         .foregroundColor(Color(red: 1.0, green: 0.4, blue: 0.11))
-                    
-                    Spacer().frame(height: 10)
 
-                   
+                    Spacer().frame(height: 11)
+
                     Text("Independent Trading Co.")
                         .font(Font.custom("Lexend", size: 16).weight(.light))
                         .foregroundColor(.white)
@@ -39,82 +40,87 @@ struct IndividualItemView: View {
                         .font(Font.custom("Lexend", size: 14).weight(.light))
                         .foregroundColor(.white)
 
-                    // Price
                     Text("$45")
                         .font(Font.custom("Lexend", size: 24))
                         .foregroundColor(.white)
 
-                    // Color Options
                     VStack(alignment: .leading) {
-                        Text("Gray")
+                        Text("Color")
                             .font(Font.custom("Lexend-Bold", size: 16).weight(.light))
                             .foregroundColor(.white)
 
                         HStack(spacing: 15) {
-                            Circle()
-                                .fill(Color.white)
-                                .frame(width: 30, height: 30)
-                                .overlay(
-                                    Circle()
-                                        .stroke(Color.white, lineWidth: 1)
-                                )
-
-                            Circle()
-                                .fill(Color(red: 0.43, green: 0.33, blue: 0.24))
-                                .frame(width: 30, height: 30)
-                                .overlay(
-                                    Circle()
-                                        .stroke(Color.white, lineWidth: 1)
-                                )
-
-                            Circle()
-                                .fill(Color.gray)
-                                .frame(width: 30, height: 30)
-                                .overlay(
-                                    Circle()
-                                        .stroke(Color.white, lineWidth: 1)
-                                )
+                            ForEach(colors, id: \.self) { color in
+                                Circle()
+                                    .fill(color)
+                                    .frame(width: 30, height: 30)
+                                    .overlay(
+                                        Circle()
+                                            .stroke(selectedColor == color ? Color.orange : Color.white, lineWidth: 2)
+                                    )
+                                    .onTapGesture {
+                                        selectedColor = color
+                                    }
+                            }
                         }
                     }
 
-                    // Select Size Button
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 5)
-                            .fill(Color.gray.opacity(0.3))
-                            .frame(width: 300, height: 50)
-
-                        HStack {
-                            Text("Select a Size")
-                                .font(Font.custom("Lexend", size: 16))
-                                .foregroundColor(.white)
-
-                    
-                            
-                            Image(systemName: "chevron.down")
-                                .foregroundColor(.white)
-                        }
-                        .padding(.horizontal)
-                    }
-
-                    // Add to Cart Button
-                    HStack(spacing: 10) {
+                    Button(action: {
+                        showSizePicker.toggle()
+                    }) {
                         ZStack {
                             RoundedRectangle(cornerRadius: 5)
-                                .fill(Color.orange)
+                                .fill(Color.gray.opacity(0.3))
                                 .frame(width: 300, height: 50)
 
-                            Text("Add to cart - $45")
-                                .font(Font.custom("Lexend", size: 16))
-                                .foregroundColor(.white)
+                            HStack {
+                                Text(selectedSize ?? "Select a Size")
+                                    .font(Font.custom("Lexend", size: 16))
+                                    .foregroundColor(.white)
+
+                                Image(systemName: "chevron.down")
+                                    .foregroundColor(.white)
+                            }
+                            .padding(.horizontal)
+                        }
+                    }
+
+                    if showSizePicker {
+                        Picker("Select Size", selection: $selectedSize) {
+                            ForEach(sizes, id: \.self) { size in
+                                Text(size).tag(size as String?)
+                            }
+                        }
+                        .pickerStyle(MenuPickerStyle())
+                        .frame(width: 300)
+                    }
+
+                    HStack(spacing: 10) {
+                        Button(action: {
+                            // Add to cart functionality
+                        }) {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 5)
+                                    .fill(Color.orange)
+                                    .frame(width: 300, height: 50)
+
+                                Text("Add to cart - $45")
+                                    .font(Font.custom("Lexend", size: 16))
+                                    .foregroundColor(.white)
+                            }
                         }
 
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 5)
-                                .stroke(Color.orange, lineWidth: 1)
-                                .frame(width: 50, height: 50)
+                        Button(action: {
+                            isFavorite.toggle()
+                        }) {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 5)
+                                    .stroke(Color.orange, lineWidth: 1)
+                                    .frame(width: 50, height: 50)
 
-                            Image(systemName: "heart")
-                                .foregroundColor(.white)
+                                Image(systemName: isFavorite ? "heart.fill" : "heart")
+                                    .foregroundColor(.white)
+                            }
                         }
                     }
                 }
