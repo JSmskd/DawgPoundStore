@@ -1,79 +1,53 @@
-
 import SwiftUI
 
 struct PickUpView: View {
-    @State private var userMessage: String = ""
     var body: some View {
         ZStack {
-            Color.black.edgesIgnoringSafeArea(.all)
-            
-            VStack {
-                // Header
-                HStack {
-                    Image(systemName: "chevron.left")
-                        .foregroundColor(.white)
-                        .font(.system(size: 20, weight: .bold))
-                    Spacer()
-                    Image("DawgPoundLogo")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 100, height: 100)
-                    Spacer()
-                }
-                .padding()
-                
-                // Main content
-                HStack(alignment: .top) {
-                    // Cart Items with ScrollView
-                    ScrollView {
-                        VStack(spacing: 0) {
-                            Image(systemName: "photo")
-                                .resizable()
-                                .frame(width: 80, height: 80)
-                                .background(Color.gray.opacity(0.2))
-                                .cornerRadius(10)
-                            
-                            VStack(alignment: .leading, spacing: 5) {
-                                Text("Independent Trading Co.")
-                                    .font(.system(size: 10, weight: .light))
-                                    .foregroundColor(.white)
-                                Text("Hersey Hoodie with Husky Head")
-                                    .font(.system(size: 15, weight: .bold))
-                                    .foregroundColor(.white)
-                                Text("Gray")
-                                    .font(.system(size: 10))
-                                    .foregroundColor(.white)
-                                Text("Size S")
-                                    .font(.system(size: 10))
-                                    .foregroundColor(.white)
-                            }
-                            Divider().background(Color.gray)
+                    Color.black.edgesIgnoringSafeArea(.all) // Background color
+                    
+                    VStack {
+                        // Header
+                        HStack {
+                            Spacer()
+                            Text("Pick Up Order")
+                                .font(Font.custom("Lexend-Bold", size: 24))
+                                .foregroundColor(.white)
+                            Spacer()
                         }
-                        .padding(.horizontal)
-                    }
-                    
-                    Spacer()
-                    
-                    // Order Summary and Pickup Button
-                    VStack(spacing: 15) {
-                        VStack(spacing: 10) {
+                        .padding()
+                        
+                        // Cart Items
+                        ScrollView {
+                            VStack(spacing: 20) {
+                                CartItemView()
+                                CartItemView()
+                            }
+                            .padding(.horizontal)
+                        }
+                        
+                        // Order Summary
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text("Order Summary")
+                                .font(Font.custom("Lexend-Bold", size: 24))
+                                .foregroundColor(.white)
+                            
                             HStack {
                                 Text("Clothing cost (2)")
-                                    .font(Font.custom("Lexend-Regular", size: 15))
+                                    .font(Font.custom("Lexend-Thin", size: 15))
                                     .foregroundColor(.white)
                                 Spacer()
                                 Text("$90")
-                                    .font(Font.custom("Lexend-Regular", size: 15))
+                                    .font(Font.custom("Lexend-Thin", size: 15))
                                     .foregroundColor(.white)
                             }
                             
                             HStack {
                                 Text("Maintenance fee")
-                                    .font(Font.custom("Lexend-Regular", size: 15))
+                                    .font(Font.custom("Lexend-Thin", size: 15))
                                     .foregroundColor(.white)
                                 Spacer()
                                 Text("$8")
-                                    .font(Font.custom("Lexend-Regular", size: 15))
+                                    .font(Font.custom("Lexend-Thin", size: 15))
                                     .foregroundColor(.white)
                             }
                             
@@ -82,39 +56,36 @@ struct PickUpView: View {
                             
                             HStack {
                                 Text("Total")
-                                    .font(.headline)
-                                    .font(Font.custom("Lexend-Regular", size: 24))
+                                    .font(Font.custom("Lexend-Bold", size: 24))
                                     .foregroundColor(.white)
                                 Spacer()
                                 Text("$98.00")
-                                    .font(.headline)
-                                    .font(Font.custom("Lexend-Regular", size: 24))
+                                    .font(Font.custom("Lexend-Bold", size: 24))
                                     .foregroundColor(.white)
                             }
                         }
                         .padding()
                         .background(Color.gray.opacity(0.2))
                         .cornerRadius(10)
-                        
+                        .padding(.horizontal)
+
                         NavigationLink(destination: FinalView()) {
                             Text("Place order")
-                                .font(.headline)
-                                .font(Font.custom("Lexend-Regular", size: 24))
+                                .font(Font.custom("Lexend-Bold", size: 24))
                                 .foregroundColor(.white)
-                                .frame(maxWidth: .infinity, minHeight: 50)
+                                .frame(maxWidth: .infinity)
+                                .padding()
                                 .background(Color.orange)
                                 .cornerRadius(10)
                         }
-                        
-                        .frame(width: 200) // Fixed width for the right-side content
                         .padding()
                     }
                 }
             }
         }
-    }
-}
-    
-    #Preview {
-        PickUpView()
-    }
+
+        struct PickUpView_Previews: PreviewProvider {
+            static var previews: some View {
+                PickUpView()
+            }
+        }
