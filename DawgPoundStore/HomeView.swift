@@ -1,17 +1,9 @@
 import SwiftUI
-import MessageUI
-
 
 struct HomeView: View {
     let trendingItems = [
         ("Nike Hersey Classic Hoodie", "$55"),
-     
     ]
-//    PUT ME BACK LATER
-//    let recentlyViewedItems = [
-//        ("Nike Hersey Classic Hoodie", "$55"),
-//       
-//    ]
     
     var body: some View {
         ScrollView {
@@ -31,10 +23,9 @@ struct HomeView: View {
                         Text("Pound.")
                             .foregroundColor(.orange)
                     }
-                    .font(.custom("Lexend-Bold", size: 90))//.system(size: 60, weight: .bold))
+                    .font(.custom("Lexend-Bold", size: 90))
                     .padding(.leading)
-                    .padding(.bottom, 20
-)
+                    .padding(.bottom, 20)
                 }
                 
                 // Search Bar and Action Icons
@@ -92,29 +83,6 @@ struct HomeView: View {
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)
                 
-               // PUT ME BACK LATER!!
-//                // Recently Viewed Section
-//                VStack(alignment: .leading) {
-//                    Text("Recently viewed")
-//                        .font(.title2)
-//                        .fontWeight(.bold)
-//                        .foregroundColor(.white)
-//                        .padding(.horizontal)
-//                    
-//                    ScrollView(.horizontal, showsIndicators: false) {
-//                        HStack(spacing: 16) {
-//                            ForEach(recentlyViewedItems, id: \.0) { item in
-//                                Button(action: {
-//                                    print("\(item.0) tapped")
-//                                }) {
-//                                    ProductCard(productName: item.0, productPrice: item.1)
-//                                }
-//                            }
-//                        }
-//                        .padding(.horizontal)
-//                    }
-//                }
-                
                 // FAQ Section
                 VStack(alignment: .leading, spacing: 20) {
                     Text("FAQ")
@@ -157,18 +125,13 @@ struct HomeView: View {
                             .frame(maxWidth: .infinity, alignment: .center)
                             .padding()
                         
-                        // Add the link below the email text
                         Link("dawgpound@d214.org", destination: URL(string:"mailto:dawgpound@d214.org")!)
-                       
-                        //
                             .font(.footnote)
                             .foregroundColor(.blue)
                             .frame(maxWidth: .infinity, alignment: .center)
                             .padding(.top, 3)
-                        
                     }
                 }
-
             }
         }
         .background(Color.black.edgesIgnoringSafeArea(.all))
@@ -206,23 +169,4 @@ struct DawgPoundInteractiveView_Previews: PreviewProvider {
         HomeView()
             .previewDevice("iPad Pro (11-inch) (4th generation)")
     }
-    
-    
-    
-    var body: some View {
-            Text("dawgpound@d214.org")
-                .foregroundColor(.blue)
-                .underline()
-                .onTapGesture {
-                    if let emailURL = URL(string: "mailto:dawgpound@d214.org") {
-                        if UIApplication.shared.canOpenURL(emailURL) {
-                            UIApplication.shared.open(emailURL)
-                        } else {
-                            print("Cannot open the email URL")
-                        }
-                    }
-                }
-        }
-
-    
 }
