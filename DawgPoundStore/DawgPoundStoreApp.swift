@@ -9,12 +9,12 @@ import SwiftUI
 
 @main
 struct YourApp: App {
-
+    @StateObject var model = ItemViewModel()
   var body: some Scene {
     WindowGroup {
 //      NavigationView {
           NavigationStack{
-              HomeView()
+              HomeView(_model)
           }
 //      }
     }

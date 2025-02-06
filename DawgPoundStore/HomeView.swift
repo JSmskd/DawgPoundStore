@@ -1,9 +1,15 @@
 import SwiftUI
 
 struct HomeView: View {
-    let trendingItems = [
-        ("Nike Hersey Classic Hoodie", "$55"),
-    ]
+    var model:StateObject<ItemViewModel>
+    init (_ model:StateObject<ItemViewModel>) {
+        self.model = model
+//        trendingItems = []//model.wrappedValue.getTasks()
+        model.wrappedValue.getTasks()
+    }
+//    let trendingItems:[Item]// = [
+////        ("Nike Hersey Classic Hoodie", "$55"),
+////    ]
     
     var body: some View {
         ScrollView {
@@ -63,11 +69,11 @@ struct HomeView: View {
                     
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 16) {
-                            ForEach(trendingItems, id: \.0) { item in
+                            ForEach(model.wrappedValue.items, id: \.self) { item in
                                 Button(action: {
-                                    print("\(item.0) tapped")
+                                    print("\(item) tapped")
                                 }) {
-                                    ProductCard(productName: item.0, productPrice: item.1)
+                                    ProductCard(productName: item.title, productPrice: toPrice(item.price))
                                 }
                             }
                         }
@@ -163,10 +169,15 @@ struct ProductCard: View {
         .frame(width: 140)
     }
 }
-
-struct DawgPoundInteractiveView_Previews: PreviewProvider {
-    static var previews: some View {
-        HomeView()
-            .previewDevice("iPad Pro (11-inch) (4th generation)")
-    }
+func toPrice(_ doub:Double) -> String {
+    let dollars = Int(doub)
+    let cents = Int(doub * 100) - (dollars * 100)
+    return "$\(dollars).\(cents)\(cents < 10 ? "0" : "")"
 }
+//
+//struct DawgPoundInteractiveView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        HomeView(StateObject(wrappedValue: ItemViewModel()))
+//            .previewDevice("iPad Pro (11-inch) (4th generation)")
+//    }
+//}
