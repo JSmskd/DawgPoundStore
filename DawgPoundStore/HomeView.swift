@@ -6,6 +6,7 @@ struct HomeView: View {
         self.model = model
 //        trendingItems = []//model.wrappedValue.getTasks()
         model.wrappedValue.getTasks()
+        model.wrappedValue.getUser()
     }
 //    let trendingItems:[Item]// = [
 ////        ("Nike Hersey Classic Hoodie", "$55"),
@@ -43,13 +44,13 @@ struct HomeView: View {
                         .padding(.horizontal)
                     
                     HStack(spacing: 15) {
-                        NavigationLink(destination: CartView()) {
+                        NavigationLink(destination: CartView(model)) {
                             Image(systemName: "cart")
                                 .font(.title)
                                 .foregroundColor(.white)
                                 .padding()
                         }
-                        NavigationLink(destination: FavoritesView()) {
+                        NavigationLink(destination: FavoritesView(model)) {
                             Image(systemName: "heart")
                                 .font(.title)
                                 .foregroundColor(.white)

@@ -1,6 +1,13 @@
 import SwiftUI
 
 struct CartView: View {
+    var model:StateObject<ItemViewModel>
+    init (_ model:StateObject<ItemViewModel>) {
+        self.model = model
+        //        trendingItems = []//model.wrappedValue.getTasks()
+        model.wrappedValue.getUser()
+    }
+
     var body: some View {
         ZStack {
                     Color.black.edgesIgnoringSafeArea(.all) // Background color
@@ -142,8 +149,8 @@ struct CartView: View {
             }
         }
 
-        struct CartView_Previews: PreviewProvider {
-            static var previews: some View {
-                CartView()
-            }
-        }
+//        struct CartView_Previews: PreviewProvider {
+//            static var previews: some View {
+//                CartView()
+//            }
+//        }

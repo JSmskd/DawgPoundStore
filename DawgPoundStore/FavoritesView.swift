@@ -2,16 +2,23 @@ import SwiftUI
 
 struct FavoritesView: View {
     // Sample Product Data
-    @State private var products = [
-        Product(name: "Nike Hersey Classic Hoodie", price: "$55", isFavorite: true),
-        Product(name: "Nike Hersey Beanie", price: "$15"),
-        Product(name: "Gildan Hersey Classic Sweatpants", price: "$25", isFavorite: false),
-        Product(name: "Gildan Hersey Classic Sweatshirt", price: "$35"),
-        Product(name: "Nike Hersey Classic Hoodie", price: "$55"),
-        Product(name: "Nike Hersey Beanie", price: "$15"),
-        Product(name: "Gildan Hersey Classic Sweatpants", price: "$25"),
-        Product(name: "Gildan Hersey Classic Sweatshirt", price: "$35")
-    ]
+    var model:StateObject<ItemViewModel>
+    init (_ model:StateObject<ItemViewModel>) {
+        self.model = model
+        //        trendingItems = []//model.wrappedValue.getTasks()
+        model.wrappedValue.getTasks()
+    }
+
+//    @State private var products = [
+//        Product(name: "Nike Hersey Classic Hoodie", price: "$55", isFavorite: true),
+//        Product(name: "Nike Hersey Beanie", price: "$15"),
+//        Product(name: "Gildan Hersey Classic Sweatpants", price: "$25", isFavorite: false),
+//        Product(name: "Gildan Hersey Classic Sweatshirt", price: "$35"),
+//        Product(name: "Nike Hersey Classic Hoodie", price: "$55"),
+//        Product(name: "Nike Hersey Beanie", price: "$15"),
+//        Product(name: "Gildan Hersey Classic Sweatpants", price: "$25"),
+//        Product(name: "Gildan Hersey Classic Sweatshirt", price: "$35")
+//    ]
 
     // Dynamic Grid Layout
     let columns = [
@@ -51,9 +58,9 @@ struct FavoritesView: View {
             // Product Grid
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 20) {
-                    ForEach($products) { $product in
-                        ProductView(product: $product)
-                    }
+//                    ForEach($products) { $product in
+//                        ProductView(product: $product)
+//                    }
                 }
                 .padding(.horizontal)
             }
@@ -131,9 +138,9 @@ struct ProductView: View {
     }
 }
 
-// Preview
-struct FavoritesView_Previews: PreviewProvider {
-    static var previews: some View {
-        FavoritesView()
-    }
-}
+//// Preview
+//struct FavoritesView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        FavoritesView()
+//    }
+//}
