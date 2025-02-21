@@ -13,8 +13,49 @@ struct HomeView: View {
 ////    ]
     
     var body: some View {
+        @State var showMenu = false
         ScrollView {
             VStack(spacing: 40) {
+                ZStack {
+                            // Main content
+                    VStack {
+                        HStack {
+                            Button(action: {
+                                withAnimation {
+                                    showMenu.toggle()
+                                }
+                            }) {
+                                Image(systemName: "line.horizontal.3")
+                                    .font(.title)
+                                    .padding()
+                            }
+                        }
+                    }
+                    HStack {
+                                    VStack(alignment: .leading, spacing: 20) {
+                                        Button("IN-STOCK NOW") {}
+                                        Button("TRENDING NOW") {}
+                                        Button("LIMITED EDITION") {}
+                                        Button("TOPS") {}
+                                        Button("BOTTOMS") {}
+                                        Spacer()
+                                    }
+                                    .padding()
+                                    .frame(width: 250, height: UIScreen.main.bounds.height)
+                                    .background(Color.gray.opacity(0.9))
+                                    .offset(x: showMenu ? 0 : -300) // Hide menu when closed
+                                    .animation(.easeInOut, value: showMenu)
+
+                                    Spacer() // Pushes menu to the left
+                                }
+                                .background(showMenu ? Color.black.opacity(0.4) : Color.clear)
+                                .edgesIgnoringSafeArea(.all)
+                                .onTapGesture {
+                                    withAnimation {
+                                        showMenu = false
+                                    }
+                                }
+                            }
                 // Header Section
                 ZStack(alignment: .bottomLeading) {
                     Image("HeaderImage") // Replace with your header image
