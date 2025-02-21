@@ -1,90 +1,113 @@
 import SwiftUI
 
 struct ProductsView: View {
-    let items = [
-        ("Nike", "Hersey Classic Hoodie", "$55"),
-        ("Nike", "Hersey Beanie", "$15"),
-        ("Gildan", "Hersey Classic Sweatpants", "$25"),
-        ("Gildan", "Hersey Classic Sweatshirt", "$35")
+    @State private var favoriteProducts: Set<UUID> = []
+    
+    let products = [
+        Product(name: "Nike Hersey Classic Hoodie", price: "$55"),
+        Product(name: "Nike Hersey Beanie", price: "$15"),
+        Product(name: "Gildan Hersey Classic Sweatpants", price: "$25"),
+        Product(name: "Gildan Hersey Classic Sweatshirt", price: "$35"),
+        Product(name: "Adidas Hersey Joggers", price: "$45"),
+        Product(name: "Champion Hersey Hoodie", price: "$60"),
+        Product(name: "Under Armour Hersey Tee", price: "$20"),
+        Product(name: "Puma Hersey Sweatpants", price: "$40")
     ]
     
-    @State private var favorites: Set<String> = []
-    @State private var cart: Set<String> = []
+    private var gridColumns: [GridItem] {
+        Array(repeating: GridItem(.flexible(), spacing: 16), count: 4)
+    }
     
     var body: some View {
-        VStack(alignment: .leading) {
-            Text("DAWG POUND")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .foregroundColor(.orange)
-                .padding(.top)
-            
-            Text("Shirts - Women")
-                .font(.title2)
-                .fontWeight(.semibold)
-                .padding(.leading)
-                .padding(.top, 5)
-            
-            ScrollView(.vertical, showsIndicators: false) {
-                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
-                    ForEach(items, id: \.[1]) { brand, name, price in
-                        VStack(spacing: 10) {
-                            ZStack(alignment: .topTrailing) {
-                                Rectangle()
-                                    .fill(Color.gray.opacity(0.3))
-                                    .frame(height: 150)
-                                    .cornerRadius(10)
-                                
-                                Button(action: {
-                                    if favorites.contains(name) {
-                                        favorites.remove(name)
-                                    } else {
-                                        favorites.insert(name)
-                                    }
-                                }) {
-                                    Image(systemName: favorites.contains(name) ? "heart.fill" : "heart")
-                                        .foregroundColor(favorites.contains(name) ? .red : .gray)
-                                        .padding(8)
-                                }
-                            }
+        ScrollView {
+            VStack {
+                HStack {
+                    Button(action: {}) {
+                        Image(systemName: "chevron.left")
+                            .foregroundColor(.white)
+                            .font(.title)
+                    }
+                    Spacer()
+                }
+                .padding(.leading, 20)
+                
+                Image("DawgPoundLogo")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 80)
+                    .padding(.top, 10)
+                    
+                Text("Shirts - Women")
+                    .foregroundColor(.white)
+                    .font(.title2)
+                    .bold()
+                    .padding(.top, 10)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.leading, 20)
+                
+                LazyVGrid(columns: gridColumns, spacing: 20) {
+                    ForEach(products, id: \ .id) { product in
+                        VStack {
+                            Rectangle()
+                                .fill(Color.gray)
+                                .frame(height: 200)
+                                .cornerRadius(10)
+                                .overlay(
+                                    Button(action: {
+                                     
+                                    }) {
+                                        Image(systemName: favoriteProducts.contains(product.id) ? "heart.fill" : "heart")
+                                            .foregroundColor(favoriteProducts.contains(product.id) ? .red : .white)
+                                            .padding(10)
+                                            .animation(.easeInOut, value: favoriteProducts)
+                                    }, alignment: .topTrailing
+                                )
                             
-                            Text(brand)
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
-                            Text(name)
-                                .font(.headline)
-                            Text(price)
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
+                            Text(product.name)
+                                .foregroundColor(.white)
+                                .font(.body)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.leading, 5)
                             
-                            Button(action: {
-                                if cart.contains(name) {
-                                    cart.remove(name)
-                                } else {
-                                    cart.insert(name)
-                                }
-                            }) {
-                                Text(cart.contains(name) ? "Added to cart" : "Move to cart")
+                            Text(product.price)
+                                .foregroundColor(.white)
+                                .font(.subheadline)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.leading, 5)
+                            
+                            Button(action: {}) {
+                                Text("Move to cart")
                                     .frame(maxWidth: .infinity)
                                     .padding()
                                     .background(Color.orange)
                                     .foregroundColor(.white)
-                                    .cornerRadius(8)
+                                    .cornerRadius(10)
                             }
+                            .padding(.top, 5)
                         }
-                        .padding()
-                        .background(Color.black.opacity(0.8))
-                        .cornerRadius(12)
+                        .background(Color.black)
+                        .cornerRadius(10)
                     }
                 }
-                .padding()
+                .padding(.horizontal, 20)
             }
         }
-        .background(Color.black)
-        .foregroundColor(.white)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.black.edgesIgnoringSafeArea(.all))
+        .scrollIndicators(.visible)
     }
+    
+   
+
+    }
+
+struct Products: Identifiable {
+    let id = UUID()
+    let name: String
+    let price: String
 }
 
+
 #Preview {
-    ProductView()
+    ProductsView()
 }
