@@ -6,8 +6,11 @@ struct CartView: View {
     @State var time: String = ""
     init (_ model:StateObject<ItemViewModel>) {
         self.model = model
-        //        trendingItems = []//model.wrappedValue.getTasks()
-        model.wrappedValue.getUser()
+//        model = []model.wrappedValue.getTasks()
+        if model.wrappedValue.items.isEmpty {
+            model.wrappedValue.update()
+        }
+
     }
 
     var body: some View {
