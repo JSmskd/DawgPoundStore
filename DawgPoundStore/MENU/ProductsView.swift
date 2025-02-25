@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ProductsView: View {
     @State private var favoriteProducts: Set<UUID> = []
+    @State private var cartProducts: Set<UUID> = []
     
     let products = [
         Product(name: "Nike Hersey Classic Hoodie", price: "$55"),
@@ -46,7 +47,7 @@ struct ProductsView: View {
                     .padding(.leading, 20)
                 
                 LazyVGrid(columns: gridColumns, spacing: 20) {
-                    ForEach(products, id: \ .id) { product in
+                    ForEach(products, id: \.id) { product in
                         VStack {
                             Rectangle()
                                 .fill(Color.gray)
@@ -54,13 +55,21 @@ struct ProductsView: View {
                                 .cornerRadius(10)
                                 .overlay(
                                     Button(action: {
-                                     
+                                        withAnimation(.spring(response: 0.3, dampingFraction: 0.5, blendDuration: 0)) {
+                                            if favoriteProducts.contains(product.id) {
+                                                favoriteProducts.remove(product.id)
+                                            } else {
+                                                favoriteProducts.insert(product.id)
+                                            }
+                                        }
                                     }) {
                                         Image(systemName: favoriteProducts.contains(product.id) ? "heart.fill" : "heart")
                                             .foregroundColor(favoriteProducts.contains(product.id) ? .red : .white)
                                             .padding(10)
-                                            .animation(.easeInOut, value: favoriteProducts)
-                                    }, alignment: .topTrailing
+                                            .scaleEffect(favoriteProducts.contains(product.id) ? 1.2 : 1.0)
+                                    }
+                                    .buttonStyle(PlainButtonStyle())
+                                    , alignment: .topTrailing
                                 )
                             
                             Text(product.name)
@@ -75,11 +84,19 @@ struct ProductsView: View {
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .padding(.leading, 5)
                             
-                            Button(action: {}) {
-                                Text("Move to cart")
+                            Button(action: {
+                                withAnimation {
+                                    if cartProducts.contains(product.id) {
+                                        cartProducts.remove(product.id)
+                                    } else {
+                                        cartProducts.insert(product.id)
+                                    }
+                                }
+                            }) {
+                                Text(cartProducts.contains(product.id) ? "Added to Cart" : "Move to Cart")
                                     .frame(maxWidth: .infinity)
                                     .padding()
-                                    .background(Color.orange)
+                                    .background(cartProducts.contains(product.id) ? Color(red: 1.0, green: 0.5, blue: 0.0) : Color(red: 1.0, green: 0.58, blue: 0.0))
                                     .foregroundColor(.white)
                                     .cornerRadius(10)
                             }
@@ -96,17 +113,13 @@ struct ProductsView: View {
         .background(Color.black.edgesIgnoringSafeArea(.all))
         .scrollIndicators(.visible)
     }
-    
-   
-
-    }
+}
 
 struct Products: Identifiable {
     let id = UUID()
     let name: String
     let price: String
 }
-
 
 #Preview {
     ProductsView()
