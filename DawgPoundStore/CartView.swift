@@ -2,12 +2,15 @@ import SwiftUI
 
 struct CartView: View {
     var model:StateObject<ItemViewModel>
-    @State var email: String = ""
-    @State var time: String = ""
+ 
+
     init (_ model:StateObject<ItemViewModel>) {
         self.model = model
-        //        trendingItems = []//model.wrappedValue.getTasks()
-        model.wrappedValue.getUser()
+//        model = []model.wrappedValue.getTasks()
+        if model.wrappedValue.items.isEmpty {
+            model.wrappedValue.update()
+        }
+
     }
 
     var body: some View {
@@ -25,24 +28,7 @@ struct CartView: View {
                         }
                         .padding()
                         
-                        VStack {
-                            Text("Pick up info")
-                                .font(Font.custom("Lexend-Bold", size: 24))
-                                .foregroundColor(.white)
-                                .padding()
-                            VStack(spacing: 16) {
-                                TextField("Email (e.g. jhersey1234@stu.d214.org): ", text: $email)
-                                    .padding()
-                                    .background(Color.gray.opacity(0.2))
-                                    .cornerRadius(25)
-                                    .foregroundColor(.white)
-                                TextField("Time (e.g. 2/25/25 @ 12 pm): ", text: $time)
-                                    .padding()
-                                    .background(Color.gray.opacity(0.2))
-                                    .cornerRadius(25)
-                                    .foregroundColor(.white)
-                            }
-                            .padding(.horizontal)
+                      
                         }
                         .background(Color.white.opacity(0.1))
                         .cornerRadius(10)
@@ -114,7 +100,7 @@ struct CartView: View {
                     }
                 }
             }
-        }
+        
 
         struct CartItemView: View {
             @State private var quantity: Int = 1

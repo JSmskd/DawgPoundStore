@@ -4,7 +4,7 @@ import SwiftUI
 struct MenuView: View {
     @Binding var isMenuOpen: Bool
     var body: some View {
-        ZStack(alignment: .leading) {
+        VStack(alignment: .leading) {
             if isMenuOpen {
                 Color.black.opacity(0.3)
                     .edgesIgnoringSafeArea(.all)
