@@ -11,51 +11,27 @@ struct HomeView: View {
 //    let trendingItems:[Item]// = [
 ////        ("Nike Hersey Classic Hoodie", "$55"),
 ////    ]
-    
+    @State var isMenuOpen = false
     var body: some View {
-        @State var showMenu = false
         ScrollView {
-            VStack(spacing: 40) {
-                ZStack {
-                            // Main content
-                    VStack {
-                        HStack {
-                            Button(action: {
-                                withAnimation {
-                                    showMenu.toggle()
-                                }
-                            }) {
-                                Image(systemName: "line.horizontal.3")
-                                    .font(.title)
-                                    .padding()
-                            }
-                        }
-                    }
+            ZStack {
+                VStack {
                     HStack {
-                                    VStack(alignment: .leading, spacing: 20) {
-                                        Button("IN-STOCK NOW") {}
-                                        Button("TRENDING NOW") {}
-                                        Button("LIMITED EDITION") {}
-                                        Button("TOPS") {}
-                                        Button("BOTTOMS") {}
-                                        Spacer()
-                                    }
-                                    .padding()
-                                    .frame(width: 250, height: UIScreen.main.bounds.height)
-                                    .background(Color.gray.opacity(0.9))
-                                    .offset(x: showMenu ? 0 : -300) // Hide menu when closed
-                                    .animation(.easeInOut, value: showMenu)
-
-                                    Spacer() // Pushes menu to the left
-                                }
-                                .background(showMenu ? Color.black.opacity(0.4) : Color.clear)
-                                .edgesIgnoringSafeArea(.all)
-                                .onTapGesture {
-                                    withAnimation {
-                                        showMenu = false
-                                    }
-                                }
+                        Button(action: {
+                            withAnimation {
+                                isMenuOpen.toggle()
                             }
+                        }) {
+                            Image(systemName: "line.horizontal.3")
+                                .resizable()
+                                .frame(width: 30, height: 20)
+                                .padding()
+                        }
+                        Spacer()
+                    }
+                    Spacer()
+                }
+                MenuView(isMenuOpen: $isMenuOpen)
                 // Header Section
                 ZStack(alignment: .bottomLeading) {
                     Image("HeaderImage") // Replace with your header image
@@ -75,7 +51,6 @@ struct HomeView: View {
                     .padding(.leading)
                     .padding(.bottom, 20)
                 }
-                
                 // Search Bar and Action Icons
                 HStack {
                     TextField("Search", text: .constant(""))
@@ -182,9 +157,9 @@ struct HomeView: View {
                 }
             }
         }
-        .background(Color.black.edgesIgnoringSafeArea(.all))
     }
 }
+
 
 struct ProductCard: View {
     let productName: String
