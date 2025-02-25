@@ -96,7 +96,7 @@ struct ProductsView: View {
                                 Text(cartProducts.contains(product.id) ? "Added to Cart" : "Move to Cart")
                                     .frame(maxWidth: .infinity)
                                     .padding()
-                                    .background(cartProducts.contains(product.id) ? Color(red: 1.0, green: 0.5, blue: 0.0) : Color(red: 1.0, green: 0.65, blue: 0.0))
+                                    .background(cartProducts.contains(product.id) ? Color(red: 1.0, green: 0.5, blue: 0.0) : Color(red: 1.0, green: 0.58, blue: 0.0))
                                     .foregroundColor(.white)
                                     .cornerRadius(10)
                             }
