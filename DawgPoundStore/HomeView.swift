@@ -113,7 +113,7 @@ struct HomeView: View {
                                                 .font(.headline)
                                                 .foregroundColor(.white)
 
-                                            Text("Graphics Room or Next Drop")
+                                            Text("Answer etc. etc.")
                                                 .font(.subheadline)
                                                 .foregroundColor(.gray)
                                         }
