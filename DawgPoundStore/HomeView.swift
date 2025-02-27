@@ -76,11 +76,8 @@ struct HomeView: View {
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack(spacing: 16) {
                                     ForEach(model.wrappedValue.items, id: \.self) { item in
-                                        Button(action: {
-                                            print("\(item) tapped")
-                                        }) {
-                                            ProductCard(productName: item.title, productPrice: toPrice(item.price))
-                                        }
+                                        itemPreview(model, item: item)
+//                                        item.preview
                                     }
                                 }
                                 .padding(.horizontal)
@@ -145,7 +142,7 @@ struct HomeView: View {
                             }
                         }
                     }
-                }
+                }.background(Color.black)
                 VStack {
                     HStack {
                         Button(action: {

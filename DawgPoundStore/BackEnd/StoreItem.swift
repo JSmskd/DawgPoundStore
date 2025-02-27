@@ -39,27 +39,70 @@ struct Item:Identifiable, CustomStringConvertible, Hashable/*, Codable*/ {
     var description: String {
         return "\(title) : \(price)"
     }
-    var id: CKRecord.ID?
+    var id: CKRecord.ID? {get {
+        record?.recordID
+    }}
+    var record:CKRecord?
     var title:String
     var Itemdescription:String
     var reference:CKRecord.Reference?
-var images:[CKAsset]?
+    var images:[CKAsset]?
     var price:Double
-    init(title: String, description: String, price: Double, images: [CKAsset]? = [], id: CKRecord.ID? = nil,reference: CKRecord.Reference? = nil) {
-        self.id = id
+    init(title: String, description: String, price: Double, images: [CKAsset]? = [], id: CKRecord? = nil,reference: CKRecord.Reference? = nil) {
+        self.record = id
         self.title = title
         self.Itemdescription = description
         self.images = images
         self.price = price
         self.reference = reference
     }
-    init(_ title: String, _ description: String, _ price: Double, images: [CKAsset]? = [], id: CKRecord.ID? = nil, reference: CKRecord.Reference? = nil) {
-        self.id = id
+    init(_ title: String, _ description: String, _ price: Double, images: [CKAsset]? = [], id: CKRecord? = nil, reference: CKRecord.Reference? = nil) {
+        self.record = id
         self.title = title
         self.Itemdescription = description
         self.images = images
         self.price = price
         self.reference = reference
+    }
+}
+struct itemPreview:View {
+    var item:Item
+    var model:StateObject<ItemViewModel>
+    init (_ model:StateObject<ItemViewModel>, item:Item) {
+        self.item = item
+        //        trendingItems = []//model.wrappedValue.getTasks()
+        if model.wrappedValue.items.isEmpty {
+            model.wrappedValue.update()
+        }
+
+        //        model.wrappedValue.getUser()
+        self.model = model
+    }
+    var body: some View {
+        VStack{
+            NavigationLink {
+                IndividualItemView(model, item: item)
+            } label: {
+                VStack {
+                    Rectangle()
+                        .fill(Color.gray)
+                        .frame(width: 140, height: 140)
+                        .cornerRadius(8)
+
+                    Text(item.title)
+                        .font(.subheadline)
+                        .foregroundColor(.white)
+                        .multilineTextAlignment(.center)
+                        .lineLimit(2)
+                        .padding(.top, 5)
+
+                    Text(toPrice(item.price))
+                        .font(.footnote)
+                        .foregroundColor(.gray)
+                }
+                .frame(width: 140)
+            }
+        }
     }
 }
 ///ready to sell object
@@ -88,7 +131,7 @@ class ItemViewModel: ObservableObject {
     func addTask(taskItem: inout Item) {
 
         let record = CKRecord(recordType: "Item")
-        taskItem.id = record.recordID
+        taskItem.record = record
         record.setObject(taskItem.title as CKRecordValue, forKey: "title")
         record.setObject(taskItem.description as CKRecordValue, forKey: "description")
         record.setObject((taskItem.images ?? []) as CKRecordValue, forKey: "images")
@@ -132,9 +175,9 @@ class ItemViewModel: ObservableObject {
                                 var newItems:[Item] = []
                 $0.matchResults.map{$0.1.map { record in
 
-                    temp.email
-                    temp.accountStatus
-                    temp.accountStatus
+//                    temp.email
+//                    temp.accountStatus
+//                    temp.accountStatus
                     temp.id = record.recordID
 
                     for iter in record["cart"] as! [CKRecord.Reference] {
@@ -143,7 +186,7 @@ class ItemViewModel: ObservableObject {
                         //                        print("recordName == '\(iter.recordID.recordName)'")//"iter.recordID.recordName.self)
 //                        let q = CKQuery(recordType: "Item", predicate: NSPredicate(format: "___recordID == %@", iter.recordID))
 //                        print("\(q.recordType);  \(q.predicate)")
-                        self.database.fetch(withRecordID: iter.recordID) { r,e in
+                        self.self.self.self.self.database.fetch(withRecordID: iter.recordID) { r,e in
 //                            print("map0")
 //                            print(e)
                             if r == nil {
@@ -229,7 +272,7 @@ class ItemViewModel: ObservableObject {
 //                print("------------------------")
 //                print("------------------------")
 //                print(record)
-                    newItems.append(Item(title: record["title"] as! String, description: record["description"] as! String, price: record["price"] as! Double, images: record["images"] as? [CKAsset] , id: record.recordID, reference: CKRecord.Reference.init(recordID: record.recordID, action: .none)))
+                    newItems.append(Item(title: record["title"] as! String, description: record["description"] as! String, price: record["price"] as! Double, images: record["images"] as? [CKAsset] , id: record, reference: CKRecord.Reference.init(recordID: record.recordID, action: .none)))
 //                print("------------------------")
 //                print("------------------------")
 //                print("ENDRECORD>")

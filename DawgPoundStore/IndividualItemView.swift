@@ -1,10 +1,22 @@
 import SwiftUI
 
 struct IndividualItemView: View {
-    @State private var selectedColor: Color = .gray
-    @State private var selectedSize: String? = nil
-    @State private var showSizePicker = false
-    @State private var isFavorite = false
+    var model:StateObject<ItemViewModel>
+    var curentItem:Item
+    init (_ model:StateObject<ItemViewModel>, item:Item) {
+        curentItem = item
+        //        trendingItems = []//model.wrappedValue.getTasks()
+        if model.wrappedValue.items.isEmpty {
+            model.wrappedValue.update()
+        }
+
+        //        model.wrappedValue.getUser()
+        self.model = model
+    }
+//    @State private var selectedColor: Color = .gray
+//    @State private var selectedSize: String? = nil
+//    @State private var showSizePicker = false
+//    @State private var isFavorite = false
 
     let colors: [Color] = [.white, Color(red: 0.43, green: 0.33, blue: 0.24), .gray]
     let sizes: [String] = ["S", "M", "L", "XL", "XXL"]
@@ -15,10 +27,10 @@ struct IndividualItemView: View {
 
             HStack(spacing: 30) {
                 VStack {
-                    Image("hoodie_image") // Ensure image is in assets
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(maxWidth: 500, maxHeight: 500)
+//                    Image("hoodie_image") // Ensure image is in assets
+//                        .resizable()
+//                        .aspectRatio(contentMode: .fit)
+//                        .frame(maxWidth: 500, maxHeight: 500)
                 }
 
                 VStack(alignment: .leading, spacing: 20) {
@@ -32,15 +44,15 @@ struct IndividualItemView: View {
                         .font(Font.custom("Lexend", size: 16).weight(.light))
                         .foregroundColor(.white)
 
-                    Text("Hersey Hoodie\nwith Husky Head")
+                    Text("\(curentItem.title)")
                         .font(Font.custom("Lexend", size: 24).weight(.semibold))
                         .foregroundColor(.white)
 
-                    Text("Heavyweight Hooded Sweatshirt")
+                    Text("\(curentItem.Itemdescription )")
                         .font(Font.custom("Lexend", size: 14).weight(.light))
                         .foregroundColor(.white)
 
-                    Text("$45")
+                    Text("\(toPrice(curentItem.price))")
                         .font(Font.custom("Lexend", size: 24))
                         .foregroundColor(.white)
 
@@ -49,24 +61,24 @@ struct IndividualItemView: View {
                             .font(Font.custom("Lexend-Bold", size: 16).weight(.light))
                             .foregroundColor(.white)
 
-                        HStack(spacing: 15) {
-                            ForEach(colors, id: \.self) { color in
-                                Circle()
-                                    .fill(color)
-                                    .frame(width: 30, height: 30)
-                                    .overlay(
-                                        Circle()
-                                            .stroke(selectedColor == color ? Color.orange : Color.white, lineWidth: 2)
-                                    )
-                                    .onTapGesture {
-                                        selectedColor = color
-                                    }
-                            }
-                        }
+//                        HStack(spacing: 15) {
+//                            ForEach(colors, id: \.self) { color in
+//                                Circle()
+//                                    .fill(color)
+//                                    .frame(width: 30, height: 30)
+//                                    .overlay(
+//                                        Circle()
+//                                            .stroke(selectedColor == color ? Color.orange : Color.white, lineWidth: 2)
+//                                    )
+//                                    .onTapGesture {
+//                                        selectedColor = color
+//                                    }
+//                            }
+//                        }
                     }
 
                     Button(action: {
-                        showSizePicker.toggle()
+//                        showSizePicker.toggle()
                     }) {
                         ZStack {
                             RoundedRectangle(cornerRadius: 5)
@@ -74,7 +86,7 @@ struct IndividualItemView: View {
                                 .frame(width: 300, height: 50)
 
                             HStack {
-                                Text(selectedSize ?? "Select a Size")
+                                Text(/*selectedSize ?? */"Select a Size")
                                     .font(Font.custom("Lexend", size: 16))
                                     .foregroundColor(.white)
 
@@ -85,15 +97,15 @@ struct IndividualItemView: View {
                         }
                     }
 
-                    if showSizePicker {
-                        Picker("Select Size", selection: $selectedSize) {
-                            ForEach(sizes, id: \.self) { size in
-                                Text(size).tag(size as String?)
-                            }
-                        }
-                        .pickerStyle(MenuPickerStyle())
-                        .frame(width: 300)
-                    }
+//                    if showSizePicker {
+//                        Picker("Select Size", selection: $selectedSize) {
+//                            ForEach(sizes, id: \.self) { size in
+//                                Text(size).tag(size as String?)
+//                            }
+//                        }
+//                        .pickerStyle(MenuPickerStyle())
+//                        .frame(width: 300)
+//                    }
 
                     HStack(spacing: 10) {
                         Button(action: {
@@ -104,21 +116,21 @@ struct IndividualItemView: View {
                                     .fill(Color.orange)
                                     .frame(width: 300, height: 50)
 
-                                Text("Add to cart - $45")
+                                Text("Add to cart - \(toPrice(curentItem.price))")
                                     .font(Font.custom("Lexend", size: 16))
                                     .foregroundColor(.white)
                             }
                         }
 
                         Button(action: {
-                            isFavorite.toggle()
+//                            isFavorite.toggle()
                         }) {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 5)
                                     .stroke(Color.orange, lineWidth: 1)
                                     .frame(width: 50, height: 50)
 
-                                Image(systemName: isFavorite ? "heart.fill" : "heart")
+                                Image(systemName: /*isFavorite ? "heart.fill" : */"heart")
                                     .foregroundColor(.white)
                             }
                         }
@@ -131,8 +143,8 @@ struct IndividualItemView: View {
     }
 }
 
-struct HoodieView_Previews: PreviewProvider {
-    static var previews: some View {
-        IndividualItemView()
-    }
-}
+//struct HoodieView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        IndividualItemView()
+//    }
+//}
