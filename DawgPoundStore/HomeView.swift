@@ -163,7 +163,7 @@ struct HomeView: View {
                 }
                 .foregroundStyle(Color.clear)
                 .frame(width: 30, height: 20).offset(x: 10, y: 10)
-                MenuView(isMenuOpen: $isMenuOpen)
+                MenuView(isMenuOpen: $isMenuOpen).frame(alignment: .leading)
         }
     }
 }

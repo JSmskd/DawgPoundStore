@@ -83,8 +83,9 @@ struct MenuView: View {
 
                 Spacer()
             }
-            .frame(width: 500, height: 700)
-            .background(Color.white)
+//            .frame(width: 500, height: 700)
+            .frame(alignment: .leading)
+            .background(Color.black.opacity(0.3))
             .transition(.move(edge: .leading))
         }
     }

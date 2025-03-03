@@ -100,7 +100,7 @@ struct itemPreview:View {
                         .font(.footnote)
                         .foregroundColor(.gray)
                 }
-                .frame(width: 140)
+                .frame(width: 140, height: 160)
             }
         }
     }
