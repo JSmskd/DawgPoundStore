@@ -22,6 +22,7 @@ struct user {
         itemsInCart = []
     }
 }
+
 struct orderItem:Identifiable {
     var id:CKRecord.Reference?
     var item:Item
@@ -35,6 +36,7 @@ struct orderItem:Identifiable {
 
     }
 }
+
 struct Item:Identifiable, CustomStringConvertible, Hashable/*, Codable*/ {
     var description: String {
         return "\(title) : \(price)"
@@ -65,6 +67,7 @@ struct Item:Identifiable, CustomStringConvertible, Hashable/*, Codable*/ {
         self.reference = reference
     }
 }
+
 struct itemPreview:View {
     var item:Item
     var model:StateObject<ItemViewModel>
@@ -105,9 +108,11 @@ struct itemPreview:View {
         }
     }
 }
+
 ///ready to sell object
 @MainActor
 class ItemViewModel: ObservableObject {
+    
     func qry(recordID: CKRecord.ID) -> Item? {
         for i in items {
             if i.id == recordID {
@@ -127,6 +132,27 @@ class ItemViewModel: ObservableObject {
         getTasks()
         getUser(userCookie)
         getActiveCart()
+        getCollections()
+    }
+    func getCollections() {
+        let homeRecordNames: [String] = [
+            "8032DBAA-2AAD-4597-AFF7-E2D8F42D3CD5"
+        ]
+        for i in homeRecordNames{
+            self.database.fetch(withQuery: .init(recordType: "itemCollection", predicate: .init(format: "recordName == '\(i)'"))) { [self] results in
+                results.map { (matchResults: [(CKRecord.ID, Result<CKRecord, any Error>)], queryCursor: CKQueryOperation.Cursor?) in
+                    if matchResults.count > 0{
+                        print(matchResults.first!.0)
+                    }
+                }
+            }
+            print("go")
+            
+            
+        }
+        let sideRecordNames: [String] = [
+            "8032DBAA-2AAD-4597-AFF7-E2D8F42D3CD5"
+        ]
     }
     func addTask(taskItem: inout Item) {
 
