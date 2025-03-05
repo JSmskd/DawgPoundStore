@@ -139,9 +139,28 @@ struct IndividualItemView: View {
                 .frame(maxWidth: 500)
                 .padding()
             }
+        
+                    NavigationLink {
+                        HomeView(model)
+                    } label:
+                    {
+                        Image("DawgPoundLogo")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width:80, height: 80)
+                            .position(x: UIScreen.main.bounds.width / 2, y: 70)
+                           
+
+                    }
+                   
+
+                              Spacer()
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color.white)
+            }
         }
-    }
-}
+    
 
 //struct HoodieView_Previews: PreviewProvider {
 //    static var previews: some View {
