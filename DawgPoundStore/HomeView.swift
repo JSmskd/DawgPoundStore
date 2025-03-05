@@ -1,89 +1,95 @@
 import SwiftUI
+import CloudKit
 
 struct HomeView: View {
     var model:StateObject<ItemViewModel>
     init (_ model:StateObject<ItemViewModel>) {
 
-//        trendingItems = []//model.wrappedValue.getTasks()
+        //        trendingItems = []//model.wrappedValue.getTasks()
+//        if model.wrappedValue.colecs.isEmpty {
+//            model.wrappedValue.update()
+//        }
         if model.wrappedValue.items.isEmpty {
             model.wrappedValue.update()
         }
 
-//        model.wrappedValue.getUser()
+        //        model.wrappedValue.getUser()
         self.model = model
     }
-//    let trendingItems:[Item]// = [
-////        ("Nike Hersey Classic Hoodie", "$55"),
-////    ]
+    //    let trendingItems:[Item]// = [
+    ////        ("Nike Hersey Classic Hoodie", "$55"),
+    ////    ]
     @State var isMenuOpen = false
     var body: some View {
-            ZStack (alignment:.topLeading){
+        ZStack (alignment:.topLeading){
 
-                ScrollView {
-                    VStack{
-                        // Header Section
-                        ZStack(alignment: .bottomLeading) {
-                            Image("HeaderImage") // Replace with your header image
-                                .resizable()
-                                .scaledToFill()
-                                .frame(height: 500)
-                                .clipped()
+            ScrollView {
+                VStack{
+                    // Header Section
+                    ZStack(alignment: .bottomLeading) {
+                        Image("HeaderImage") // Replace with your header image
+                            .resizable()
+                            .scaledToFill()
+                            .frame(height: 500)
+                            .clipped()
 
-                            VStack(alignment: .leading) {
-                                Text("The")
-                                    .foregroundColor(.white)
-
-                                Text("Pound.")
-                                    .foregroundColor(.orange)
-                            }
-                            .font(.custom("Lexend-Bold", size: 90))
-                            .padding(.leading)
-                            .padding(.bottom, 20)
-                        }
-                        // Search Bar and Action Icons
-                        HStack {
-                            TextField("Search", text: .constant(""))
-                                .padding()
-                                .background(Color(.systemGray6))
-                                .cornerRadius(12)
-                                .padding(.horizontal)
-
-                            HStack(spacing: 15) {
-                                NavigationLink(destination: CartView(model)) {
-                                    Image(systemName: "cart")
-                                        .font(.title)
-                                        .foregroundColor(.white)
-                                        .padding()
-                                }
-                                NavigationLink(destination: FavoritesView(model)) {
-                                    Image(systemName: "heart")
-                                        .font(.title)
-                                        .foregroundColor(.white)
-                                        .padding()
-                                }
-                            }
-                            .padding(.trailing)
-                        }
-
-                        // Trending Section
                         VStack(alignment: .leading) {
-                            Text("Trending now")
-                                .font(.title2)
-                                .fontWeight(.bold)
+                            Text("The")
                                 .foregroundColor(.white)
-                                .padding(.horizontal)
 
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(spacing: 16) {
-                                    ForEach(model.wrappedValue.items, id: \.self) { item in
-                                        itemPreview(model, item: item)
-//                                        item.preview
-                                    }
-                                }
-                                .padding(.horizontal)
+                            Text("Pound.")
+                                .foregroundColor(.orange)
+                        }
+                        .font(.custom("Lexend-Bold", size: 90))
+                        .padding(.leading)
+                        .padding(.bottom, 20)
+                    }
+                    // Search Bar and Action Icons
+                    HStack {
+                        TextField("Search", text: .constant(""))
+                            .padding()
+                            .background(Color(.systemGray6))
+                            .cornerRadius(12)
+                            .padding(.horizontal)
+
+                        HStack(spacing: 15) {
+                            NavigationLink(destination: CartView(model)) {
+                                Image(systemName: "cart")
+                                    .font(.title)
+                                    .foregroundColor(.white)
+                                    .padding()
+                            }
+                            NavigationLink(destination: FavoritesView(model)) {
+                                Image(systemName: "heart")
+                                    .font(.title)
+                                    .foregroundColor(.white)
+                                    .padding()
                             }
                         }
+                        .padding(.trailing)
+                    }
 
+                    // Trending Section
+                    VStack{
+//                        ForEach(0..<recordNames.count) { <#Identifiable#> in
+                            VStack(alignment: .leading) {
+                                Text("Trending now")
+                                    .font(.title2)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.white)
+                                    .padding(.horizontal)
+
+                                ScrollView(.horizontal, showsIndicators: false) {
+                                    HStack(spacing: 16) {
+                                        ForEach(model.wrappedValue.items, id: \.self) { item in
+                                            itemPreview(model, item: item)
+                                            //                                        item.preview
+                                        }
+                                    }
+                                    .padding(.horizontal)
+                                }
+                            }
+                        }
                         // Featured Section
                         Text("Show your best Husky pride with Dawg Pound.")
                             .font(.title)
@@ -164,36 +170,37 @@ struct HomeView: View {
                 .foregroundStyle(Color.clear)
                 .frame(width: 30, height: 20).offset(x: 10, y: 10)
                 MenuView(isMenuOpen: $isMenuOpen).frame(alignment: .leading)
+            }
         }
     }
-}
 
 
-struct ProductCard: View {
-    let productName: String
-    let productPrice: String
-    
-    var body: some View {
-        VStack {
-            Rectangle()
-                .fill(Color.gray)
-                .frame(width: 140, height: 140)
-                .cornerRadius(8)
-            
-            Text(productName)
-                .font(.subheadline)
-                .foregroundColor(.white)
-                .multilineTextAlignment(.center)
-                .lineLimit(2)
-                .padding(.top, 5)
-            
-            Text(productPrice)
-                .font(.footnote)
-                .foregroundColor(.gray)
+    struct ProductCard: View {
+        let productName: String
+        let productPrice: String
+
+        var body: some View {
+            VStack {
+                Rectangle()
+                    .fill(Color.gray)
+                    .frame(width: 140, height: 140)
+                    .cornerRadius(8)
+
+                Text(productName)
+                    .font(.subheadline)
+                    .foregroundColor(.white)
+                    .multilineTextAlignment(.center)
+                    .lineLimit(2)
+                    .padding(.top, 5)
+
+                Text(productPrice)
+                    .font(.footnote)
+                    .foregroundColor(.gray)
+            }
+            .frame(width: 140)
         }
-        .frame(width: 140)
     }
-}
+
 func toPrice(_ doub:Double) -> String {
     let dollars = Int(doub)
     let cents = Int(doub * 100) - (dollars * 100)
