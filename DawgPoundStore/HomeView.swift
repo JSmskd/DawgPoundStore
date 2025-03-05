@@ -69,27 +69,7 @@ struct HomeView: View {
                         .padding(.trailing)
                     }
 
-                    // Trending Section
-                    VStack{
-//                        ForEach(0..<recordNames.count) { <#Identifiable#> in
-                            VStack(alignment: .leading) {
-                                Text("Trending now")
-                                    .font(.title2)
-                                    .fontWeight(.bold)
-                                    .foregroundColor(.white)
-                                    .padding(.horizontal)
-
-                                ScrollView(.horizontal, showsIndicators: false) {
-                                    HStack(spacing: 16) {
-                                        ForEach(model.wrappedValue.items, id: \.self) { item in
-                                            itemPreview(model, item: item)
-                                            //                                        item.preview
-                                        }
-                                    }
-                                    .padding(.horizontal)
-                                }
-                            }
-                        }
+                    HomeItems(model)
                         // Featured Section
                         Text("Show your best Husky pride with Dawg Pound.")
                             .font(.title)
@@ -213,3 +193,37 @@ func toPrice(_ doub:Double) -> String {
 //            .previewDevice("iPad Pro (11-inch) (4th generation)")
 //    }
 //}
+struct HomeItems: View {
+    var model:StateObject<ItemViewModel>
+    init (_ model:StateObject<ItemViewModel>) {self.model = model
+        print("{")
+        for i in model.wrappedValue.homeColecs {
+            print(i.name)
+        }
+        print("}")
+    }
+    var body: some View {
+        // Trending Section
+        VStack{
+            ForEach(0..<model.wrappedValue.homeColecs.count, id:\.self) { noeh in
+                VStack(alignment: .leading) {
+                    Text("Trending now")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .padding(.horizontal)
+
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 16) {
+                            ForEach(0..<min(5,(model.wrappedValue.homeColecs)[noeh].items.count), id: \.self) { item in
+                                itemPreview(model, item: (model.wrappedValue.homeColecs)[noeh].items[item])
+                                //                                        item.preview
+                            }
+                        }
+                        .padding(.horizontal)
+                    }
+                }
+            }
+        }
+    }
+}

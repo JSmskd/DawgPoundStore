@@ -108,7 +108,39 @@ struct itemPreview:View {
         }
     }
 }
-
+///item collection
+class ic : Identifiable, Hashable{
+    var name:String
+    var desc:String
+    var items:[Item] = []
+    var id: String { "\(name):\(desc)" }
+    init(name: String, desc: String, itemRefs:[CKRecord.ID]) {
+        self.name = name
+        self.desc = desc
+    }
+    init (_ cloudkitRecord:CKRecord) {
+//        print(cloudkitRecord)
+        name = cloudkitRecord["Name"] as! String
+        desc = cloudkitRecord["collectionDescription"] as! String
+//        cloudkitRecord.recordID.recordName
+        for i in cloudkitRecord["items"] as! [CKRecord.Reference] {
+            CKContainer.default().publicCloudDatabase.fetch(withRecordID: i.recordID) { o,e in
+                if o == nil {} else {
+                    self.items.append(.init(o!["title"] as! String, o!["description"] as! String, o!["price"] as! Double))
+                }
+            }
+        }
+    }
+    static func != (lhs:ic,rhs:ic) -> Bool {
+        !(lhs == rhs)
+    }
+    static func == (lhs:ic,rhs:ic) -> Bool {
+        lhs.id == rhs.id
+    }
+    func hash(into hasher: inout Hasher) {
+        id.hash(into: &hasher)
+    }
+}
 ///ready to sell object
 @MainActor
 class ItemViewModel: ObservableObject {
@@ -127,6 +159,7 @@ class ItemViewModel: ObservableObject {
     @Published var cart:[orderItem] = []
     @Published var orders:[orderItem] = []
     @Published var userCookie : String = "ADMIN"
+    @Published var homeColecs:[ic] = []
 
     func update() {
         getTasks()
@@ -138,15 +171,30 @@ class ItemViewModel: ObservableObject {
         let homeRecordNames: [String] = [
             "8032DBAA-2AAD-4597-AFF7-E2D8F42D3CD5"
         ]
+
         for i in homeRecordNames{
-            self.database.fetch(withQuery: .init(recordType: "itemCollection", predicate: .init(format: "recordName == '\(i)'"))) { [self] results in
+            self.database.fetch(withQuery: .init(recordType: "itemCollection", predicate: .init(format: "___recordID == %@",CKRecord.ID(recordName: i)))) { [self] results in
+//                print(results)
                 results.map { (matchResults: [(CKRecord.ID, Result<CKRecord, any Error>)], queryCursor: CKQueryOperation.Cursor?) in
                     if matchResults.count > 0{
-                        print(matchResults.first!.0)
+                        let use = matchResults.first!.1
+                        use.map { r in
+                            DispatchQueue.main.async {
+                                var use = true
+                                for i in self.homeColecs {
+                                    if i == .init(r) {
+                                        use = false
+                                    }
+                                }
+                                if use {
+                                    self.homeColecs.append(.init(r))
+                                }
+                        }
+                        }
                     }
                 }
             }
-            print("go")
+//            print("go")
             
             
         }
