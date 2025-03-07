@@ -30,16 +30,6 @@ struct FavoritesView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            // Back Button and Title
-            HStack {
-                Button(action: {
-                    print("Back button tapped")
-                }) {
-                    Image(systemName: "chevron.left")
-                        .foregroundColor(.white)
-                        .font(.title)
-                }
-                Spacer()
                 Text("DAWG POUND")
                     .font(.custom("Lexend-Bold", size: 28))
                     .foregroundColor(.white)

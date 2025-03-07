@@ -22,16 +22,6 @@ struct ProductsView: View {
     var body: some View {
         ScrollView {
             VStack {
-                HStack {
-                    Button(action: {}) {
-                        Image(systemName: "chevron.left")
-                            .foregroundColor(.white)
-                            .font(.title)
-                    }
-                    Spacer()
-                }
-                .padding(.leading, 20)
-                
                 Image("DawgPoundLogo")
                     .resizable()
                     .scaledToFit()
