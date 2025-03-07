@@ -1,32 +1,32 @@
 import SwiftUI
 
 struct MenuView: View {
-    @Binding var isMenuOpen: Bool
+    var isMenuOpen : Binding<Bool>
     var model:StateObject<ItemViewModel>
-    init (_ model:StateObject<ItemViewModel>, isMenuOpen:Binding<Bool>) {
+    init (_ model:StateObject<ItemViewModel>, isMenuOpen imo:Binding<Bool>) {
+        self.model = model
+        self.isMenuOpen = imo
         if model.wrappedValue.items.isEmpty {
             model.wrappedValue.update()
         }
-        self.isMenuOpen = isMenuOpen.wrappedValue
-        self.model = model
     }
     @State private var expandedCategory: String? = nil // Tracks expanded category
 
     var body: some View {
         ZStack {
-            if isMenuOpen {
+            if isMenuOpen.wrappedValue {
                 Color.black.opacity(0.3)
                     .edgesIgnoringSafeArea(.all)
                     .onTapGesture {
                         withAnimation {
-                            isMenuOpen.toggle()
+                            isMenuOpen.wrappedValue.toggle()
                         }
                     }
             }
             
             // Side Menu
             HStack {
-                if isMenuOpen {
+                if isMenuOpen.wrappedValue {
                     VStack(alignment: .center, spacing: 10) {
                         Spacer()
                         
@@ -57,7 +57,7 @@ struct MenuView: View {
                     .frame(width: 450, height: 750)
                     .background(Color("lightlightgray"))
                     .transition(.move(edge: .leading))
-                    .animation(.easeInOut, value: isMenuOpen)
+                    .animation(.easeInOut, value: isMenuOpen.wrappedValue)
                 }
                 
                 Spacer()
