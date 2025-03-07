@@ -196,11 +196,14 @@ func toPrice(_ doub:Double) -> String {
 struct HomeItems: View {
     var model:StateObject<ItemViewModel>
     init (_ model:StateObject<ItemViewModel>) {self.model = model
-        print("{")
+//        print("{")
         for i in model.wrappedValue.homeColecs {
-            print(i.name)
+//            print(i.name)
+//            for o in i.items {
+////                print(o)
+//            }
         }
-        print("}")
+//        print("}")
     }
     var body: some View {
         // Trending Section
