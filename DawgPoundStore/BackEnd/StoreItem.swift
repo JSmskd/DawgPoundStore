@@ -123,9 +123,14 @@ class ic : Identifiable, Hashable{
         name = cloudkitRecord["Name"] as! String
         desc = cloudkitRecord["collectionDescription"] as! String
 //        cloudkitRecord.recordID.recordName
+//        print(cloudkitRecord["items"] as! [CKRecord.Reference])
         for i in cloudkitRecord["items"] as! [CKRecord.Reference] {
             CKContainer.default().publicCloudDatabase.fetch(withRecordID: i.recordID) { o,e in
-                if o == nil {} else {
+//                print(o)
+                if o == nil {
+//                    print("\(i.recordID.recordName) = nil")
+                } else {
+//                    print("winner")
                     self.items.append(.init(o!["title"] as! String, o!["description"] as! String, o!["price"] as! Double))
                 }
             }
@@ -195,8 +200,7 @@ class ItemViewModel: ObservableObject {
                 }
             }
 //            print("go")
-            
-            
+
         }
         let sideRecordNames: [String] = [
             "8032DBAA-2AAD-4597-AFF7-E2D8F42D3CD5"
@@ -267,9 +271,9 @@ class ItemViewModel: ObservableObject {
                                 print("sad :(")
                             } else {
 //                                print(r!)
-                                print(r!.allKeys())
-                                print(r!["quantity"] as! Int64)
-                                print(r!["style"] as! String)
+//                                print(r!.allKeys())
+//                                print(r!["quantity"] as! Int64)
+//                                print(r!["style"] as! String)
                                 var q = r!["quantity"] as! Int64
                                 var s = r!["style"] as! String
                                 var ordItem:Item?
