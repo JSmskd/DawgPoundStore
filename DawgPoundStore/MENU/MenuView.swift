@@ -6,9 +6,7 @@ struct MenuView: View {
     init (_ model:StateObject<ItemViewModel>, isMenuOpen imo:Binding<Bool>) {
         self.model = model
         self.isMenuOpen = imo
-        if model.wrappedValue.items.isEmpty {
             model.wrappedValue.update()
-        }
     }
     @State private var expandedCategory: String? = nil // Tracks expanded category
 

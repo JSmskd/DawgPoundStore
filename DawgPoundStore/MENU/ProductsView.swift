@@ -5,9 +5,7 @@ struct ProductsView: View {
     @State private var cartProducts: Set<UUID> = []
     var model:StateObject<ItemViewModel>
     init (_ model:StateObject<ItemViewModel>) {
-        if model.wrappedValue.items.isEmpty {
             model.wrappedValue.update()
-        }
         self.model = model
     }
     let product = [

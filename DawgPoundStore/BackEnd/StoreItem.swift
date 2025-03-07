@@ -190,12 +190,15 @@ class ItemViewModel: ObservableObject {
     @Published var orders:[orderItem] = []
     @Published var userCookie : String = "ADMIN"
     @Published var homeColecs:[ic] = []
+    @Published var isRequesting = false
 
     func update() {
-        getTasks()
-        getUser(userCookie)
-        getActiveCart()
-        getCollections()
+        if items.isEmpty {
+            getTasks()
+            getUser(userCookie)
+            getActiveCart()
+            getCollections()
+        }
     }
     func getCollections() {
         let homeRecordNames: [String] = [

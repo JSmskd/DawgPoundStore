@@ -6,7 +6,7 @@ struct FavoritesView: View {
     init (_ model:StateObject<ItemViewModel>) {
         self.model = model
         //        trendingItems = []//model.wrappedValue.getTasks()
-        model.wrappedValue.getTasks()
+            model.wrappedValue.update()
     }
     
     //    @State private var products = [

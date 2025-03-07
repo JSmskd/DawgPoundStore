@@ -9,9 +9,7 @@ struct HomeView: View {
 //        if model.wrappedValue.colecs.isEmpty {
 //            model.wrappedValue.update()
 //        }
-        if model.wrappedValue.items.isEmpty {
             model.wrappedValue.update()
-        }
 
         //        model.wrappedValue.getUser()
         self.model = model

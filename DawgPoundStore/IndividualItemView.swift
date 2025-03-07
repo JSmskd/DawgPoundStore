@@ -6,9 +6,7 @@ struct IndividualItemView: View {
     init (_ model:StateObject<ItemViewModel>, item:Item) {
         curentItem = item
         //        trendingItems = []//model.wrappedValue.getTasks()
-        if model.wrappedValue.items.isEmpty {
             model.wrappedValue.update()
-        }
 
         //        model.wrappedValue.getUser()
         self.model = model
