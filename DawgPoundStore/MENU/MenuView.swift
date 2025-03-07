@@ -2,6 +2,14 @@ import SwiftUI
 
 struct MenuView: View {
     @Binding var isMenuOpen: Bool
+    var model:StateObject<ItemViewModel>
+    init (_ model:StateObject<ItemViewModel>, isMenuOpen:Binding<Bool>) {
+        if model.wrappedValue.items.isEmpty {
+            model.wrappedValue.update()
+        }
+        self.isMenuOpen = isMenuOpen.wrappedValue
+        self.model = model
+    }
     @State private var expandedCategory: String? = nil // Tracks expanded category
 
     var body: some View {
@@ -60,7 +68,7 @@ struct MenuView: View {
     // Regular menu items
     @ViewBuilder
     func menuItem(title: String, color: Color) -> some View {
-        NavigationLink(destination: ProductsView()) {
+        NavigationLink(destination: ProductsView(model)) {
             Text(title)
                 .font(.custom("Lexend-Bold", size: 22))
                 .foregroundColor(.black)
@@ -94,7 +102,7 @@ struct MenuView: View {
     // Submenu items (TOPS, BOTTOMS)
     @ViewBuilder
     func submenuItem(title: String) -> some View {
-        NavigationLink(destination: ProductsView()) {
+        NavigationLink(destination: ProductsView(model)) {
             Text(title)
                 .font(.custom("Lexend-Regular", size: 18))
                 .foregroundColor(.gray)
@@ -108,9 +116,9 @@ struct MenuView: View {
 }
 
 // Preview
-struct MenuView_Previews: PreviewProvider {
-    static var previews: some View {
-        MenuView(isMenuOpen: .constant(true))
-    }
-}
+//struct MenuView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        MenuView(isMenuOpen: .constant(true))
+//    }
+//}
 
