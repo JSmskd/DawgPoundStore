@@ -70,6 +70,18 @@ struct Item:Identifiable, CustomStringConvertible, Hashable/*, Codable*/ {
 
 struct itemPreview:View {
     var item:Item
+    var previewImage:UIImage { get {
+        var ret:UIImage = .dawgPoundLogo
+        if item.images != nil { if item.images!.first != nil { if item.images!.first!.fileURL != nil {
+            ret = UIImage.init(data:NSData(contentsOf: item.images!.first!.fileURL.unsafelyUnwrapped.absoluteURL)! as Data) ?? ret
+        } } }
+        return ret
+    }
+    }
+//    var previewImage:UIImage? { get {
+//        item.images!.first!.fileURL
+//        return
+//    }}
     var model:StateObject<ItemViewModel>
     init (_ model:StateObject<ItemViewModel>, item:Item) {
         self.item = item
@@ -87,11 +99,22 @@ struct itemPreview:View {
                 IndividualItemView(model, item: item)
             } label: {
                 VStack {
-                    Rectangle()
-                        .fill(Color.gray)
-                        .frame(width: 140, height: 140)
-                        .cornerRadius(8)
-
+                    ZStack{
+                        Rectangle()
+                            .fill(Color.gray)
+                            .frame(width: 140, height: 140)
+                            .cornerRadius(8)
+                        Image(uiImage:previewImage) //item.images)
+                            .resizable()
+                    }
+                    .frame(width: 140, height: 140)
+                    .cornerRadius(8)
+//                    .onAppear {
+////                        item.images!.first!.fileURL
+////                        print(<#T##items: Any...##Any#>)
+////                        print("hi")
+////                        print(item.images?.first?.fileURL)
+//                    }
                     Text(item.title)
                         .font(.subheadline)
                         .foregroundColor(.white)
@@ -130,8 +153,10 @@ class ic : Identifiable, Hashable{
                 if o == nil {
 //                    print("\(i.recordID.recordName) = nil")
                 } else {
-//                    print("winner")
-                    self.items.append(.init(o!["title"] as! String, o!["description"] as! String, o!["price"] as! Double))
+//                    print("\(self.name)")
+//                    Item.init(String, String, Double, images: [CKAsset]?, id: CKRecord?, reference: CKRecord.Reference?)
+
+                    self.items.append(.init(o!["title"] as! String, o!["description"] as! String, o!["price"] as! Double, images: o!["images"] as? Array<CKAsset>,id: o))
                 }
             }
         }
@@ -174,7 +199,7 @@ class ItemViewModel: ObservableObject {
     }
     func getCollections() {
         let homeRecordNames: [String] = [
-            "8032DBAA-2AAD-4597-AFF7-E2D8F42D3CD5"
+            "7D64CC49-2D7C-4191-A987-063BD0D9DF15"
         ]
 
         for i in homeRecordNames{
