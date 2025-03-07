@@ -225,5 +225,6 @@ struct HomeItems: View {
                 }
             }
         }
+        .navigationBarBackButtonHidden()
     }
 }
