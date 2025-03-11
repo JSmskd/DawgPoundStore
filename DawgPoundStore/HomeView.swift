@@ -6,13 +6,16 @@ struct HomeView: View {
     init (_ model:StateObject<ItemViewModel>) {
 
         //        trendingItems = []//model.wrappedValue.getTasks()
-//        if model.wrappedValue.colecs.isEmpty {
-//            model.wrappedValue.update()
-//        }
-            model.wrappedValue.update()
+        //        if model.wrappedValue.colecs.isEmpty {
+        //            model.wrappedValue.update()
+        //        }
+        model.wrappedValue.update()
 
         //        model.wrappedValue.getUser()
         self.model = model
+
+        UIRefreshControl.appearance().tintColor = UIColor.white
+        UIRefreshControl.appearance().attributedTitle = NSAttributedString("Refreshing…")
     }
     //    let trendingItems:[Item]// = [
     ////        ("Nike Hersey Classic Hoodie", "$55"),
@@ -20,9 +23,8 @@ struct HomeView: View {
     @State var isMenuOpen = false
     var body: some View {
         ZStack (alignment:.topLeading){
-
-            ScrollView {
-                VStack{
+            ScrollView(.vertical) {
+                VStack {
                     // Header Section
                     ZStack(alignment: .bottomLeading) {
                         Image("HeaderImage") // Replace with your header image
@@ -68,89 +70,91 @@ struct HomeView: View {
                     }
 
                     HomeItems(model)
-                        // Featured Section
-                        Text("Show your best Husky pride with Dawg Pound.")
-                            .font(.title)
+                    // Featured Section
+                    Text("Show your best Husky pride with Dawg Pound.")
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .foregroundColor(.orange)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
+
+                    // FAQ Section
+                    VStack(alignment: .leading, spacing: 20) {
+                        Text("FAQ")
+                            .font(.title2)
                             .fontWeight(.bold)
-                            .foregroundColor(.orange)
-                            .multilineTextAlignment(.center)
+                            .foregroundColor(.white)
                             .padding(.horizontal)
 
-                        // FAQ Section
-                        VStack(alignment: .leading, spacing: 20) {
-                            Text("FAQ")
-                                .font(.title2)
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
-                                .padding(.horizontal)
+                        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 16), count: 2), spacing: 20) {
+                            ForEach(1...6, id: \.self) { index in
+                                Button(action: {
+                                    print("FAQ \(index) tapped")
+                                }) {
+                                    VStack(alignment: .leading, spacing: 8) {
+                                        Text("Where do I get my order picked up?")
+                                            .font(.headline)
+                                            .foregroundColor(.white)
 
-                            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 16), count: 2), spacing: 20) {
-                                ForEach(1...6, id: \.self) { index in
-                                    Button(action: {
-                                        print("FAQ \(index) tapped")
-                                    }) {
-                                        VStack(alignment: .leading, spacing: 8) {
-                                            Text("Where do I get my order picked up?")
-                                                .font(.headline)
-                                                .foregroundColor(.white)
-
-                                            Text("Answer etc. etc.")
-                                                .font(.subheadline)
-                                                .foregroundColor(.gray)
-                                        }
-                                        .padding()
-                                        .background(Color(.systemGray6).opacity(0.2))
-                                        .cornerRadius(10)
+                                        Text("Answer etc. etc.")
+                                            .font(.subheadline)
+                                            .foregroundColor(.gray)
                                     }
+                                    .padding()
+                                    .background(Color(.systemGray6).opacity(0.2))
+                                    .cornerRadius(10)
                                 }
                             }
-                            .padding(.horizontal)
                         }
-
-                        // Footer
-                        Button(action: {
-                            print("Email footer tapped")
-                        }) {
-                            VStack {
-                                Text("Email us with any other questions at")
-                                    .font(.footnote)
-                                    .foregroundColor(.gray)
-                                    .frame(maxWidth: .infinity, alignment: .center)
-                                    .padding()
-
-                                Link("dawgpound@d214.org", destination: URL(string:"mailto:dawgpound@d214.org")!)
-                                    .font(.footnote)
-                                    .foregroundColor(.blue)
-                                    .frame(maxWidth: .infinity, alignment: .center)
-                                    .padding(.top, 3)
-                            }
-                        }
+                        .padding(.horizontal)
                     }
-                }.background(Color.black)
-                VStack {
-                    HStack {
-                        Button(action: {
-                            withAnimation {
-                                isMenuOpen.toggle()
-                            }
-                        }) {
-                            Image(systemName: "line.horizontal.3")
-                                .resizable()
-                                .frame(width: 30, height: 20)
+
+                    // Footer
+                    Button(action: {
+                        print("Email footer tapped")
+                    }) {
+                        VStack {
+                            Text("Email us with any other questions at")
+                                .font(.footnote)
+                                .foregroundColor(.gray)
+                                .frame(maxWidth: .infinity, alignment: .center)
                                 .padding()
-                                .foregroundStyle(.gray)
+
+                            Link("dawgpound@d214.org", destination: URL(string:"mailto:dawgpound@d214.org")!)
+                                .font(.footnote)
+                                .foregroundColor(.blue)
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .padding(.top, 3)
                         }
-                        .foregroundStyle(.gray)
-                        Spacer()
                     }
+                }
+            }.background(Color.black).refreshable {
+                model.wrappedValue.update(true)
+            }
+            VStack {
+                HStack {
+                    Button(action: {
+                        withAnimation {
+                            isMenuOpen.toggle()
+                        }
+                    }) {
+                        Image(systemName: "line.horizontal.3")
+                            .resizable()
+                            .frame(width: 30, height: 20)
+                            .padding()
+                            .foregroundStyle(.gray)
+                    }
+                    .foregroundStyle(.gray)
                     Spacer()
                 }
-                .foregroundStyle(Color.clear)
-                .frame(width: 30, height: 20).offset(x: 10, y: 10)
-            MenuView(model, isMenuOpen: $isMenuOpen).frame(alignment: .leading)
+                Spacer()
             }
+            .foregroundStyle(Color.clear)
+            .frame(width: 30, height: 20).offset(x: 10, y: 10)
+            MenuView(model, isMenuOpen: $isMenuOpen).frame(alignment: .leading)
         }
     }
+}
 
 
     struct ProductCard: View {
@@ -194,14 +198,14 @@ func toPrice(_ doub:Double) -> String {
 struct HomeItems: View {
     var model:StateObject<ItemViewModel>
     init (_ model:StateObject<ItemViewModel>) {self.model = model
-//        print("{")
+        //        print("{")
         for i in model.wrappedValue.homeColecs {
-//            print(i.name)
-//            for o in i.items {
-////                print(o)
-//            }
+            //            print(i.name)
+            //            for o in i.items {
+            ////                print(o)
+            //            }
         }
-//        print("}")
+        //        print("}")
     }
     var body: some View {
         // Trending Section

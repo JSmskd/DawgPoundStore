@@ -192,8 +192,9 @@ class ItemViewModel: ObservableObject {
     @Published var homeColecs:[ic] = []
     @Published var isRequesting = false
 
-    func update() {
-        if items.isEmpty {
+    func update(_ force:Bool = false) {
+        if items.isEmpty || force {
+            print("loading \(force)")
             getTasks()
             getUser(userCookie)
             getActiveCart()
