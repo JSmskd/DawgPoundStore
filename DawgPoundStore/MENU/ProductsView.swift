@@ -5,9 +5,12 @@ struct ProductsView: View {
     @State private var cartProducts: Set<UUID> = []
     var model:StateObject<ItemViewModel>
     init (_ model:StateObject<ItemViewModel>) {
-            model.wrappedValue.update()
+//            model.wrappedValue.update()
         self.model = model
-    }
+//        DispatchQueue.main.async {
+//            model.wrappedValue.timedown -= 5
+//        }
+            }
     let product = [
         Product(name: "Nike Hersey Classic Hoodie", price: "$55"),
         Product(name: "Nike Hersey Beanie", price: "$15"),

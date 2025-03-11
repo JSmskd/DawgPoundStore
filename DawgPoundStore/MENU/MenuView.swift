@@ -6,7 +6,10 @@ struct MenuView: View {
     init (_ model:StateObject<ItemViewModel>, isMenuOpen imo:Binding<Bool>) {
         self.model = model
         self.isMenuOpen = imo
-            model.wrappedValue.update()
+//            model.wrappedValue.update()
+//        DispatchQueue.main.async {
+//            model.wrappedValue.timedown -= 10
+//        }
     }
     @State private var expandedCategory: String? = nil // Tracks expanded category
 

@@ -9,7 +9,11 @@ struct HomeView: View {
         //        if model.wrappedValue.colecs.isEmpty {
         //            model.wrappedValue.update()
         //        }
-        model.wrappedValue.update()
+//        model.wrappedValue.update()
+//        DispatchQueue.main.async {
+//            print("-10")
+//            model.wrappedValue.timedown -= 1
+//        }
 
         //        model.wrappedValue.getUser()
         self.model = model

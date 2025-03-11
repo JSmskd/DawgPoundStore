@@ -86,9 +86,12 @@ struct itemPreview:View {
     init (_ model:StateObject<ItemViewModel>, item:Item) {
         self.item = item
         //        trendingItems = []//model.wrappedValue.getTasks()
-        if model.wrappedValue.items.isEmpty {
-            model.wrappedValue.update()
-        }
+//        if model.wrappedValue.items.isEmpty {
+//            model.wrappedValue.update()
+//        DispatchQueue.main.async {
+//            model.wrappedValue.timedown -= 0
+//        }
+//        }
 
         //        model.wrappedValue.getUser()
         self.model = model
@@ -175,31 +178,36 @@ class ic : Identifiable, Hashable{
 @MainActor
 class ItemViewModel: ObservableObject {
     
-    func qry(recordID: CKRecord.ID) -> Item? {
-        for i in items {
-            if i.id == recordID {
-                return i
+    func qryItm(recordID: CKRecord.ID) -> Item? {
+        var ret = nil as Item?
+        self.database.fetch(withRecordID: recordID) { r,e in
+            if let record = r {
+                ret = Item(title: record["title"] as! String, description: record["description"] as! String, price: record["price"] as! Double, images: record["images"] as? [CKAsset] , id: record, reference: CKRecord.Reference.init(recordID: record.recordID, action: .none))
             }
         }
-        return nil
+        return ret
     }
     var database = CKContainer.default().publicCloudDatabase
-    @Published var items:[Item] = []
+//    @Published var items:[Item] = []
     @Published var usr:user = user()
     @Published var cart:[orderItem] = []
     @Published var orders:[orderItem] = []
     @Published var userCookie : String = "ADMIN"
     @Published var homeColecs:[ic] = []
-    @Published var isRequesting = false
+    @Published var timedown:Int = 0
+    private var isRequesting = false
 
     func update(_ force:Bool = false) {
-        if items.isEmpty || force {
-            print("loading \(force)")
-            getTasks()
-            getUser(userCookie)
-            getActiveCart()
+        //items.isEmpty
+            print("START OF REQUESTS")
+             getTasks()
+//           int("tasks received")
+             getUser(userCookie)
+//           int("user received")
+             getActiveCart()
+//            print("activeCart received")
             getCollections()
-        }
+//            print("collections received\ncollections received")
     }
     func getCollections() {
         let homeRecordNames: [String] = [
@@ -258,12 +266,13 @@ class ItemViewModel: ObservableObject {
 //        function body
 //    }
     func getItem(id:CKRecord.Reference) -> Item? {
-        for i in items {
-            if i.id  == id.recordID {
-                return i
-            }
-        }
-        return nil
+        qryItm(recordID: id.recordID)
+//        for i in items {
+//            if i.id  == id.recordID {
+//                return i
+//            }
+//        }
+//        return nil
     }
     func getUser(_ cookie:String = "") {
         //        print("usera")
@@ -364,8 +373,8 @@ class ItemViewModel: ObservableObject {
 //                queryOperation.queryResultBlock = { results in
 //                    print(results)
 //                }
-
     }
+    ///depreciated
     func getTasks() {
         let predicate = NSPredicate(value: true)
         let query = CKQuery(recordType: "Item", predicate: predicate)
@@ -384,9 +393,9 @@ class ItemViewModel: ObservableObject {
 //                print("------------------------")
 //                print("ENDRECORD>")
             }})
-                DispatchQueue.main.async {
-                    self.items = newItems
-                }
+//                DispatchQueue.main.async {
+//                    self.items = newItems
+//                }
             }
 //            print(results)
         }
