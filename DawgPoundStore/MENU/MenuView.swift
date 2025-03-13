@@ -1,24 +1,33 @@
 import SwiftUI
 
 struct MenuView: View {
-    @Binding var isMenuOpen: Bool
+    var isMenuOpen : Binding<Bool>
+    var model:StateObject<ItemViewModel>
+    init (_ model:StateObject<ItemViewModel>, isMenuOpen imo:Binding<Bool>) {
+        self.model = model
+        self.isMenuOpen = imo
+//            model.wrappedValue.update()
+//        DispatchQueue.main.async {
+//            model.wrappedValue.timedown -= 10
+//        }
+    }
     @State private var expandedCategory: String? = nil // Tracks expanded category
 
     var body: some View {
         ZStack {
-            if isMenuOpen {
+            if isMenuOpen.wrappedValue {
                 Color.black.opacity(0.3)
                     .edgesIgnoringSafeArea(.all)
                     .onTapGesture {
                         withAnimation {
-                            isMenuOpen.toggle()
+                            isMenuOpen.wrappedValue.toggle()
                         }
                     }
             }
             
             // Side Menu
             HStack {
-                if isMenuOpen {
+                if isMenuOpen.wrappedValue {
                     VStack(alignment: .center, spacing: 10) {
                         Spacer()
                         
@@ -49,7 +58,7 @@ struct MenuView: View {
                     .frame(width: 450, height: 750)
                     .background(Color("lightlightgray"))
                     .transition(.move(edge: .leading))
-                    .animation(.easeInOut, value: isMenuOpen)
+                    .animation(.easeInOut, value: isMenuOpen.wrappedValue)
                 }
                 
                 Spacer()
@@ -60,7 +69,7 @@ struct MenuView: View {
     // Regular menu items
     @ViewBuilder
     func menuItem(title: String, color: Color) -> some View {
-        NavigationLink(destination: ProductsView()) {
+        NavigationLink(destination: ProductsView(model)) {
             Text(title)
                 .font(.custom("Lexend-Bold", size: 22))
                 .foregroundColor(.black)
@@ -94,7 +103,7 @@ struct MenuView: View {
     // Submenu items (TOPS, BOTTOMS)
     @ViewBuilder
     func submenuItem(title: String) -> some View {
-        NavigationLink(destination: ProductsView()) {
+        NavigationLink(destination: ProductsView(model)) {
             Text(title)
                 .font(.custom("Lexend-Regular", size: 18))
                 .foregroundColor(.gray)
@@ -108,9 +117,9 @@ struct MenuView: View {
 }
 
 // Preview
-struct MenuView_Previews: PreviewProvider {
-    static var previews: some View {
-        MenuView(isMenuOpen: .constant(true))
-    }
-}
+//struct MenuView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        MenuView(isMenuOpen: .constant(true))
+//    }
+//}
 

@@ -3,8 +3,15 @@ import SwiftUI
 struct ProductsView: View {
     @State private var favoriteProducts: Set<UUID> = []
     @State private var cartProducts: Set<UUID> = []
-    
-    let products = [
+    var model:StateObject<ItemViewModel>
+    init (_ model:StateObject<ItemViewModel>) {
+//            model.wrappedValue.update()
+        self.model = model
+//        DispatchQueue.main.async {
+//            model.wrappedValue.timedown -= 5
+//        }
+            }
+    let product = [
         Product(name: "Nike Hersey Classic Hoodie", price: "$55"),
         Product(name: "Nike Hersey Beanie", price: "$15"),
         Product(name: "Gildan Hersey Classic Sweatpants", price: "$25"),
@@ -22,21 +29,14 @@ struct ProductsView: View {
     var body: some View {
         ScrollView {
             VStack {
-                HStack {
-                    Button(action: {}) {
-                        Image(systemName: "chevron.left")
-                            .foregroundColor(.white)
-                            .font(.title)
-                    }
-                    Spacer()
+                NavigationLink(destination: HomeView(model)) {
+                    Image("DawgPoundLogo")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 80)
+                        .padding(.top, 10)
                 }
-                .padding(.leading, 20)
                 
-                Image("DawgPoundLogo")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(height: 80)
-                    .padding(.top, 10)
                     
                 Text("Shirts - Women")
                     .foregroundColor(.white)
@@ -47,7 +47,7 @@ struct ProductsView: View {
                     .padding(.leading, 20)
                 
                 LazyVGrid(columns: gridColumns, spacing: 20) {
-                    ForEach(products, id: \.id) { product in
+                    ForEach(product, id: \.id) { product in
                         VStack {
                             Rectangle()
                                 .fill(Color.gray)
@@ -115,12 +115,8 @@ struct ProductsView: View {
     }
 }
 
-struct Products: Identifiable {
+struct Product: Identifiable {
     let id = UUID()
     let name: String
     let price: String
-}
-
-#Preview {
-    ProductsView()
 }

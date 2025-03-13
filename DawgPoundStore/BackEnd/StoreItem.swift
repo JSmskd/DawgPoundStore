@@ -70,13 +70,28 @@ struct Item:Identifiable, CustomStringConvertible, Hashable/*, Codable*/ {
 
 struct itemPreview:View {
     var item:Item
+    var previewImage:UIImage { get {
+        var ret:UIImage = .dawgPoundLogo
+        if item.images != nil { if item.images!.first != nil { if item.images!.first!.fileURL != nil {
+            ret = UIImage.init(data:NSData(contentsOf: item.images!.first!.fileURL.unsafelyUnwrapped.absoluteURL)! as Data) ?? ret
+        } } }
+        return ret
+    }
+    }
+//    var previewImage:UIImage? { get {
+//        item.images!.first!.fileURL
+//        return
+//    }}
     var model:StateObject<ItemViewModel>
     init (_ model:StateObject<ItemViewModel>, item:Item) {
         self.item = item
         //        trendingItems = []//model.wrappedValue.getTasks()
-        if model.wrappedValue.items.isEmpty {
-            model.wrappedValue.update()
-        }
+//        if model.wrappedValue.items.isEmpty {
+//            model.wrappedValue.update()
+//        DispatchQueue.main.async {
+//            model.wrappedValue.timedown -= 0
+//        }
+//        }
 
         //        model.wrappedValue.getUser()
         self.model = model
@@ -87,11 +102,22 @@ struct itemPreview:View {
                 IndividualItemView(model, item: item)
             } label: {
                 VStack {
-                    Rectangle()
-                        .fill(Color.gray)
-                        .frame(width: 140, height: 140)
-                        .cornerRadius(8)
-
+                    ZStack{
+                        Rectangle()
+                            .fill(Color.gray)
+                            .frame(width: 140, height: 140)
+                            .cornerRadius(8)
+                        Image(uiImage:previewImage) //item.images)
+                            .resizable()
+                    }
+                    .frame(width: 140, height: 140)
+                    .cornerRadius(8)
+//                    .onAppear {
+////                        item.images!.first!.fileURL
+////                        print(<#T##items: Any...##Any#>)
+////                        print("hi")
+////                        print(item.images?.first?.fileURL)
+//                    }
                     Text(item.title)
                         .font(.subheadline)
                         .foregroundColor(.white)
@@ -108,47 +134,110 @@ struct itemPreview:View {
         }
     }
 }
+///item collection
+class ic : Identifiable, Hashable{
+    var name:String
+    var desc:String
+    var items:[Item] = []
+    var id: String { "\(name):\(desc)" }
+    init(name: String, desc: String, itemRefs:[CKRecord.ID]) {
+        self.name = name
+        self.desc = desc
+    }
+    init (_ cloudkitRecord:CKRecord) {
+//        print(cloudkitRecord)
+        name = cloudkitRecord["Name"] as! String
+        desc = cloudkitRecord["collectionDescription"] as! String
+//        cloudkitRecord.recordID.recordName
+//        print(cloudkitRecord["items"] as! [CKRecord.Reference])
+        for i in cloudkitRecord["items"] as! [CKRecord.Reference] {
+            CKContainer.default().publicCloudDatabase.fetch(withRecordID: i.recordID) { o,e in
+//                print(o)
+                if o == nil {
+//                    print("\(i.recordID.recordName) = nil")
+                } else {
+//                    print("\(self.name)")
+//                    Item.init(String, String, Double, images: [CKAsset]?, id: CKRecord?, reference: CKRecord.Reference?)
 
+                    self.items.append(.init(o!["title"] as! String, o!["description"] as! String, o!["price"] as! Double, images: o!["images"] as? Array<CKAsset>,id: o))
+                }
+            }
+        }
+    }
+    static func != (lhs:ic,rhs:ic) -> Bool {
+        !(lhs == rhs)
+    }
+    static func == (lhs:ic,rhs:ic) -> Bool {
+        lhs.id == rhs.id
+    }
+    func hash(into hasher: inout Hasher) {
+        id.hash(into: &hasher)
+    }
+}
 ///ready to sell object
 @MainActor
 class ItemViewModel: ObservableObject {
     
-    func qry(recordID: CKRecord.ID) -> Item? {
-        for i in items {
-            if i.id == recordID {
-                return i
+    func qryItm(recordID: CKRecord.ID) -> Item? {
+        var ret = nil as Item?
+        self.database.fetch(withRecordID: recordID) { r,e in
+            if let record = r {
+                ret = Item(title: record["title"] as! String, description: record["description"] as! String, price: record["price"] as! Double, images: record["images"] as? [CKAsset] , id: record, reference: CKRecord.Reference.init(recordID: record.recordID, action: .none))
             }
         }
-        return nil
+        return ret
     }
     var database = CKContainer.default().publicCloudDatabase
-    @Published var items:[Item] = []
+//    @Published var items:[Item] = []
     @Published var usr:user = user()
     @Published var cart:[orderItem] = []
     @Published var orders:[orderItem] = []
     @Published var userCookie : String = "ADMIN"
+    @Published var homeColecs:[ic] = []
+    @Published var timedown:Int = 0
+    private var isRequesting = false
 
-    func update() {
-        getTasks()
-        getUser(userCookie)
-        getActiveCart()
-        getCollections()
+    func update(_ force:Bool = false) {
+        //items.isEmpty
+            print("START OF REQUESTS")
+             getTasks()
+//           int("tasks received")
+             getUser(userCookie)
+//           int("user received")
+             getActiveCart()
+//            print("activeCart received")
+            getCollections()
+//            print("collections received\ncollections received")
     }
     func getCollections() {
         let homeRecordNames: [String] = [
-            "8032DBAA-2AAD-4597-AFF7-E2D8F42D3CD5"
+            "7D64CC49-2D7C-4191-A987-063BD0D9DF15"
         ]
+
         for i in homeRecordNames{
-            self.database.fetch(withQuery: .init(recordType: "itemCollection", predicate: .init(format: "recordName == '\(i)'"))) { [self] results in
+            self.database.fetch(withQuery: .init(recordType: "itemCollection", predicate: .init(format: "___recordID == %@",CKRecord.ID(recordName: i)))) { [self] results in
+//                print(results)
                 results.map { (matchResults: [(CKRecord.ID, Result<CKRecord, any Error>)], queryCursor: CKQueryOperation.Cursor?) in
                     if matchResults.count > 0{
-                        print(matchResults.first!.0)
+                        let use = matchResults.first!.1
+                        use.map { r in
+                            DispatchQueue.main.async {
+                                var use = true
+                                for i in self.homeColecs {
+                                    if i == .init(r) {
+                                        use = false
+                                    }
+                                }
+                                if use {
+                                    self.homeColecs.append(.init(r))
+                                }
+                        }
+                        }
                     }
                 }
             }
-            print("go")
-            
-            
+//            print("go")
+
         }
         let sideRecordNames: [String] = [
             "8032DBAA-2AAD-4597-AFF7-E2D8F42D3CD5"
@@ -177,12 +266,13 @@ class ItemViewModel: ObservableObject {
 //        function body
 //    }
     func getItem(id:CKRecord.Reference) -> Item? {
-        for i in items {
-            if i.id  == id.recordID {
-                return i
-            }
-        }
-        return nil
+        qryItm(recordID: id.recordID)
+//        for i in items {
+//            if i.id  == id.recordID {
+//                return i
+//            }
+//        }
+//        return nil
     }
     func getUser(_ cookie:String = "") {
         //        print("usera")
@@ -219,9 +309,9 @@ class ItemViewModel: ObservableObject {
                                 print("sad :(")
                             } else {
 //                                print(r!)
-                                print(r!.allKeys())
-                                print(r!["quantity"] as! Int64)
-                                print(r!["style"] as! String)
+//                                print(r!.allKeys())
+//                                print(r!["quantity"] as! Int64)
+//                                print(r!["style"] as! String)
                                 var q = r!["quantity"] as! Int64
                                 var s = r!["style"] as! String
                                 var ordItem:Item?
@@ -283,8 +373,8 @@ class ItemViewModel: ObservableObject {
 //                queryOperation.queryResultBlock = { results in
 //                    print(results)
 //                }
-
     }
+    ///depreciated
     func getTasks() {
         let predicate = NSPredicate(value: true)
         let query = CKQuery(recordType: "Item", predicate: predicate)
@@ -303,9 +393,9 @@ class ItemViewModel: ObservableObject {
 //                print("------------------------")
 //                print("ENDRECORD>")
             }})
-                DispatchQueue.main.async {
-                    self.items = newItems
-                }
+//                DispatchQueue.main.async {
+//                    self.items = newItems
+//                }
             }
 //            print(results)
         }

@@ -7,9 +7,10 @@ struct CartView: View {
     init (_ model:StateObject<ItemViewModel>) {
         self.model = model
 //        model = []model.wrappedValue.getTasks()
-        if model.wrappedValue.items.isEmpty {
-            model.wrappedValue.update()
-        }
+//        DispatchQueue.main.async {
+//            model.wrappedValue.timedown -= 0
+//        }
+//            model.wrappedValue.update()
 
     }
 
