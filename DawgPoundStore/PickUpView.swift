@@ -1,6 +1,10 @@
 import SwiftUI
 
 struct PickUpView: View {
+    var model:StateObject<ItemViewModel>
+    init (_ model:StateObject<ItemViewModel>) {
+        self.model = model
+    }
     var body: some View {
         @State var email: String = ""
         @State var time: String = ""
@@ -118,7 +122,7 @@ struct PickUpView: View {
                     .cornerRadius(10)
                     .padding(.horizontal)
                     
-                    NavigationLink(destination: FinalView()) {
+                    NavigationLink(destination: FinalView(model)) {
                         Text("Place order")
                             .font(Font.custom("Lexend-Bold", size: 24))
                             .foregroundColor(.white)
@@ -133,9 +137,9 @@ struct PickUpView: View {
         }
     }
     
-    struct PickUpView_Previews: PreviewProvider {
-        static var previews: some View {
-            PickUpView()
-        }
-    }
+//    struct PickUpView_Previews: PreviewProvider {
+//        static var previews: some View {
+//            PickUpView()
+//        }
+//    }
 }
