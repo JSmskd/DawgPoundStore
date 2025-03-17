@@ -18,13 +18,44 @@ struct IndividualItemView: View {
 
     let colors: [Color] = [.white, Color(red: 0.43, green: 0.33, blue: 0.24), .gray]
     let sizes: [String] = ["S", "M", "L", "XL", "XXL"]
-
+    var previewImage:UIImage { get {
+        var ret:UIImage = .dawgPoundLogo
+        if curentItem.images != nil { if curentItem.images!.first != nil { if curentItem.images!.first!.fileURL != nil {
+            ret = UIImage.init(data:NSData(contentsOf: curentItem.images!.first!.fileURL.unsafelyUnwrapped.absoluteURL)! as Data) ?? ret
+        } } }
+        return ret
+    }
+    }
     var body: some View {
         ZStack {
             Color.black.ignoresSafeArea()
 
+            NavigationLink {
+                HomeView(model)
+            } label:
+            {
+                Image("DawgPoundLogo")
+                    .resizable()
+                    .frame(width:80, height: 80)
+                    .aspectRatio(1.0, contentMode: .fit)
+                    .position(x: UIScreen.main.bounds.width / 2, y: 70)
+
+
+            }
+            .frame(width:80, height: 80)
+            .aspectRatio(1.0, contentMode: .fit)
+            .position(/*x: UIScreen.main.bounds.width / 2, */y: 48)
             HStack(spacing: 30) {
                 VStack {
+                    ZStack{
+                        Rectangle()
+                            .fill(Color.gray)
+                        Image(uiImage:previewImage) //item.images)
+                            .resizable()
+                            .padding(.all)
+                    }
+                    .frame(width: 468, height: 512)
+                .cornerRadius(8)
 //                    Image("hoodie_image") // Ensure image is in assets
 //                        .resizable()
 //                        .aspectRatio(contentMode: .fit)
@@ -138,18 +169,7 @@ struct IndividualItemView: View {
                 .padding()
             }
         
-                    NavigationLink {
-                        HomeView(model)
-                    } label:
-                    {
-                        Image("DawgPoundLogo")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width:80, height: 80)
-                            .position(x: UIScreen.main.bounds.width / 2, y: 70)
-                           
 
-                    }
                    
 
                               Spacer()

@@ -2,10 +2,24 @@ import SwiftUI
 
 struct CartView: View {
     var model:StateObject<ItemViewModel>
- 
+    @State var cart: [orderItem] = []
+    ///cost multiplied by 100
+    var itemTotal:Int { get {
+        var t = 0
+        for i in cart {
+            i.item.price * i.blnk.cost
+
+        }
+        return t
+    }}
+    var total:Int { get {
+        return itemTotal// +
+    }}
+
 
     init (_ model:StateObject<ItemViewModel>) {
         self.model = model
+        STATICCART = false
 //        model = []model.wrappedValue.getTasks()
 //        DispatchQueue.main.async {
 //            model.wrappedValue.timedown -= 0
@@ -13,7 +27,20 @@ struct CartView: View {
 //            model.wrappedValue.update()
 
     }
+    let STATICCART:Bool
+    init (_ model:StateObject<ItemViewModel>, items: [orderItem]) {
+        self.model = model
+        STATICCART = true
+    }
+    func reloadCart() {
+        if STATICCART { return }
 
+        model.wrappedValue.update()
+cart = []
+        model.wrappedValue.cart.forEach { i in
+            cart.append(i)
+        }
+    }
     var body: some View {
         ZStack {
                     Color.black.edgesIgnoringSafeArea(.all) // Background color
@@ -99,6 +126,9 @@ struct CartView: View {
                         }
                         .padding()
                     }
+        .onAppear {
+            reloadCart()
+        }
                 }
             }
         
