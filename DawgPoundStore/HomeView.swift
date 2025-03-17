@@ -89,36 +89,7 @@ struct HomeView: View {
                         .multilineTextAlignment(.leading)
                         .padding(.horizontal)
 
-                    // FAQ Section
-                    VStack(alignment: .leading, spacing: 20) {
-                        Text("FAQ")
-                            .font(.custom("Lexend-Regular", size: 25))
-                            .foregroundColor(.white)
-                            .padding(.horizontal)
-                            .offset(x: 8, y: 15)
-
-                        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 16), count: 2), spacing: 20) {
-                            ForEach(1...6, id: \.self) { index in
-                                Button(action: {
-                                    print("FAQ \(index) tapped")
-                                }) {
-                                    VStack(alignment: .leading, spacing: 8) {
-                                        Text("Where do I get my order picked up?")
-                                            .font(.headline)
-                                            .foregroundColor(.white)
-
-                                        Text("Answer etc. etc.")
-                                            .font(.subheadline)
-                                            .foregroundColor(.gray)
-                                    }
-                                    .padding()
-                                    .background(Color(.systemGray6).opacity(0.2))
-                                    .cornerRadius(10)
-                                }
-                            }
-                        }
-                        .padding(.horizontal)
-                    }
+                   faq()
 
                     // Footer
                     Button(action: {
@@ -243,4 +214,51 @@ struct HomeItems: View {
         }
         .navigationBarBackButtonHidden()
     }
+}
+struct faq: View {
+    //("question","answer")
+    let questions:Array<(String,String)> = [
+        ("Where do I get my order picked up?","Answer Etc. Etc."),
+        ("Where do I get my order picked up?","Answer Etc. Etc."),
+        ("Where do I get my order picked up?","Answer Etc. Etc."),
+        ("Where do I get my order picked up?","Answer Etc. Etc."),
+        ("Where do I get my order picked up?","Answer Etc. Etc."),
+        ("Where do I get my order picked up?","Answer Etc. Etc.")
+    ]
+    var body: some View {
+        // FAQ Section
+        VStack(alignment: .leading, spacing: 20) {
+            Text("FAQ")
+                .font(.title2)
+                .fontWeight(.bold)
+                .foregroundColor(.white)
+                .padding(.horizontal)
+
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 16), count: 2), spacing: 20) {
+                ForEach(0..<questions.count, id: \.self) { index in
+                    Button(action: {
+                        print("FAQ \(index) tapped")
+                    }) {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text(questions[index].0)
+                                .font(.headline)
+                                .foregroundColor(.white)
+
+                            Text(questions[index].1)
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
+                        }
+                        .padding()
+                        .background(Color(.systemGray6).opacity(0.2))
+                        .cornerRadius(10)
+                    }
+                }
+            }
+            .padding(.horizontal)
+        }
+    }
+}
+
+#Preview {
+    faq()
 }
