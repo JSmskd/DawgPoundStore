@@ -25,6 +25,7 @@ struct HomeView: View {
     ////        ("Nike Hersey Classic Hoodie", "$55"),
     ////    ]
     @State var isMenuOpen = false
+    let colors = customColors()
     var body: some View {
         ZStack (alignment:.topLeading){
             ScrollView(.vertical) {
@@ -39,22 +40,26 @@ struct HomeView: View {
 
                         VStack(alignment: .leading) {
                             Text("The")
-                                .foregroundColor(.white)
+                                .foregroundColor(.white ?? .black)
+                                .offset(y: 80)
 
                             Text("Pound.")
-                                .foregroundColor(.orange)
+                                .foregroundColor(colors["orange"] ?? .black)
+                                .offset(y: 30)
                         }
-                        .font(.custom("Lexend-Bold", size: 90))
+                        .font(.custom("Lexend-Bold", size: 130))
                         .padding(.leading)
                         .padding(.bottom, 20)
                     }
                     // Search Bar and Action Icons
                     HStack {
                         TextField("Search", text: .constant(""))
+                            .font(.custom("Lexend-Thin", size: 15))
                             .padding()
-                            .background(Color(.systemGray6))
-                            .cornerRadius(12)
+                            .background((colors["lightLightGray"] ?? .black))
+                            .cornerRadius(50)
                             .padding(.horizontal)
+                            .offset(x: 8, y: 15)
 
                         HStack(spacing: 15) {
                             NavigationLink(destination: CartView(model)) {
@@ -62,12 +67,14 @@ struct HomeView: View {
                                     .font(.title)
                                     .foregroundColor(.white)
                                     .padding()
+                                    .offset(y: 15)
                             }
                             NavigationLink(destination: FavoritesView(model)) {
                                 Image(systemName: "heart")
                                     .font(.title)
                                     .foregroundColor(.white)
                                     .padding()
+                                    .offset(y: 15)
                             }
                         }
                         .padding(.trailing)
@@ -76,19 +83,19 @@ struct HomeView: View {
                     HomeItems(model)
                     // Featured Section
                     Text("Show your best Husky pride with Dawg Pound.")
-                        .font(.title)
+                        .font(.custom("Lexend-Bold", size: 45))
                         .fontWeight(.bold)
                         .foregroundColor(.orange)
-                        .multilineTextAlignment(.center)
+                        .multilineTextAlignment(.leading)
                         .padding(.horizontal)
 
                     // FAQ Section
                     VStack(alignment: .leading, spacing: 20) {
                         Text("FAQ")
-                            .font(.title2)
-                            .fontWeight(.bold)
+                            .font(.custom("Lexend-Regular", size: 25))
                             .foregroundColor(.white)
                             .padding(.horizontal)
+                            .offset(x: 8, y: 15)
 
                         LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 16), count: 2), spacing: 20) {
                             ForEach(1...6, id: \.self) { index in
@@ -154,7 +161,7 @@ struct HomeView: View {
                 Spacer()
             }
             .foregroundStyle(Color.clear)
-            .frame(width: 30, height: 20).offset(x: 10, y: 10)
+            .frame(width: 30, height: 20).offset(x: 15, y: 15)
             MenuView(model, isMenuOpen: $isMenuOpen).frame(alignment: .leading)
         }
     }
@@ -217,10 +224,10 @@ struct HomeItems: View {
             ForEach(0..<model.wrappedValue.homeColecs.count, id:\.self) { noeh in
                 VStack(alignment: .leading) {
                     Text("Trending now")
-                        .font(.title2)
-                        .fontWeight(.bold)
+                        .font(.custom("Lexend-Regular", size: 25))
                         .foregroundColor(.white)
                         .padding(.horizontal)
+                        .offset(x: 8, y: 15)
 
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 16) {
