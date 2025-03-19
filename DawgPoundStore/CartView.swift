@@ -88,7 +88,7 @@ struct CartView: View {
                         .cornerRadius(10)
                         .padding(.horizontal)
 
-            NavigationLink(destination: PickUpView(model)) {
+                        NavigationLink(destination: PickUpView(model)) {
                             Text("Pick up")
                                 .font(Font.custom("Lexend-Bold", size: 24))
                                 .foregroundColor(.white)

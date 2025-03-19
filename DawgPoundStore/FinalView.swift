@@ -8,29 +8,33 @@ struct FinalView: View {
     var body: some View {
         Text("Thank you for ordering!")
             .font(.custom("Lexend-Regular", size: 24))
-        VStack(spacing: 15) {
+        padding()
+        ZStack {
+            Rectangle()
+                .foregroundStyle(Color.gray.opacity(0.3))
+                .frame(width: 1000, height: 150)
+                .cornerRadius(10)
             Text("An email has been sent to your inbox to confirm your purchase.")
-                .font(.body)
+                .font(.custom("Lexend-Regular", size: 24))
                 .foregroundStyle(.white)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 20)
+            NavigationLink(destination: HomeView(model)) {
+                Text("Return to Home Page")
+                    .font(Font.custom("Lexend-Regular", size: 24))
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.orange)
+                    .cornerRadius(10)
+                    .foregroundColor(.white)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color.orange)
+                    .cornerRadius(10)
+            }
+            .padding()
+            .cornerRadius(10)
         }
-        
-        NavigationLink(destination: HomeView(model)) {
-            Text("Return to Home Page")
-                .font(Font.custom("Lexend-Regular", size: 24))
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color.orange)
-                .cornerRadius(10)
-                .foregroundColor(.white)
-                .padding()
-                .frame(maxWidth: .infinity)
-                .background(Color.orange)
-                .cornerRadius(10)
-        }
-        .padding()
-        .cornerRadius(10)
     }
 }
