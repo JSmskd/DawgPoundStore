@@ -38,13 +38,13 @@ struct IndividualItemView: View {
                     .resizable()
                     .frame(width:80, height: 80)
                     .aspectRatio(1.0, contentMode: .fit)
-                    .position(x: UIScreen.main.bounds.width / 2, y: 70)
+//                    .position(x: UIScreen.main.bounds.width / 2, y: 70)
 
 
             }
             .frame(width:80, height: 80)
             .aspectRatio(1.0, contentMode: .fit)
-            .position(/*x: UIScreen.main.bounds.width / 2, */y: 48)
+            .position(x: UIScreen.main.bounds.width / 2, y: 48)
             HStack(spacing: 30) {
                 VStack {
                     ZStack{
