@@ -165,10 +165,19 @@ struct HomeView: View {
         }
     }
 
-func toPrice(_ doub:Double) -> String {
-    let dollars = Int(doub)
-    let cents = Int(doub * 100) - (dollars * 100)
-    return "$\(dollars).\(cents)\(cents < 10 ? "0" : "")"
+func toPrice(_ doub:Int) -> String {
+    let cuttoff = 10000
+    let dollars:Int = doub / cuttoff
+    let cent = doub % cuttoff
+    var cents = cent.description
+    while cents.last == "0" {
+        cents.removeLast()
+    }
+    while cents.count < 2 {
+        cents += "0"
+    }
+//    let cents:Int = doub - (dollars * 10000)
+    return "$\(dollars).\(cents)"
 }
 //
 //struct DawgPoundInteractiveView_Previews: PreviewProvider {

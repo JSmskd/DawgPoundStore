@@ -22,18 +22,83 @@ struct user {
         itemsInCart = []
     }
 }
+struct blankSize {
+    var name:String
+    var n:String
+    ///cost multiplied my 10000 {10.423  ->  10423}
+    var cost:Int
+    var quantity:Int
+    init (shortName:String,longName:String,cost:Int,quantity:Int) {
+        self.cost = cost
+        self.quantity = quantity
+        self.name = longName
+        self.n = shortName
+    }
+    init (_ reference:CKRecord.Reference) {
+        var shortname = ""
+        var longname = ""
+        var price = 0
+        var qty = 0
+        CKContainer.default().publicCloudDatabase.fetch(withRecordID: reference.recordID) { record, e in
 
+            if record != nil {
+                var r = record.unsafelyUnwrapped
+
+                shortname =  r["shortName"] as? String ?? "err"
+                longname = r["longName"] as? String ?? "error"
+                qty = r["quantity"] as? Int ?? 0
+                price = r["cost"] as? Int ?? 0
+            }
+
+        }
+        //fetch(withRecordID: reference) { record, error in
+
+        cost = price
+        quantity = qty
+        name = longname
+        n = shortname
+    }
+}
+struct blank:CustomStringConvertible {
+    var name:String
+
+    var sizes:[CKRecord.Reference]
+    var description: String {get {name}}
+    init (name:String,sizes:[CKRecord.Reference]) {
+        self.name = name
+        self.sizes = sizes
+    }
+    init(_ reference:CKRecord.ID) {
+        var NAME = "error"
+        var szs :[CKRecord.Reference] = []
+        CKContainer.default().publicCloudDatabase.fetch(withRecordID: reference) { record, error in
+            if record != nil {
+                var r:CKRecord {get {record.unsafelyUnwrapped}}
+
+                NAME = r["brandName"] as? String ?? NAME
+                for i in r["sizes"] as? [CKRecord.Reference] ?? .init() {
+                    szs.append(i)
+                }
+            }
+
+
+        }
+        name = NAME
+        sizes = szs
+    }
+}
 struct orderItem:Identifiable {
     var id:CKRecord.Reference?
     var item:Item
     var quantity:Int64
-    var style:String
-    init (_ ref:Item,_ qty:Int64, _ sty:String, id:CKRecord.Reference? = nil) {
+    var style:blank
+    var blnk:blankSize
+    init (_ ref:Item,_ qty:Int64, _ sty:blank, id:CKRecord.Reference? = nil, _ selected:blankSize) {
         //            itm = Item(reference: ref)
         quantity = qty
         style = sty
         item = ref
-
+        blnk = selected
     }
 }
 
@@ -49,8 +114,10 @@ struct Item:Identifiable, CustomStringConvertible, Hashable/*, Codable*/ {
     var Itemdescription:String
     var reference:CKRecord.Reference?
     var images:[CKAsset]?
-    var price:Double
-    init(title: String, description: String, price: Double, images: [CKAsset]? = [], id: CKRecord? = nil,reference: CKRecord.Reference? = nil) {
+    var price:Int
+//    var dollar:Int {get {price / 100}}
+//    var cent:Int {get {price - (dollar * 1000)}}
+    init(title: String, description: String, price: Int, images: [CKAsset]? = [], id: CKRecord? = nil,reference: CKRecord.Reference? = nil) {
         self.record = id
         self.title = title
         self.Itemdescription = description
@@ -58,7 +125,7 @@ struct Item:Identifiable, CustomStringConvertible, Hashable/*, Codable*/ {
         self.price = price
         self.reference = reference
     }
-    init(_ title: String, _ description: String, _ price: Double, images: [CKAsset]? = [], id: CKRecord? = nil, reference: CKRecord.Reference? = nil) {
+    init(_ title: String, _ description: String, _ price: Int, images: [CKAsset]? = [], id: CKRecord? = nil, reference: CKRecord.Reference? = nil) {
         self.record = id
         self.title = title
         self.Itemdescription = description
@@ -159,7 +226,7 @@ class ic : Identifiable, Hashable{
 //                    print("\(self.name)")
 //                    Item.init(String, String, Double, images: [CKAsset]?, id: CKRecord?, reference: CKRecord.Reference?)
 
-                    self.items.append(.init(o!["title"] as! String, o!["description"] as! String, o!["price"] as! Double, images: o!["images"] as? Array<CKAsset>,id: o))
+                    self.items.append(.init(o!["title"] as! String, o!["description"] as! String, (o!["cost"] as! Int), images: o!["images"] as? Array<CKAsset>,id: o))
                 }
             }
         }
@@ -182,7 +249,7 @@ class ItemViewModel: ObservableObject {
         var ret = nil as Item?
         self.database.fetch(withRecordID: recordID) { r,e in
             if let record = r {
-                ret = Item(title: record["title"] as! String, description: record["description"] as! String, price: record["price"] as! Double, images: record["images"] as? [CKAsset] , id: record, reference: CKRecord.Reference.init(recordID: record.recordID, action: .none))
+                ret = Item(title: record["title"] as! String, description: record["description"] as! String, price: record["price"] as! Int, images: record["images"] as? [CKAsset] , id: record, reference: CKRecord.Reference.init(recordID: record.recordID, action: .none))
             }
         }
         return ret
@@ -199,7 +266,7 @@ class ItemViewModel: ObservableObject {
 
     func update(_ force:Bool = false) {
         //items.isEmpty
-            print("START OF REQUESTS")
+//            print("START OF REQUESTS")
              getTasks()
 //           int("tasks received")
              getUser(userCookie)
@@ -388,7 +455,7 @@ class ItemViewModel: ObservableObject {
 //                print("------------------------")
 //                print("------------------------")
 //                print(record)
-                    newItems.append(Item(title: record["title"] as! String, description: record["description"] as! String, price: record["price"] as! Double, images: record["images"] as? [CKAsset] , id: record, reference: CKRecord.Reference.init(recordID: record.recordID, action: .none)))
+                    newItems.append(Item(title: record["title"] as! String, description: record["description"] as! String, price: /*record["price"] as! Int*/0, images: record["images"] as? [CKAsset] , id: record, reference: CKRecord.Reference.init(recordID: record.recordID, action: .none)))
 //                print("------------------------")
 //                print("------------------------")
 //                print("ENDRECORD>")
