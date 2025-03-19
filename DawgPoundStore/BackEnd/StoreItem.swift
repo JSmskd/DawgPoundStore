@@ -226,7 +226,7 @@ class ic : Identifiable, Hashable{
 //                    print("\(self.name)")
 //                    Item.init(String, String, Double, images: [CKAsset]?, id: CKRecord?, reference: CKRecord.Reference?)
 
-                    self.items.append(.init(o!["title"] as! String, o!["description"] as! String, (o!["cents"] as! Int) + (o!["dollars"] as! Int * 10000), images: o!["images"] as? Array<CKAsset>,id: o))
+                    self.items.append(.init(o!["title"] as! String, o!["description"] as! String, (o!["cost"] as! Int), images: o!["images"] as? Array<CKAsset>,id: o))
                 }
             }
         }
