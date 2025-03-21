@@ -1,8 +1,23 @@
 import SwiftUI
+import CloudKit
 
 struct IndividualItemView: View {
     var model:StateObject<ItemViewModel>
     var curentItem:Item
+    @State var quantity:UInt = 1
+    var styles: [blank] = [
+        .init(CKRecord.ID.init(recordName: "FA9FAB4D-F49F-4B26-B365-7F3210C8D9EE")),
+        .init(CKRecord.ID.init(recordName: "CE24806E-343D-4D68-9067-A80895D834FF"))
+    ]
+    var sizes: [[blankSize]] = [
+        [
+            blankSize.init(CKRecord.Reference.init(recordID: .init(recordName: "478BD526-5E40-4ACD-89AC-EAB617929B61"), action: CKRecord.ReferenceAction.none)),
+                           blankSize.init(CKRecord.Reference.init(recordID: .init(recordName: "80EDAE9C-6396-4F9D-B4D2-F906794C8526"), action: CKRecord.ReferenceAction.none))
+        ],
+        [
+            blankSize.init(CKRecord.Reference.init(recordID: .init(recordName: "73F4CFC6-745B-4DDD-ABAA-5042E6F9F0FE"), action: CKRecord.ReferenceAction.none))
+        ]
+    ]
     init (_ model:StateObject<ItemViewModel>, item:Item) {
         curentItem = item
         //        trendingItems = []//model.wrappedValue.getTasks()
@@ -10,6 +25,8 @@ struct IndividualItemView: View {
 
         //        model.wrappedValue.getUser()
         self.model = model
+//        item.reference?.recordID ?? .init(recordName: "F527E4A8-2B46-4930-8535-D51E6CCDC31B")
+
     }
 //    @State private var selectedColor: Color = .gray
 //    @State private var selectedSize: String? = nil
@@ -17,7 +34,7 @@ struct IndividualItemView: View {
 //    @State private var isFavorite = false
 
     let colors: [Color] = [.white, Color(red: 0.43, green: 0.33, blue: 0.24), .gray]
-    let sizes: [String] = ["S", "M", "L", "XL", "XXL"]
+//    let sizes: [String] = ["S", "M", "L", "XL", "XXL"]
     var previewImage:UIImage { get {
         var ret:UIImage = .dawgPoundLogo
         if curentItem.images != nil { if curentItem.images!.first != nil { if curentItem.images!.first!.fileURL != nil {
@@ -145,9 +162,14 @@ struct IndividualItemView: View {
                                     .fill(Color.orange)
                                     .frame(width: 300, height: 50)
 
-                                Text("Add to cart - \(toPrice(curentItem.price))")
-                                    .font(Font.custom("Lexend", size: 16))
-                                    .foregroundColor(.white)
+                                NavigationLink {
+                                    CartView(model, items: [.init(curentItem, Int64(exactly: quantity)!, styles.first!, sizes.first!.first! )])
+                                } label: {
+                                    Text("Add to cart - \(toPrice(curentItem.price))")
+                                        .font(Font.custom("Lexend", size: 16))
+                                        .foregroundColor(.white)
+                                }
+
                             }
                         }
 
