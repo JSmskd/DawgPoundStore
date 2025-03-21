@@ -2,7 +2,7 @@ import SwiftUI
 
 struct CartView: View {
     var model:StateObject<ItemViewModel>
-    @State var cart: [orderItem] = []
+    @State var cart: [orderItem]// = []
     ///cost multiplied by 100
     var itemTotal:Int { get {
         var t = 0
@@ -25,11 +25,12 @@ struct CartView: View {
 //            model.wrappedValue.timedown -= 0
 //        }
 //            model.wrappedValue.update()
-
+cart = []
     }
     let STATICCART:Bool
     init (_ model:StateObject<ItemViewModel>, items: [orderItem]) {
         self.model = model
+        cart = items
         STATICCART = true
     }
     func reloadCart() {
