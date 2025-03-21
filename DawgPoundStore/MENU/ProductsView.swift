@@ -3,14 +3,12 @@ import SwiftUI
 struct ProductsView: View {
     @State private var favoriteProducts: Set<UUID> = []
     @State private var cartProducts: Set<UUID> = []
-    var model:StateObject<ItemViewModel>
-    init (_ model:StateObject<ItemViewModel>) {
-//            model.wrappedValue.update()
+    var model: StateObject<ItemViewModel>
+
+    init(_ model: StateObject<ItemViewModel>) {
         self.model = model
-//        DispatchQueue.main.async {
-//            model.wrappedValue.timedown -= 5
-//        }
-            }
+    }
+
     let product = [
         Product(name: "Nike Hersey Classic Hoodie", price: "$55"),
         Product(name: "Nike Hersey Beanie", price: "$15"),
@@ -21,11 +19,11 @@ struct ProductsView: View {
         Product(name: "Under Armour Hersey Tee", price: "$20"),
         Product(name: "Puma Hersey Sweatpants", price: "$40")
     ]
-    
+
     private var gridColumns: [GridItem] {
         Array(repeating: GridItem(.flexible(), spacing: 16), count: 4)
     }
-    
+
     var body: some View {
         ScrollView {
             VStack {
@@ -36,8 +34,7 @@ struct ProductsView: View {
                         .frame(height: 80)
                         .padding(.top, 10)
                 }
-                
-                    
+
                 Text("Shirts - Women")
                     .foregroundColor(.white)
                     .font(.title2)
@@ -45,15 +42,17 @@ struct ProductsView: View {
                     .padding(.top, 10)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.leading, 20)
-                
+
                 LazyVGrid(columns: gridColumns, spacing: 20) {
                     ForEach(product, id: \.id) { product in
                         VStack {
+                            // Product Image Placeholder
                             Rectangle()
                                 .fill(Color.gray)
                                 .frame(height: 200)
                                 .cornerRadius(10)
                                 .overlay(
+                                    // Favorite Button (Heart)
                                     Button(action: {
                                         withAnimation(.spring(response: 0.3, dampingFraction: 0.5, blendDuration: 0)) {
                                             if favoriteProducts.contains(product.id) {
@@ -68,22 +67,24 @@ struct ProductsView: View {
                                             .padding(10)
                                             .scaleEffect(favoriteProducts.contains(product.id) ? 1.2 : 1.0)
                                     }
-                                    .buttonStyle(PlainButtonStyle())
-                                    , alignment: .topTrailing
+                                    .buttonStyle(PlainButtonStyle()),
+                                    alignment: .topTrailing
                                 )
                             
                             Text(product.name)
                                 .foregroundColor(.white)
                                 .font(.body)
+                                .lineLimit(1)
+                                .truncationMode(.tail)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .padding(.leading, 5)
-                            
+
                             Text(product.price)
                                 .foregroundColor(.white)
                                 .font(.subheadline)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .padding(.leading, 5)
-                            
+
                             Button(action: {
                                 withAnimation {
                                     if cartProducts.contains(product.id) {
