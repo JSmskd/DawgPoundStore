@@ -6,8 +6,8 @@ struct PickUpView: View {
         self.model = model
     }
     var body: some View {
-        @State var email: String = ""
-        @State var time: String = ""
+        @AppStorage("email") var email: String = ""
+        @AppStorage("time") var time: String = ""
         ZStack {
             Color.black.edgesIgnoringSafeArea(.all) // Background color
             
@@ -136,10 +136,4 @@ struct PickUpView: View {
             }
         }
     }
-    
-//    struct PickUpView_Previews: PreviewProvider {
-//        static var previews: some View {
-//            PickUpView()
-//        }
-//    }
 }
