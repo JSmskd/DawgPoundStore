@@ -42,7 +42,7 @@ struct blankSize {
         CKContainer.default().publicCloudDatabase.fetch(withRecordID: reference.recordID) { record, e in
 
             if record != nil {
-                var r = record.unsafelyUnwrapped
+                let r = record.unsafelyUnwrapped
 
                 shortname =  r["shortName"] as? String ?? "err"
                 longname = r["longName"] as? String ?? "error"
@@ -212,21 +212,24 @@ class ic : Identifiable, Hashable{
         self.desc = desc
     }
     init (_ cloudkitRecord:CKRecord) {
-//        print(cloudkitRecord)
+        //        print(cloudkitRecord)
         name = cloudkitRecord["Name"] as! String
         desc = cloudkitRecord["collectionDescription"] as! String
-//        cloudkitRecord.recordID.recordName
-//        print(cloudkitRecord["items"] as! [CKRecord.Reference])
+        //        cloudkitRecord.recordID.recordName
+        //        print(cloudkitRecord["items"] as! [CKRecord.Reference])
         for i in cloudkitRecord["items"] as! [CKRecord.Reference] {
             CKContainer.default().publicCloudDatabase.fetch(withRecordID: i.recordID) { o,e in
-//                print(o)
+                //                print(o)
                 if o == nil {
-//                    print("\(i.recordID.recordName) = nil")
+                    //                    print("\(i.recordID.recordName) = nil")
                 } else {
-//                    print("\(self.name)")
-//                    Item.init(String, String, Double, images: [CKAsset]?, id: CKRecord?, reference: CKRecord.Reference?)
-
-                    self.items.append(.init(o!["title"] as! String, o!["description"] as! String, (o!["cost"] as! Int), images: o!["images"] as? Array<CKAsset>,id: o))
+                    //                    print("\(self.name)")
+                    //                    Item.init(String, String, Double, images: [CKAsset]?, id: CKRecord?, reference: CKRecord.Reference?)
+                        var useit:Item = .init(o!["title"] as! String, o!["description"] as! String, (o!["cost"] as! Int), images: o!["images"] as? Array<CKAsset>,id: o)
+//                        print(useit)
+                    DispatchQueue.main.async {
+                        self.items.append(useit)
+                    }
                 }
             }
         }
@@ -283,12 +286,13 @@ class ItemViewModel: ObservableObject {
 
         for i in homeRecordNames{
             self.database.fetch(withQuery: .init(recordType: "itemCollection", predicate: .init(format: "___recordID == %@",CKRecord.ID(recordName: i)))) { [self] results in
-//                print(results)
+                //                                print(results)
                 results.map { (matchResults: [(CKRecord.ID, Result<CKRecord, any Error>)], queryCursor: CKQueryOperation.Cursor?) in
                     if matchResults.count > 0{
-                        let use = matchResults.first!.1
-                        use.map { r in
+                        let uperUse = matchResults.first!.1
+                        uperUse.map { r in
                             DispatchQueue.main.async {
+//                                print()
                                 var use = true
                                 for i in self.homeColecs {
                                     if i == .init(r) {
@@ -296,14 +300,22 @@ class ItemViewModel: ObservableObject {
                                     }
                                 }
                                 if use {
-                                    self.homeColecs.append(.init(r))
+                                    var touse:ic = .init(name: "Err", desc: "err", itemRefs: [])
+                                    DispatchQueue.main.async {
+                                        touse = .init(r)
+                                    }
+                                    DispatchQueue.main.async{
+//                                        print(touse.desc)
+//                                        print("inners")
+                                        self.homeColecs.append(touse)
+                                    }
                                 }
-                        }
+                            }
                         }
                     }
                 }
             }
-//            print("go")
+            //            print("go")
 
         }
         let sideRecordNames: [String] = [

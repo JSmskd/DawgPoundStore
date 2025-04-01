@@ -3,6 +3,7 @@ import CloudKit
 
 struct HomeView: View {
     var model:StateObject<ItemViewModel>
+    @State var colecs:[ic] = []
     init (_ model:StateObject<ItemViewModel>) {
 
         //        trendingItems = []//model.wrappedValue.getTasks()
@@ -80,7 +81,7 @@ struct HomeView: View {
                         .padding(.trailing)
                     }
 
-                    HomeItems(model)
+                    HomeItems(model, $colecs)
                     // Featured Section
                     Text("Show your best Husky pride with Dawg Pound.")
                         .font(.custom("Lexend-Bold", size: 45))
@@ -111,7 +112,7 @@ struct HomeView: View {
                     }
                 }
             }.background(Color.black).refreshable {
-                model.wrappedValue.update(true)
+                refAct()
             }
             VStack {
                 HStack {
@@ -135,6 +136,14 @@ struct HomeView: View {
             .frame(width: 30, height: 20).offset(x: 15, y: 15)
             MenuView(model, isMenuOpen: $isMenuOpen).frame(alignment: .leading)
         }
+        .onAppear {
+            refAct()
+        }
+    }
+    func refAct() {
+        model.wrappedValue.update(true)
+        colecs = model.wrappedValue.homeColecs
+        print("update")
     }
 }
 
@@ -188,31 +197,52 @@ func toPrice(_ doub:Int) -> String {
 //}
 struct HomeItems: View {
     var model:StateObject<ItemViewModel>
-    init (_ model:StateObject<ItemViewModel>) {self.model = model
+    var itms:Binding<[ic]>
+    init (_ model:StateObject<ItemViewModel>,_ itms:Binding<[ic]>) {self.model = model
         //        print("{")
-        for i in model.wrappedValue.homeColecs {
-            //            print(i.name)
-            //            for o in i.items {
-            ////                print(o)
-            //            }
-        }
+        self.itms = itms
+//        for i in model.wrappedValue.homeColecs {
+//            //            print(i.name)
+//            //            for o in i.items {
+//            ////                print(o)
+//            //            }
+//        }
         //        print("}")
     }
     var body: some View {
         // Trending Section
         VStack{
-            ForEach(0..<model.wrappedValue.homeColecs.count, id:\.self) { noeh in
+//            ForEach(0..<model.wrappedValue.homeColecs.count, id:\.self) { noeh in
+//                VStack(alignment: .leading) {
+//                    Text("Trending now")
+//                        .font(.custom("Lexend-Regular", size: 25))
+//                        .foregroundColor(.white)
+//                        .padding(.horizontal)
+//                        .offset(x: 8, y: 15)
+//
+//                    ScrollView(.horizontal, showsIndicators: false) {
+//                        HStack(spacing: 16) {
+//                            ForEach(0..<min(5,(model.wrappedValue.homeColecs)[noeh].items.count), id: \.self) { item in
+//                                itemPreview(model, item: (model.wrappedValue.homeColecs)[noeh].items[item])
+//                                //                                        item.preview
+//                            }
+//                        }
+//                        .padding(.horizontal)
+//                    }
+//                }
+//            }
+            ForEach(itms.wrappedValue, id:\.self) { noeh in
                 VStack(alignment: .leading) {
-                    Text("Trending now")
+                    Text(noeh.name)
                         .font(.custom("Lexend-Regular", size: 25))
                         .foregroundColor(.white)
                         .padding(.horizontal)
-                        .offset(x: 8, y: 15)
+//                        .offset(x: 8, y: 15)
 
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 16) {
-                            ForEach(0..<min(5,(model.wrappedValue.homeColecs)[noeh].items.count), id: \.self) { item in
-                                itemPreview(model, item: (model.wrappedValue.homeColecs)[noeh].items[item])
+                            ForEach(noeh.items, id: \.self) { item in
+                                itemPreview(model, item: item)
                                 //                                        item.preview
                             }
                         }
