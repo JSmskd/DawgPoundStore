@@ -8,7 +8,7 @@
 import SwiftUI
 import CloudKit
 
-struct user {
+struct user:Hashable {
     var id:CKRecord.ID?
     var whishes :[CKRecord.Reference]
     var email:String
@@ -22,25 +22,54 @@ struct user {
         itemsInCart = []
     }
 }
-struct blankSize {
+struct blankSize:Hashable {
     var name:String
     var n:String
     ///cost multiplied my 10000 {10.423  ->  10423}
     var cost:Int
     var quantity:Int
+    var record:CKRecord?
     init (shortName:String,longName:String,cost:Int,quantity:Int) {
         self.cost = cost
         self.quantity = quantity
         self.name = longName
         self.n = shortName
     }
+    mutating func updateSelf () {
+        if record?.recordID == nil { print("fail"); return}
+        var shortname = ""
+        var longname = ""
+        var price = 0
+        var qty = 0
+        var rec = record
+        CKContainer.default().publicCloudDatabase.fetch(withRecordID: record.unsafelyUnwrapped.recordID) { record, e in
+
+            if record != nil {
+                rec = record.unsafelyUnwrapped
+                let r = record.unsafelyUnwrapped
+
+                shortname =  r["shortName"] as? String ?? "err"
+                longname = r["longName"] as? String ?? "error"
+                qty = r["quantity"] as? Int ?? 0
+                price = r["cost"] as? Int ?? 0
+            }
+
+        }
+        //fetch(withRecordID: reference) { record, error in
+        cost = price
+        quantity = qty
+        name = longname
+        n = shortname
+        record = rec
+    }
     init (_ reference:CKRecord.Reference) {
         var shortname = ""
         var longname = ""
         var price = 0
         var qty = 0
+        var rec = CKRecord(recordType: "blankSIZE", recordID: reference.recordID)
         CKContainer.default().publicCloudDatabase.fetch(withRecordID: reference.recordID) { record, e in
-
+            rec = record ?? CKRecord(recordType: "blankSIZE", recordID: reference.recordID)
             if record != nil {
                 let r = record.unsafelyUnwrapped
 
@@ -52,14 +81,14 @@ struct blankSize {
 
         }
         //fetch(withRecordID: reference) { record, error in
-
+        record = rec
         cost = price
         quantity = qty
         name = longname
         n = shortname
     }
 }
-struct blank:CustomStringConvertible {
+struct blank:CustomStringConvertible , Hashable{
     var name:String
 
     var sizes:[CKRecord.Reference]
@@ -87,7 +116,7 @@ struct blank:CustomStringConvertible {
         sizes = szs
     }
 }
-struct orderItem:Identifiable {
+struct orderItem:Identifiable, Hashable {
     var id:CKRecord.Reference?
     var item:Item
     var quantity:Int64

@@ -4,12 +4,15 @@ import CloudKit
 struct IndividualItemView: View {
     var model:StateObject<ItemViewModel>
     var curentItem:Item
+    @State var showSizePicker = false
+    @State var sizeNum = 0
+    @State var col = 0
     @State var quantity:UInt = 1
     var styles: [blank] = [
         .init(CKRecord.ID.init(recordName: "FA9FAB4D-F49F-4B26-B365-7F3210C8D9EE")),
         .init(CKRecord.ID.init(recordName: "CE24806E-343D-4D68-9067-A80895D834FF"))
     ]
-    var sizes: [[blankSize]] = [
+    @State var sizes: [[blankSize]] = [
         [
             blankSize.init(CKRecord.Reference.init(recordID: .init(recordName: "478BD526-5E40-4ACD-89AC-EAB617929B61"), action: CKRecord.ReferenceAction.none)),
                            blankSize.init(CKRecord.Reference.init(recordID: .init(recordName: "80EDAE9C-6396-4F9D-B4D2-F906794C8526"), action: CKRecord.ReferenceAction.none))
@@ -18,6 +21,13 @@ struct IndividualItemView: View {
             blankSize.init(CKRecord.Reference.init(recordID: .init(recordName: "73F4CFC6-745B-4DDD-ABAA-5042E6F9F0FE"), action: CKRecord.ReferenceAction.none))
         ]
     ]
+    func reloadSizes() {
+        for a in $sizes {
+            for b in a {
+                b.wrappedValue.updateSelf()
+            }
+        }
+    }
     init (_ model:StateObject<ItemViewModel>, item:Item) {
         curentItem = item
         //        trendingItems = []//model.wrappedValue.getTasks()
@@ -124,7 +134,8 @@ struct IndividualItemView: View {
                     }
 
                     Button(action: {
-//                        showSizePicker.toggle()
+                        showSizePicker.toggle()
+                        reloadSizes()
                     }) {
                         ZStack {
                             RoundedRectangle(cornerRadius: 5)
@@ -143,15 +154,17 @@ struct IndividualItemView: View {
                         }
                     }
 
-//                    if showSizePicker {
-//                        Picker("Select Size", selection: $selectedSize) {
-//                            ForEach(sizes, id: \.self) { size in
-//                                Text(size).tag(size as String?)
-//                            }
-//                        }
-//                        .pickerStyle(MenuPickerStyle())
-//                        .frame(width: 300)
-//                    }
+                    if showSizePicker {
+                        Picker("Select Size", selection: $sizeNum) {
+                            ForEach(0..<sizes[col].count, id: \.self) { oo in
+                                Text("\(sizes[col][oo].name )").tag(oo)
+//                                let use = sizes[col][oo]
+//                                Text(use.description)
+                            }
+                        }
+                        .pickerStyle(MenuPickerStyle())
+                        .frame(width: 300)
+                    }
 
                     HStack(spacing: 10) {
                         Button(action: {
