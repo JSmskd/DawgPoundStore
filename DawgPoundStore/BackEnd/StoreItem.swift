@@ -92,26 +92,16 @@ struct blank:CustomStringConvertible , Hashable{
     var name:String
 
     var sizes:[CKRecord.Reference]
+    var record:CKRecord?
     var description: String {get {name}}
-    init (name:String,sizes:[CKRecord.Reference]) {
+    init (name:String,sizes:[CKRecord.Reference], record:CKRecord? = nil) {
         self.name = name
         self.sizes = sizes
+        self.record = record
     }
     init(_ reference:CKRecord.ID) {
         var NAME = "error"
         var szs :[CKRecord.Reference] = []
-        CKContainer.default().publicCloudDatabase.fetch(withRecordID: reference) { record, error in
-            if record != nil {
-                var r:CKRecord {get {record.unsafelyUnwrapped}}
-
-                NAME = r["brandName"] as? String ?? NAME
-                for i in r["sizes"] as? [CKRecord.Reference] ?? .init() {
-                    szs.append(i)
-                }
-            }
-
-
-        }
         name = NAME
         sizes = szs
     }

@@ -8,7 +8,7 @@ struct IndividualItemView: View {
     @State var sizeNum = 0
     @State var col = 0
     @State var quantity:UInt = 1
-    var styles: [blank] = [
+    @State var styles: [blank] = [
         .init(CKRecord.ID.init(recordName: "FA9FAB4D-F49F-4B26-B365-7F3210C8D9EE")),
         .init(CKRecord.ID.init(recordName: "CE24806E-343D-4D68-9067-A80895D834FF"))
     ]
@@ -22,9 +22,40 @@ struct IndividualItemView: View {
         ]
     ]
     func reloadSizes() {
-        for a in $sizes {
-            for b in a {
-                b.wrappedValue.updateSelf()
+        sizes = []
+        for (ai, a) in $styles.enumerated() {
+            var szs :[CKRecord.Reference] = []
+            //            for b in a {
+            //                a.wrappedValue.updateSelf()
+            if a.record.wrappedValue != nil {
+                let id = a.wrappedValue.record!.recordID
+                //            wrappedValue.record!.recordID.self
+                CKContainer.default().publicCloudDatabase.fetch(withRecordID: id) { record, error in
+                    if record != nil {
+                        var r:CKRecord {get {record.unsafelyUnwrapped}}
+                        //                            a.wrappedValue.name = r["brandName"] as? String ?? a.wrappedValue.name
+                        for i in r["sizes"] as? [CKRecord.Reference] ?? [] {
+                            szs.append(i)
+                            //                            }
+                        }
+                    }
+                }
+                var nextup:[blankSize] = []
+                for (bi, b) in szs.enumerated() {
+                    CKContainer.default().publicCloudDatabase.fetch(withRecordID: b.recordID) { record, error in
+                            if record != nil {
+                                var r:CKRecord {get {record.unsafelyUnwrapped}}
+                                blankSize(shortName: "a", longName: "b", cost: 1, quantity: 1)
+                                //                            a.wrappedValue.name = r["brandName"] as? String ?? a.wrappedValue.name
+
+//                                for i in r["sizes"] as? [CKRecord.Reference] ?? .init() {
+//                                    szs.append(i)
+//                                    //                            }
+//                            }
+                        }
+                    }
+                }
+                sizes.append(/*bi = */nextup)
             }
         }
     }
@@ -156,14 +187,15 @@ struct IndividualItemView: View {
 
                     if showSizePicker {
                         Picker("Select Size", selection: $sizeNum) {
-                            ForEach(0..<sizes[col].count, id: \.self) { oo in
-                                Text("\(sizes[col][oo].name )").tag(oo)
+//                            ForEach(0..<sizes[col].count, id: \.self) { oo in
+//                                Text("\(sizes[col][oo].name )").tag(oo)
 //                                let use = sizes[col][oo]
 //                                Text(use.description)
-                            }
+//                            }
                         }
                         .pickerStyle(MenuPickerStyle())
                         .frame(width: 300)
+
                     }
 
                     HStack(spacing: 10) {
@@ -176,7 +208,7 @@ struct IndividualItemView: View {
                                     .frame(width: 300, height: 50)
 
                                 NavigationLink {
-                                    CartView(model, items: [.init(curentItem, Int64(exactly: quantity)!, styles.first!, sizes.first!.first! )])
+//                                    CartView(model, items: [.init(curentItem, Int64(exactly: quantity)!, styles.first!, sizes.first!.first! )])
                                 } label: {
                                     Text("Add to cart - \(toPrice(curentItem.price))")
                                         .font(Font.custom("Lexend", size: 16))
@@ -211,6 +243,13 @@ struct IndividualItemView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color.white)
+                .onAppear {
+                    reloadSizes()
+                }
+                .onTapGesture {
+                    print(sizes)
+                    print(styles)
+                }
             }
         }
     
