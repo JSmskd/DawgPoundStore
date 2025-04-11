@@ -4,26 +4,12 @@ import CloudKit
 struct HomeView: View {
     var model:StateObject<ItemViewModel>
     init (_ model:StateObject<ItemViewModel>) {
-
-        //        trendingItems = []//model.wrappedValue.getTasks()
-        //        if model.wrappedValue.colecs.isEmpty {
-        //            model.wrappedValue.update()
-        //        }
-//        model.wrappedValue.update()
-//        DispatchQueue.main.async {
-//            print("-10")
-//            model.wrappedValue.timedown -= 1
-//        }
-
-        //        model.wrappedValue.getUser()
         self.model = model
 
         UIRefreshControl.appearance().tintColor = UIColor.white
         UIRefreshControl.appearance().attributedTitle = NSAttributedString("Refreshing…")
     }
-    //    let trendingItems:[Item]// = [
-    ////        ("Nike Hersey Classic Hoodie", "$55"),
-    ////    ]
+
     @State var isMenuOpen = false
     let colors = customColors()
     var body: some View {
@@ -81,7 +67,7 @@ struct HomeView: View {
                     }
 
                     HomeItems(model)
-                    // Featured Section
+
                     Text("Show your best Husky pride with Dawg Pound.")
                         .font(.custom("Lexend-Bold", size: 45))
                         .fontWeight(.bold)
@@ -91,7 +77,6 @@ struct HomeView: View {
 
                    faq()
 
-                    // Footer
                     Button(action: {
                         print("Email footer tapped")
                     }) {
@@ -176,27 +161,16 @@ func toPrice(_ doub:Int) -> String {
     while cents.count < 2 {
         cents += "0"
     }
-//    let cents:Int = doub - (dollars * 10000)
     return "$\(dollars).\(cents)"
 }
-//
-//struct DawgPoundInteractiveView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        HomeView(StateObject(wrappedValue: ItemViewModel()))
-//            .previewDevice("iPad Pro (11-inch) (4th generation)")
-//    }
-//}
+
 struct HomeItems: View {
     var model:StateObject<ItemViewModel>
     init (_ model:StateObject<ItemViewModel>) {self.model = model
         //        print("{")
         for i in model.wrappedValue.homeColecs {
-            //            print(i.name)
-            //            for o in i.items {
-            ////                print(o)
-            //            }
         }
-        //        print("}")
+
     }
     var body: some View {
         // Trending Section
@@ -225,7 +199,6 @@ struct HomeItems: View {
     }
 }
 struct faq: View {
-    //("question","answer")
     let questions:Array<(String,String)> = [
         ("Where do I get my order picked up?","Answer Etc. Etc."),
         ("Where do I get my order picked up?","Answer Etc. Etc."),
