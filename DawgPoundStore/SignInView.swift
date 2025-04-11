@@ -30,12 +30,12 @@ struct SignInView: View {
                         .frame(width: geometry.size.width * 0.4, alignment: .leading)
                         .padding(.leading, geometry.size.width * 0.05)
                         
-                    
+                        
                         Rectangle()
                             .frame(width: 1, height: geometry.size.height * 0.5)
                             .foregroundColor(.gray.opacity(0.5))
                         
-                       
+                        
                         VStack(alignment: .leading, spacing: geometry.size.height * 0.03) {
                             Text("Sign in")
                                 .font(.system(size: geometry.size.width * 0.04, weight: .bold))
@@ -82,8 +82,8 @@ struct SignInView: View {
             }
         }
     }
-
-
+    
+    
     struct InputField: View {
         var icon: String
         var placeholder: String

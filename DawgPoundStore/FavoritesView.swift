@@ -6,10 +6,10 @@ struct FavoritesView: View {
     init (_ model:StateObject<ItemViewModel>) {
         self.model = model
         //        trendingItems = []//model.wrappedValue.getTasks()
-//            model.wrappedValue.update()
-//        DispatchQueue.main.async {
-//            model.wrappedValue.timedown -= 5
-//        }
+        //            model.wrappedValue.update()
+        //        DispatchQueue.main.async {
+        //            model.wrappedValue.timedown -= 5
+        //        }
     }
     
     //    @State private var products = [

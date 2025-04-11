@@ -8,7 +8,8 @@ struct FinalView: View {
     var body: some View {
         Text("Thank you for ordering!")
             .font(.custom("Lexend-Regular", size: 24))
-        padding()
+            .padding()
+        
         ZStack {
             Rectangle()
                 .foregroundStyle(Color.gray.opacity(0.3))
@@ -19,22 +20,28 @@ struct FinalView: View {
                 .foregroundStyle(.white)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 20)
-            NavigationLink(destination: HomeView(model)) {
-                Text("Return to Home Page")
-                    .font(Font.custom("Lexend-Regular", size: 24))
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.orange)
-                    .cornerRadius(10)
-                    .foregroundColor(.white)
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(Color.orange)
-                    .cornerRadius(10)
-            }
-            .padding()
-            .cornerRadius(10)
+            
         }
+        
+        
+        NavigationLink {
+            HomeView(model)
+        } label: {
+            Text("Return to Home Page")
+                .font(Font.custom("Lexend-Regular", size: 24))
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color.orange)
+                .cornerRadius(10)
+                .foregroundColor(.white)
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(Color.orange)
+                .cornerRadius(10)
+        }
+        .padding()
+        .cornerRadius(10)
     }
 }
+

@@ -4,6 +4,12 @@ struct PickUpView: View {
     var model:StateObject<ItemViewModel>
     init (_ model:StateObject<ItemViewModel>) {
         self.model = model
+        items = []
+    }
+    @State var items:[orderItem]
+    init (_ model:StateObject<ItemViewModel>, items: [orderItem]) {
+        self.model = model
+        self.items = items
     }
     var body: some View {
         @AppStorage("email") var email: String = ""
