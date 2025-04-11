@@ -24,6 +24,8 @@ struct IndividualItemView: View {
     func reloadSizes() {
         sizes = []
         for (ai, a) in $styles.enumerated() {
+//            print(styles.first!.record?.recordID)
+//            print(a)
             var szs :[CKRecord.Reference] = []
             //            for b in a {
             //                a.wrappedValue.updateSelf()
@@ -201,19 +203,22 @@ struct IndividualItemView: View {
                     HStack(spacing: 10) {
                         Button(action: {
                             // Add to cart functionality
+
+                            print(curentItem)
+
                         }) {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 5)
                                     .fill(Color.orange)
                                     .frame(width: 300, height: 50)
 
-                                NavigationLink {
+//                                NavigationLink {
 //                                    CartView(model, items: [.init(curentItem, Int64(exactly: quantity)!, styles.first!, sizes.first!.first! )])
-                                } label: {
+//                                } label: {
                                     Text("Add to cart - \(toPrice(curentItem.price))")
                                         .font(Font.custom("Lexend", size: 16))
                                         .foregroundColor(.white)
-                                }
+//                                }
 
                             }
                         }
