@@ -6,13 +6,13 @@ struct MenuView: View {
     init (_ model:StateObject<ItemViewModel>, isMenuOpen imo:Binding<Bool>) {
         self.model = model
         self.isMenuOpen = imo
-//            model.wrappedValue.update()
-//        DispatchQueue.main.async {
-//            model.wrappedValue.timedown -= 10
-//        }
+        //            model.wrappedValue.update()
+        //        DispatchQueue.main.async {
+        //            model.wrappedValue.timedown -= 10
+        //        }
     }
     @State private var expandedCategory: String? = nil // Tracks expanded category
-
+    
     var body: some View {
         ZStack {
             if isMenuOpen.wrappedValue {
@@ -41,13 +41,13 @@ struct MenuView: View {
                                 submenuItem(title: "TOPS")
                                 submenuItem(title: "BOTTOMS")
                             }
-
+                            
                             expandableMenuItem(title: "WOMEN")
                             if expandedCategory == "WOMEN" {
                                 submenuItem(title: "TOPS")
                                 submenuItem(title: "BOTTOMS")
                             }
-
+                            
                             menuItem(title: "ACCESSORIES", color: .white)
                             menuItem(title: "OTHER", color: .white)
                         }
@@ -78,7 +78,7 @@ struct MenuView: View {
                 .background(Color.white)
         }
     }
-
+    
     // Expandable menu items (MEN, WOMEN)
     @ViewBuilder
     func expandableMenuItem(title: String) -> some View {
@@ -99,7 +99,7 @@ struct MenuView: View {
                 .background(Color.white)
         }
     }
-
+    
     // Submenu items (TOPS, BOTTOMS)
     @ViewBuilder
     func submenuItem(title: String) -> some View {
