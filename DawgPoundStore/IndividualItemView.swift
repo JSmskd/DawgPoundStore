@@ -9,57 +9,64 @@ struct IndividualItemView: View {
     @State var col = 0
     @State var quantity:UInt = 1
     @State var styles: [blank] = [
-        .init(CKRecord.ID.init(recordName: "FA9FAB4D-F49F-4B26-B365-7F3210C8D9EE")),
-        .init(CKRecord.ID.init(recordName: "CE24806E-343D-4D68-9067-A80895D834FF"))
+        .init(name: "asdf", sizes: [CKRecord.Reference.init(recordID: .init(recordName: "478BD526-5E40-4ACD-89AC-EAB617929B61"), action: CKRecord.ReferenceAction.none),CKRecord.Reference.init(recordID: .init(recordName: "80EDAE9C-6396-4F9D-B4D2-F906794C8526"), action: CKRecord.ReferenceAction.none)], record: nil) ,
+//        .init(CKRecord.ID.init(recordName: "FA9FAB4D-F49F-4B26-B365-7F3210C8D9EE"))
+        .init(name: "fdsa", sizes: [CKRecord.Reference.init(recordID: .init(recordName: "73F4CFC6-745B-4DDD-ABAA-5042E6F9F0FE"), action: CKRecord.ReferenceAction.none)], record: nil),
+//        .init(CKRecord.ID.init(recordName: "CE24806E-343D-4D68-9067-A80895D834FF"))
     ]
     @State var sizes: [[blankSize]] = [
         [
-            blankSize.init(CKRecord.Reference.init(recordID: .init(recordName: "478BD526-5E40-4ACD-89AC-EAB617929B61"), action: CKRecord.ReferenceAction.none)),
-                           blankSize.init(CKRecord.Reference.init(recordID: .init(recordName: "80EDAE9C-6396-4F9D-B4D2-F906794C8526"), action: CKRecord.ReferenceAction.none))
+            blankSize.init(shortName: "s", longName: "small", cost: 100000, quantity: 1),
+//            blankSize.init(CKRecord.Reference.init(recordID: .init(recordName: "478BD526-5E40-4ACD-89AC-EAB617929B61"), action: CKRecord.ReferenceAction.none)),
+            .init(shortName: "l", longName: "large", cost: 1000000, quantity: 2)
+//                           blankSize.init(CKRecord.Reference.init(recordID: .init(recordName: "80EDAE9C-6396-4F9D-B4D2-F906794C8526"), action: CKRecord.ReferenceAction.none))
         ],
         [
-            blankSize.init(CKRecord.Reference.init(recordID: .init(recordName: "73F4CFC6-745B-4DDD-ABAA-5042E6F9F0FE"), action: CKRecord.ReferenceAction.none))
+            .init(shortName: "m", longName: "medium", cost: 500000, quantity: 50)
+//            blankSize.init(CKRecord.Reference.init(recordID: .init(recordName: "73F4CFC6-745B-4DDD-ABAA-5042E6F9F0FE"), action: CKRecord.ReferenceAction.none))
         ]
     ]
+    @State var chosenStyle:Int = 0
+    @State var chosenSize : Int = 0
     func reloadSizes() {
-        sizes = []
-        for (ai, a) in $styles.enumerated() {
-//            print(styles.first!.record?.recordID)
-//            print(a)
-            var szs :[CKRecord.Reference] = []
-            //            for b in a {
-            //                a.wrappedValue.updateSelf()
-            if a.record.wrappedValue != nil {
-                let id = a.wrappedValue.record!.recordID
-                //            wrappedValue.record!.recordID.self
-                CKContainer.default().publicCloudDatabase.fetch(withRecordID: id) { record, error in
-                    if record != nil {
-                        var r:CKRecord {get {record.unsafelyUnwrapped}}
-                        //                            a.wrappedValue.name = r["brandName"] as? String ?? a.wrappedValue.name
-                        for i in r["sizes"] as? [CKRecord.Reference] ?? [] {
-                            szs.append(i)
-                            //                            }
-                        }
-                    }
-                }
-                var nextup:[blankSize] = []
-                for (bi, b) in szs.enumerated() {
-                    CKContainer.default().publicCloudDatabase.fetch(withRecordID: b.recordID) { record, error in
-                            if record != nil {
-                                var r:CKRecord {get {record.unsafelyUnwrapped}}
-                                blankSize(shortName: "a", longName: "b", cost: 1, quantity: 1)
-                                //                            a.wrappedValue.name = r["brandName"] as? String ?? a.wrappedValue.name
-
-//                                for i in r["sizes"] as? [CKRecord.Reference] ?? .init() {
-//                                    szs.append(i)
-//                                    //                            }
-//                            }
-                        }
-                    }
-                }
-                sizes.append(/*bi = */nextup)
-            }
-        }
+//        sizes = []
+//        for (ai, a) in $styles.enumerated() {
+// //            print(styles.first!.record?.recordID)
+// //            print(a)
+//            var szs :[CKRecord.Reference] = []
+//            //            for b in a {
+//            //                a.wrappedValue.updateSelf()
+//            if a.record.wrappedValue != nil {
+//                let id = a.wrappedValue.record!.recordID
+//                //            wrappedValue.record!.recordID.self
+//                CKContainer.default().publicCloudDatabase.fetch(withRecordID: id) { record, error in
+//                    if record != nil {
+//                        var r:CKRecord {get {record.unsafelyUnwrapped}}
+//                        //                            a.wrappedValue.name = r["brandName"] as? String ?? a.wrappedValue.name
+//                        for i in r["sizes"] as? [CKRecord.Reference] ?? [] {
+//                            szs.append(i)
+//                            //                            }
+//                        }
+//                    }
+//                }
+//                var nextup:[blankSize] = []
+//                for (bi, b) in szs.enumerated() {
+//                    CKContainer.default().publicCloudDatabase.fetch(withRecordID: b.recordID) { record, error in
+//                            if record != nil {
+//                                var r:CKRecord {get {record.unsafelyUnwrapped}}
+//                                blankSize(shortName: "a", longName: "b", cost: 1, quantity: 1)
+//                                //                            a.wrappedValue.name = r["brandName"] as? String ?? a.wrappedValue.name
+//
+// //                                for i in r["sizes"] as? [CKRecord.Reference] ?? .init() {
+// //                                    szs.append(i)
+// //                                    //                            }
+// //                            }
+//                        }
+//                    }
+//                }
+//                sizes.append(/*bi = */nextup)
+//            }
+//        }
     }
     init (_ model:StateObject<ItemViewModel>, item:Item) {
         curentItem = item
@@ -150,20 +157,24 @@ struct IndividualItemView: View {
                             .font(Font.custom("Lexend-Bold", size: 16).weight(.light))
                             .foregroundColor(.white)
 
-//                        HStack(spacing: 15) {
-//                            ForEach(colors, id: \.self) { color in
-//                                Circle()
-//                                    .fill(color)
-//                                    .frame(width: 30, height: 30)
-//                                    .overlay(
-//                                        Circle()
-//                                            .stroke(selectedColor == color ? Color.orange : Color.white, lineWidth: 2)
-//                                    )
-//                                    .onTapGesture {
-//                                        selectedColor = color
-//                                    }
-//                            }
-//                        }
+                        HStack(spacing: 15) {
+                            ForEach(0..<styles.count , id: \.self) { n in
+                                Circle()
+                                    .fill(.red)
+                                    .frame(width: 30, height: 30)
+                                    .overlay(
+                                        Circle()
+                                            .stroke(chosenStyle == n ? Color.orange : Color.white, lineWidth: 2)
+                                    )
+                                    .onTapGesture {
+                                        if chosenStyle != n {
+                                            chosenStyle = n //color
+                                            chosenSize = 0
+                                        }
+                                            reloadSizes()
+                                    }
+                            }
+                        }
                     }
 
                     Button(action: {
@@ -188,12 +199,15 @@ struct IndividualItemView: View {
                     }
 
                     if showSizePicker {
-                        Picker("Select Size", selection: $sizeNum) {
-//                            ForEach(0..<sizes[col].count, id: \.self) { oo in
-//                                Text("\(sizes[col][oo].name )").tag(oo)
+                        Picker("Select Size", selection: $chosenSize) {
+                            ForEach(0..<sizes[chosenStyle].count, id: \.self) { oo in
+                                HStack {
+                                    Text("\(sizes[chosenStyle][oo].name)").tag(oo)
+                                }.tag(oo)
+
 //                                let use = sizes[col][oo]
 //                                Text(use.description)
-//                            }
+                            }
                         }
                         .pickerStyle(MenuPickerStyle())
                         .frame(width: 300)
@@ -252,8 +266,16 @@ struct IndividualItemView: View {
                     reloadSizes()
                 }
                 .onTapGesture {
-                    print(sizes)
                     print(styles)
+                    for i in styles {
+                        for i in i.sizes {
+                            print(i.recordID.recordName ?? "No Name")
+                        }
+                    }
+                    print(sizes)
+
+                    print(styles[chosenStyle].record?.recordID.recordName)
+                    print(sizes[chosenStyle][chosenSize].record?.recordID.recordName)
                 }
             }
         }
