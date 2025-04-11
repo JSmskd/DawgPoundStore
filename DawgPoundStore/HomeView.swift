@@ -5,20 +5,20 @@ struct HomeView: View {
     var model:StateObject<ItemViewModel>
     @State var colecs:[ic] = []
     init (_ model:StateObject<ItemViewModel>) {
-
+        
         //        trendingItems = []//model.wrappedValue.getTasks()
         //        if model.wrappedValue.colecs.isEmpty {
         //            model.wrappedValue.update()
         //        }
-//        model.wrappedValue.update()
-//        DispatchQueue.main.async {
-//            print("-10")
-//            model.wrappedValue.timedown -= 1
-//        }
-
+        //        model.wrappedValue.update()
+        //        DispatchQueue.main.async {
+        //            print("-10")
+        //            model.wrappedValue.timedown -= 1
+        //        }
+        
         //        model.wrappedValue.getUser()
         self.model = model
-
+        
         UIRefreshControl.appearance().tintColor = UIColor.white
         UIRefreshControl.appearance().attributedTitle = NSAttributedString("Refreshing…")
     }
@@ -38,12 +38,12 @@ struct HomeView: View {
                             .scaledToFill()
                             .frame(height: 500)
                             .clipped()
-
+                        
                         VStack(alignment: .leading) {
                             Text("The")
                                 .foregroundColor(.white ?? .black)
                                 .offset(y: 80)
-
+                            
                             Text("Pound.")
                                 .foregroundColor(colors["orange"] ?? .black)
                                 .offset(y: 30)
@@ -61,7 +61,7 @@ struct HomeView: View {
                             .cornerRadius(50)
                             .padding(.horizontal)
                             .offset(x: 8, y: 15)
-
+                        
                         HStack(spacing: 15) {
                             NavigationLink(destination: CartView(model)) {
                                 Image(systemName: "cart")
@@ -80,7 +80,7 @@ struct HomeView: View {
                         }
                         .padding(.trailing)
                     }
-
+                    
                     HomeItems(model, $colecs)
                     // Featured Section
                     Text("Show your best Husky pride with Dawg Pound.")
@@ -89,9 +89,9 @@ struct HomeView: View {
                         .foregroundColor(.orange)
                         .multilineTextAlignment(.leading)
                         .padding(.horizontal)
-
-                   faq()
-
+                    
+                    faq()
+                    
                     // Footer
                     Button(action: {
                         print("Email footer tapped")
@@ -102,7 +102,7 @@ struct HomeView: View {
                                 .foregroundColor(.gray)
                                 .frame(maxWidth: .infinity, alignment: .center)
                                 .padding()
-
+                            
                             Link("dawgpound@d214.org", destination: URL(string:"mailto:dawgpound@d214.org")!)
                                 .font(.footnote)
                                 .foregroundColor(.blue)
@@ -148,31 +148,31 @@ struct HomeView: View {
 }
 
 
-    struct ProductCard: View {
-        let productName: String
-        let productPrice: String
-
-        var body: some View {
-            VStack {
-                Rectangle()
-                    .fill(Color.gray)
-                    .frame(width: 140, height: 140)
-                    .cornerRadius(8)
-
-                Text(productName)
-                    .font(.subheadline)
-                    .foregroundColor(.white)
-                    .multilineTextAlignment(.center)
-                    .lineLimit(2)
-                    .padding(.top, 5)
-
-                Text(productPrice)
-                    .font(.footnote)
-                    .foregroundColor(.gray)
-            }
-            .frame(width: 140)
+struct ProductCard: View {
+    let productName: String
+    let productPrice: String
+    
+    var body: some View {
+        VStack {
+            Rectangle()
+                .fill(Color.gray)
+                .frame(width: 140, height: 140)
+                .cornerRadius(8)
+            
+            Text(productName)
+                .font(.subheadline)
+                .foregroundColor(.white)
+                .multilineTextAlignment(.center)
+                .lineLimit(2)
+                .padding(.top, 5)
+            
+            Text(productPrice)
+                .font(.footnote)
+                .foregroundColor(.gray)
         }
+        .frame(width: 140)
     }
+}
 
 func toPrice(_ doub:Int) -> String {
     let cuttoff = 10000
@@ -185,7 +185,7 @@ func toPrice(_ doub:Int) -> String {
     while cents.count < 2 {
         cents += "0"
     }
-//    let cents:Int = doub - (dollars * 10000)
+    //    let cents:Int = doub - (dollars * 10000)
     return "$\(dollars).\(cents)"
 }
 //
@@ -201,44 +201,44 @@ struct HomeItems: View {
     init (_ model:StateObject<ItemViewModel>,_ itms:Binding<[ic]>) {self.model = model
         //        print("{")
         self.itms = itms
-//        for i in model.wrappedValue.homeColecs {
-//            //            print(i.name)
-//            //            for o in i.items {
-//            ////                print(o)
-//            //            }
-//        }
+        //        for i in model.wrappedValue.homeColecs {
+        //            //            print(i.name)
+        //            //            for o in i.items {
+        //            ////                print(o)
+        //            //            }
+        //        }
         //        print("}")
     }
     var body: some View {
         // Trending Section
         VStack{
-//            ForEach(0..<model.wrappedValue.homeColecs.count, id:\.self) { noeh in
-//                VStack(alignment: .leading) {
-//                    Text("Trending now")
-//                        .font(.custom("Lexend-Regular", size: 25))
-//                        .foregroundColor(.white)
-//                        .padding(.horizontal)
-//                        .offset(x: 8, y: 15)
-//
-//                    ScrollView(.horizontal, showsIndicators: false) {
-//                        HStack(spacing: 16) {
-//                            ForEach(0..<min(5,(model.wrappedValue.homeColecs)[noeh].items.count), id: \.self) { item in
-//                                itemPreview(model, item: (model.wrappedValue.homeColecs)[noeh].items[item])
-//                                //                                        item.preview
-//                            }
-//                        }
-//                        .padding(.horizontal)
-//                    }
-//                }
-//            }
+            //            ForEach(0..<model.wrappedValue.homeColecs.count, id:\.self) { noeh in
+            //                VStack(alignment: .leading) {
+            //                    Text("Trending now")
+            //                        .font(.custom("Lexend-Regular", size: 25))
+            //                        .foregroundColor(.white)
+            //                        .padding(.horizontal)
+            //                        .offset(x: 8, y: 15)
+            //
+            //                    ScrollView(.horizontal, showsIndicators: false) {
+            //                        HStack(spacing: 16) {
+            //                            ForEach(0..<min(5,(model.wrappedValue.homeColecs)[noeh].items.count), id: \.self) { item in
+            //                                itemPreview(model, item: (model.wrappedValue.homeColecs)[noeh].items[item])
+            //                                //                                        item.preview
+            //                            }
+            //                        }
+            //                        .padding(.horizontal)
+            //                    }
+            //                }
+            //            }
             ForEach(itms.wrappedValue, id:\.self) { noeh in
                 VStack(alignment: .leading) {
                     Text(noeh.name)
                         .font(.custom("Lexend-Regular", size: 25))
                         .foregroundColor(.white)
                         .padding(.horizontal)
-//                        .offset(x: 8, y: 15)
-
+                    //                        .offset(x: 8, y: 15)
+                    
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 16) {
                             ForEach(noeh.items, id: \.self) { item in
@@ -272,7 +272,7 @@ struct faq: View {
                 .fontWeight(.bold)
                 .foregroundColor(.white)
                 .padding(.horizontal)
-
+            
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 16), count: 2), spacing: 20) {
                 ForEach(0..<questions.count, id: \.self) { index in
                     Button(action: {
@@ -282,7 +282,7 @@ struct faq: View {
                             Text(questions[index].0)
                                 .font(.headline)
                                 .foregroundColor(.white)
-
+                            
                             Text(questions[index].1)
                                 .font(.subheadline)
                                 .foregroundColor(.gray)
