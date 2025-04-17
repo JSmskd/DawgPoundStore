@@ -63,6 +63,7 @@ struct blankSize:Hashable {
         record = rec
     }
     init (_ reference:CKRecord.Reference) {
+        "".first! as! String
         var shortname = ""
         var longname = ""
         var price = 0
@@ -87,6 +88,13 @@ struct blankSize:Hashable {
         name = longname
         n = shortname
     }
+    init (record r : CKRecord) {
+        record = r
+        n =  r["shortName"] as? String ?? "err"
+        name = r["longName"] as? String ?? "error"
+        quantity = r["quantity"] as? Int ?? 0
+        cost = r["cost"] as? Int ?? 0
+    }
 }
 struct blank:CustomStringConvertible , Hashable{
     var name:String
@@ -98,6 +106,12 @@ struct blank:CustomStringConvertible , Hashable{
         self.name = name
         self.sizes = sizes
         self.record = record
+    }
+    init(record r:CKRecord) {
+        //["color", "sizes", "brandName"]
+        record = r
+        name = r["color"] as! String
+        sizes = r["sizes"] as! [CKRecord.Reference]
     }
     init(_ reference:CKRecord.ID) {
         var NAME = "error"

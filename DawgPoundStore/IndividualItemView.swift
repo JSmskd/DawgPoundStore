@@ -9,10 +9,10 @@ struct IndividualItemView: View {
     @State var col = 0
     @State var quantity:UInt = 1
     @State var styles: [blank] = [
-        .init(name: "asdf", sizes: [CKRecord.Reference.init(recordID: .init(recordName: "478BD526-5E40-4ACD-89AC-EAB617929B61"), action: CKRecord.ReferenceAction.none),CKRecord.Reference.init(recordID: .init(recordName: "80EDAE9C-6396-4F9D-B4D2-F906794C8526"), action: CKRecord.ReferenceAction.none)], record: nil) ,
-        //        .init(CKRecord.ID.init(recordName: "FA9FAB4D-F49F-4B26-B365-7F3210C8D9EE"))
-        .init(name: "fdsa", sizes: [CKRecord.Reference.init(recordID: .init(recordName: "73F4CFC6-745B-4DDD-ABAA-5042E6F9F0FE"), action: CKRecord.ReferenceAction.none)], record: nil),
-        //        .init(CKRecord.ID.init(recordName: "CE24806E-343D-4D68-9067-A80895D834FF"))
+//        .init(name: "asdf", sizes: [CKRecord.Reference.init(recordID: .init(recordName: "478BD526-5E40-4ACD-89AC-EAB617929B61"), action: CKRecord.ReferenceAction.none),CKRecord.Reference.init(recordID: .init(recordName: "80EDAE9C-6396-4F9D-B4D2-F906794C8526"), action: CKRecord.ReferenceAction.none)], record: nil) ,
+//        //        .init(CKRecord.ID.init(recordName: "FA9FAB4D-F49F-4B26-B365-7F3210C8D9EE"))
+//        .init(name: "fdsa", sizes: [CKRecord.Reference.init(recordID: .init(recordName: "73F4CFC6-745B-4DDD-ABAA-5042E6F9F0FE"), action: CKRecord.ReferenceAction.none)], record: nil),
+//        //        .init(CKRecord.ID.init(recordName: "CE24806E-343D-4D68-9067-A80895D834FF"))
     ]
     @State var sizes: [[blankSize]] = [
         [
@@ -28,7 +28,55 @@ struct IndividualItemView: View {
     ]
     @State var chosenStyle:Int = 0
     @State var chosenSize : Int = 0
+    @State var activeReloading = false
     func reloadSizes() {
+        if !activeReloading { activeReloading = true
+            print(curentItem.record?.allKeys())
+            if curentItem.record != nil {
+                if curentItem.record!["blanks"] != nil {
+                    let refs = curentItem.record!["blanks"]! as! [CKRecord.Reference]
+                    //                    var innerLayer : [[CKRecord.Reference]] = []
+                    var layer:[blank] = []
+                    for ref in refs {
+
+                        CKContainer.default().publicCloudDatabase.fetch(withRecordID: ref.recordID) { record, e in
+                            if record != nil {
+                                let r = record.unsafelyUnwrapped
+                                print("we have an r")
+                                r["sizes"]
+                                DispatchQueue.main.async {
+                                    layer.append(blank(record: r))
+                                    var ta : [blankSize] = []
+                                    var i = blank(record: r)
+                                    for ref in i.sizes {
+                                        CKContainer.default().publicCloudDatabase.fetch(withRecordID: ref.recordID) { record, e in
+                                            print(e)
+                                            if record != nil {
+                                                let r = record.unsafelyUnwrapped
+                                                print("we have an r2")
+                                                r["sizes"]
+                                                let g = blankSize(record: r)
+                                                print(g)
+                                                DispatchQueue.main.async {
+                                                    ta.append(g)
+                                                }
+                                            }
+                                        }
+                                        DispatchQueue.main.async {
+                                            styles.append(i)
+                                            sizes.append(ta)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+            print("done loading")
+            activeReloading = false
+        }
         //        sizes = []
         //        for (ai, a) in $styles.enumerated() {
         // //            print(styles.first!.record?.recordID)
@@ -266,16 +314,17 @@ struct IndividualItemView: View {
             reloadSizes()
         }
         .onTapGesture {
-            print(styles)
-            for i in styles {
-                for i in i.sizes {
-                    print(i.recordID.recordName ?? "No Name")
-                }
-            }
-            print(sizes)
-            
-            print(styles[chosenStyle].record?.recordID.recordName)
-            print(sizes[chosenStyle][chosenSize].record?.recordID.recordName)
+//            reloadSizes()
+//            print(styles)
+//            for i in styles {
+//                for i in i.sizes {
+//                    print(i.recordID.recordName ?? "No Name")
+//                }
+//            }
+//            print(sizes)
+//            
+////            print(styles[chosenStyle].record?.recordID.recordName)
+//            print(sizes[chosenStyle][chosenSize].record?.recordID.recordName)
         }
     }
 }
