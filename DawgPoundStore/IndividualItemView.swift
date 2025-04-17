@@ -31,32 +31,34 @@ struct IndividualItemView: View {
     @State var activeReloading = false
     func reloadSizes() {
         if !activeReloading { activeReloading = true
+            styles = []
+            sizes = []
             print(curentItem.record?.allKeys())
             if curentItem.record != nil {
                 if curentItem.record!["blanks"] != nil {
                     let refs = curentItem.record!["blanks"]! as! [CKRecord.Reference]
                     //                    var innerLayer : [[CKRecord.Reference]] = []
-                    var layer:[blank] = []
+//                    var layer:[blank] = []
+                    print("ref \(refs.count)")
                     for ref in refs {
 
                         CKContainer.default().publicCloudDatabase.fetch(withRecordID: ref.recordID) { record, e in
                             if record != nil {
                                 let r = record.unsafelyUnwrapped
-                                print("we have an r")
-                                r["sizes"]
+//                                print("we have an r")
+//                                r["sizes"]
                                 DispatchQueue.main.async {
-                                    layer.append(blank(record: r))
                                     var ta : [blankSize] = []
                                     var i = blank(record: r)
                                     for ref in i.sizes {
                                         CKContainer.default().publicCloudDatabase.fetch(withRecordID: ref.recordID) { record, e in
-                                            print(e)
+//                                            print(e)
                                             if record != nil {
                                                 let r = record.unsafelyUnwrapped
-                                                print("we have an r2")
-                                                r["sizes"]
+//                                                print("we have an r2")
+//                                                r["sizes"]
                                                 let g = blankSize(record: r)
-                                                print(g)
+//                                                print(g)
                                                 DispatchQueue.main.async {
                                                     ta.append(g)
                                                 }
