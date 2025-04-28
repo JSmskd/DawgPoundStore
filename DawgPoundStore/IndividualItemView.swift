@@ -14,64 +14,76 @@ struct IndividualItemView: View {
 //        .init(name: "fdsa", sizes: [CKRecord.Reference.init(recordID: .init(recordName: "73F4CFC6-745B-4DDD-ABAA-5042E6F9F0FE"), action: CKRecord.ReferenceAction.none)], record: nil),
 //        //        .init(CKRecord.ID.init(recordName: "CE24806E-343D-4D68-9067-A80895D834FF"))
     ]
-    @State var sizes: [[blankSize]] = [
-        [
-            blankSize.init(shortName: "s", longName: "small", cost: 100000, quantity: 1),
-            //            blankSize.init(CKRecord.Reference.init(recordID: .init(recordName: "478BD526-5E40-4ACD-89AC-EAB617929B61"), action: CKRecord.ReferenceAction.none)),
-            .init(shortName: "l", longName: "large", cost: 1000000, quantity: 2)
+    @State var sizes: [blank:[blankSize]] = [:
+//        [
+//            blankSize.init(shortName: "s", longName: "small", cost: 100000, quantity: 1),
+//                        blankSize.init(CKRecord.Reference.init(recordID: .init(recordName: "478BD526-5E40-4ACD-89AC-EAB617929B61"), action: CKRecord.ReferenceAction.none)),
+//            .init(shortName: "l", longName: "large", cost: 1000000, quantity: 2)
             //                           blankSize.init(CKRecord.Reference.init(recordID: .init(recordName: "80EDAE9C-6396-4F9D-B4D2-F906794C8526"), action: CKRecord.ReferenceAction.none))
-        ],
-        [
-            .init(shortName: "m", longName: "medium", cost: 500000, quantity: 50)
+//        ],
+//        [
+//            .init(shortName: "m", longName: "medium", cost: 500000, quantity: 50)
             //            blankSize.init(CKRecord.Reference.init(recordID: .init(recordName: "73F4CFC6-745B-4DDD-ABAA-5042E6F9F0FE"), action: CKRecord.ReferenceAction.none))
-        ]
+//        ]
     ]
     @State var chosenStyle:Int = 0
     @State var chosenSize : Int = 0
     @State var activeReloading = false
     func reloadSizes() {
         if !activeReloading { activeReloading = true
+            print(styles)
+            print(sizes)
             styles = []
-            sizes = []
+            sizes = [:]
             print(curentItem.record?.allKeys())
             if curentItem.record != nil {
                 if curentItem.record!["blanks"] != nil {
                     let refs = curentItem.record!["blanks"]! as! [CKRecord.Reference]
                     //                    var innerLayer : [[CKRecord.Reference]] = []
-//                    var layer:[blank] = []
+                    //                    var layer:[blank] = []
                     print("ref \(refs.count)")
                     for ref in refs {
 
                         CKContainer.default().publicCloudDatabase.fetch(withRecordID: ref.recordID) { record, e in
                             if record != nil {
                                 let r = record.unsafelyUnwrapped
-//                                print("we have an r")
-//                                r["sizes"]
-                                DispatchQueue.main.async {
-                                    var ta : [blankSize] = []
-                                    var i = blank(record: r)
-                                    for ref in i.sizes {
-                                        CKContainer.default().publicCloudDatabase.fetch(withRecordID: ref.recordID) { record, e in
-//                                            print(e)
-                                            if record != nil {
-                                                let r = record.unsafelyUnwrapped
-//                                                print("we have an r2")
-//                                                r["sizes"]
-                                                let g = blankSize(record: r)
-//                                                print(g)
-                                                DispatchQueue.main.async {
-                                                    ta.append(g)
+                                //                                print("we have an r")
+                                //                                r["sizes"]
+                                var ta : [blankSize] = []
+                                var i = blank(record: r)
+                                sizes[i] = []
+                                for ref in i.sizes {
+                                    CKContainer.default().publicCloudDatabase.fetch(withRecordID: ref.recordID) { record, e in
+                                        //                                            print(e)
+                                        if record != nil {
+                                            let r = record.unsafelyUnwrapped
+                                            //                                                print("we have an r2")
+                                            //                                                r["sizes"]
+                                            let g = blankSize(record: r)
+                                            //                                                print(g)
+                                            DispatchQueue.main.async {
+                                                if sizes[i] == nil {sizes[i] = []}
+                                                $sizes.wrappedValue[i]!.append(g)
+                                                for iie in sizes.keys {
+                                                    print("\(iie.name):")
+                                                    for eei in sizes[iie]! {
+                                                        print("    \(eei.name)")
+                                                    }
                                                 }
                                             }
                                         }
-                                        DispatchQueue.main.async {
-                                            styles.append(i)
-                                            sizes.append(ta)
-                                        }
                                     }
-                                }
-                            }
-                        }
+                                }//refs
+                                    DispatchQueue.main.async {
+                                        styles.append(i)
+                                        //                                            sizes.wrappedValue[i]!.append(ta)
+
+                                        print("styles now has \(styles.count)")
+                                    }
+
+                            }//pull
+                        }//for
+
                     }
                 }
 
@@ -210,18 +222,21 @@ struct IndividualItemView: View {
                         HStack(spacing: 15) {
                             ForEach(0..<styles.count , id: \.self) { n in
                                 Circle()
-                                    .fill(.red)
+                                    .fill(styles[n].getCol())
                                     .frame(width: 30, height: 30)
                                     .overlay(
                                         Circle()
                                             .stroke(chosenStyle == n ? Color.orange : Color.white, lineWidth: 2)
                                     )
                                     .onTapGesture {
+                                        print("stys")
+                                        print(self.styles.count)
+                                        print(sizes.count)
                                         if chosenStyle != n {
                                             chosenStyle = n //color
                                             chosenSize = 0
                                         }
-                                        reloadSizes()
+//                                        reloadSizes()
                                     }
                             }
                         }
@@ -248,22 +263,33 @@ struct IndividualItemView: View {
                         }
                     }
                     
-                    if showSizePicker {
-                        Picker("Select Size", selection: $chosenSize) {
-                            ForEach(0..<sizes[chosenStyle].count, id: \.self) { oo in
-                                HStack {
-                                    Text("\(sizes[chosenStyle][oo].name)").tag(oo)
-                                }.tag(oo)
-                                
-                                //                                let use = sizes[col][oo]
-                                //                                Text(use.description)
-                            }
-                        }
-                        .pickerStyle(MenuPickerStyle())
-                        .frame(width: 300)
+//                    if showSizePicker {&& (chosenStyle < styles.count && sizes[styles[chosenStyle]] != nil) {
+
+
+                    // //////////////////
+                    SizePicker(chosenStyle: chosenStyle, sizes: sizes, styles: styles, chosenSize: $chosenSize)
+
+
+
+//                        Picker("Select Size", selection: $chosenSize) {
+//
+//                            if chosenStyle < styles.count {
+//                                if sizes[styles[chosenStyle]] != nil {
+//                                    ForEach(sizes[styles[chosenStyle]]!, id: \.self) { oo in
+//
+//
+//                                        //                                let use = sizes[col][oo]
+//                                        //                                Text(use.description)
+//                                    }
+//                                }
+//                            }
+//                        }
+//                        .pickerStyle(MenuPickerStyle())
+//                        .frame(width: 300)
                         
-                    }
-                    
+//                    }
+
+
                     HStack(spacing: 10) {
                         Button(action: {
                             // Add to cart functionality
@@ -327,6 +353,29 @@ struct IndividualItemView: View {
 //            
 ////            print(styles[chosenStyle].record?.recordID.recordName)
 //            print(sizes[chosenStyle][chosenSize].record?.recordID.recordName)
+        }
+    }
+}
+struct SizePicker: View {
+    var chosenStyle: Int
+    var sizes: [blank:[blankSize]]
+    var styles: [blank]
+    @Binding var chosenSize : Int
+    var body: some View {
+        if chosenStyle < styles.count {
+            Picker("Select Size", selection: $chosenSize) {
+                if sizes[styles[chosenStyle]] != nil {
+                    let use = sizes[styles[chosenStyle]].unsafelyUnwrapped
+                    ForEach(0 ..< use.count, id:\.self) { s in
+                        HStack {
+                            Text("\(sizes[styles[chosenStyle]]![s].name)")//.tag(ooo)
+                                .foregroundStyle(.white)
+                        }
+                        .tag(s)
+                    }
+                }
+                //                            Text(.description ?? "No sizes available").foregroundStyle(.white)
+            }
         }
     }
 }

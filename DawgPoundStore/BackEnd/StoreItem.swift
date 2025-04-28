@@ -22,7 +22,9 @@ struct user:Hashable {
         itemsInCart = []
     }
 }
-struct blankSize:Hashable {
+struct blankSize:Hashable, Identifiable, CustomStringConvertible {
+    var description: String {get {name}}
+    var id : Int { get { hashValue}}
     var name:String
     var n:String
     ///cost multiplied my 10000 {10.423  ->  10423}
@@ -96,9 +98,19 @@ struct blankSize:Hashable {
         cost = r["cost"] as? Int ?? 0
     }
 }
-struct blank:CustomStringConvertible , Hashable{
+struct blank:CustomStringConvertible , Hashable, Identifiable{
+    var id : Int { get { hashValue}}
     var name:String
-    
+    func getCol() -> Color {
+        switch name {
+            case "orange":
+                return .orange
+            case "white":
+                return .white
+            default:
+                return.clear
+        }
+    }
     var sizes:[CKRecord.Reference]
     var record:CKRecord?
     var description: String {get {name}}
@@ -108,10 +120,13 @@ struct blank:CustomStringConvertible , Hashable{
         self.record = record
     }
     init(record r:CKRecord) {
+        print("new blank")
         //["color", "sizes", "brandName"]
         record = r
         name = r["color"] as! String
+//        print(r["color"] == nil)
         sizes = r["sizes"] as! [CKRecord.Reference]
+//        print(r["sizes"])
     }
     init(_ reference:CKRecord.ID) {
         var NAME = "error"
