@@ -31,17 +31,17 @@ struct IndividualItemView: View {
     @State var activeReloading = false
     func reloadSizes() {
         if !activeReloading { activeReloading = true
-            print(styles)
-            print(sizes)
+//            print(styles)
+//            print(sizes)
             styles = []
             sizes = [:]
-            print(curentItem.record?.allKeys())
+//            print(curentItem.record?.allKeys())
             if curentItem.record != nil {
                 if curentItem.record!["blanks"] != nil {
                     let refs = curentItem.record!["blanks"]! as! [CKRecord.Reference]
                     //                    var innerLayer : [[CKRecord.Reference]] = []
                     //                    var layer:[blank] = []
-                    print("ref \(refs.count)")
+//                    print("ref \(refs.count)")
                     for ref in refs {
 
                         CKContainer.default().publicCloudDatabase.fetch(withRecordID: ref.recordID) { record, e in
@@ -78,7 +78,7 @@ struct IndividualItemView: View {
                                         styles.append(i)
                                         //                                            sizes.wrappedValue[i]!.append(ta)
 
-                                        print("styles now has \(styles.count)")
+//                                        print("styles now has \(styles.count)")
                                     }
 
                             }//pull
@@ -88,7 +88,7 @@ struct IndividualItemView: View {
                 }
 
             }
-            print("done loading")
+//            print("done loading")
             activeReloading = false
         }
         //        sizes = []
@@ -176,15 +176,8 @@ struct IndividualItemView: View {
             .position(x: UIScreen.main.bounds.width / 2, y: 48)
             HStack(spacing: 30) {
                 VStack {
-                    ZStack{
-                        Rectangle()
-                            .fill(Color.gray)
-                        Image(uiImage:previewImage) //item.images)
-                            .resizable()
-                            .padding(.all)
-                    }
-                    .frame(width: 468, height: 512)
-                    .cornerRadius(8)
+
+                    DisplayImage(uiImage:previewImage)
                     //                    Image("hoodie_image") // Ensure image is in assets
                     //                        .resizable()
                     //                        .aspectRatio(contentMode: .fit)
@@ -229,9 +222,9 @@ struct IndividualItemView: View {
                                             .stroke(chosenStyle == n ? Color.orange : Color.white, lineWidth: 2)
                                     )
                                     .onTapGesture {
-                                        print("stys")
-                                        print(self.styles.count)
-                                        print(sizes.count)
+//                                        print("stys")
+//                                        print(self.styles.count)
+//                                        print(sizes.count)
                                         if chosenStyle != n {
                                             chosenStyle = n //color
                                             chosenSize = 0
@@ -294,25 +287,35 @@ struct IndividualItemView: View {
                         Button(action: {
                             // Add to cart functionality
                             
-                            print(curentItem)
+//                            print(curentItem)
                             
                         }) {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 5)
                                     .fill(Color.orange)
                                     .frame(width: 300, height: 50)
-                                
-                                //                                NavigationLink {
-                                //                                    CartView(model, items: [.init(curentItem, Int64(exactly: quantity)!, styles.first!, sizes.first!.first! )])
-                                //                                } label: {
-                                Text("Add to cart - \(toPrice(curentItem.price))")
-                                    .font(Font.custom("Lexend", size: 16))
-                                    .foregroundColor(.white)
-                                //                                }
-                                
+
+                                NavigationLink {
+                                    if chosenStyle < styles.count {
+                                        if sizes[styles[chosenStyle]] != nil {
+                                            if chosenSize < sizes[styles[chosenStyle]]!.count {
+                                                let sty = styles[chosenStyle]
+                                                CartView(model, items: [.init(curentItem, Int64(exactly: quantity)!, sty, sizes[sty]![chosenSize] )])
+                                            }
+                                        }
+                                    }
+                                } label: {
+                                    Text("Add to cart - \(toPrice(curentItem.price))")
+                                        .font(Font.custom("Lexend", size: 16))
+                                        .foregroundColor(.white)
+                                }
+                                .onTapGesture {
+                                    print("hello")
+                                }
+
                             }
                         }
-                        
+
                         Button(action: {
                             //                            isFavorite.toggle()
                         }) {
@@ -341,44 +344,36 @@ struct IndividualItemView: View {
         .onAppear {
             reloadSizes()
         }
-        .onTapGesture {
-//            reloadSizes()
-//            print(styles)
-//            for i in styles {
-//                for i in i.sizes {
-//                    print(i.recordID.recordName ?? "No Name")
-//                }
-//            }
-//            print(sizes)
-//            
-////            print(styles[chosenStyle].record?.recordID.recordName)
-//            print(sizes[chosenStyle][chosenSize].record?.recordID.recordName)
-        }
+//        .onTapGesture {
+////            reloadSizes()
+////            print(styles)
+////            for i in styles {
+////                for i in i.sizes {
+////                    print(i.recordID.recordName ?? "No Name")
+////                }
+////            }
+////            print(sizes)
+////            
+//////            print(styles[chosenStyle].record?.recordID.recordName)
+////            print(sizes[chosenStyle][chosenSize].record?.recordID.recordName)
+//        }
     }
 }
-struct SizePicker: View {
-    var chosenStyle: Int
-    var sizes: [blank:[blankSize]]
-    var styles: [blank]
-    @Binding var chosenSize : Int
+struct DisplayImage: View {
+    var uiImage: UIImage
     var body: some View {
-        if chosenStyle < styles.count {
-            Picker("Select Size", selection: $chosenSize) {
-                if sizes[styles[chosenStyle]] != nil {
-                    let use = sizes[styles[chosenStyle]].unsafelyUnwrapped
-                    ForEach(0 ..< use.count, id:\.self) { s in
-                        HStack {
-                            Text("\(sizes[styles[chosenStyle]]![s].name)")//.tag(ooo)
-                                .foregroundStyle(.white)
-                        }
-                        .tag(s)
-                    }
-                }
-                //                            Text(.description ?? "No sizes available").foregroundStyle(.white)
-            }
+        ZStack{
+            Rectangle()
+                .fill(Color.gray)
+            Image(uiImage:uiImage) //item.images)
+                .resizable()
+                .padding(.all)
         }
+        .frame(width: 468, height: 512)
+        .cornerRadius(8)
     }
 }
+
 
 
 //struct HoodieView_Previews: PreviewProvider {
