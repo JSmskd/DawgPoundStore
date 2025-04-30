@@ -2,9 +2,10 @@ import SwiftUI
 
 struct MenuView: View {
     var isMenuOpen : Binding<Bool>
-    var model:StateObject<ItemViewModel>
-    init (_ model:StateObject<ItemViewModel>, isMenuOpen imo:Binding<Bool>) {
-        self.model = model
+//    var model:StateObject<ItemViewModel>
+    @EnvironmentObject var model: ItemViewModel
+    init (/*_ model:StateObject<ItemViewModel>, */isMenuOpen imo:Binding<Bool>) {
+//        self.model = model
         self.isMenuOpen = imo
         //            model.wrappedValue.update()
         //        DispatchQueue.main.async {
@@ -69,7 +70,7 @@ struct MenuView: View {
     // Regular menu items
     @ViewBuilder
     func menuItem(title: String, color: Color) -> some View {
-        NavigationLink(destination: ProductsView(model)) {
+        NavigationLink(destination: ProductsView(/*model*/)) {
             Text(title)
                 .font(.custom("Lexend-Bold", size: 22))
                 .foregroundColor(.black)
@@ -103,7 +104,7 @@ struct MenuView: View {
     // Submenu items (TOPS, BOTTOMS)
     @ViewBuilder
     func submenuItem(title: String) -> some View {
-        NavigationLink(destination: ProductsView(model)) {
+        NavigationLink(destination: ProductsView(/*model*/)) {
             Text(title)
                 .font(.custom("Lexend-Regular", size: 18))
                 .foregroundColor(.gray)

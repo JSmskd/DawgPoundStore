@@ -1,14 +1,15 @@
 import SwiftUI
 
 struct PickUpView: View {
-    var model:StateObject<ItemViewModel>
-    init (_ model:StateObject<ItemViewModel>) {
-        self.model = model
+//    var model:StateObject<ItemViewModel>
+    @EnvironmentObject var model: ItemViewModel
+    init (_ model:StateObject<ItemViewModel>? = nil) {
+//        self.model = model
         items = []
     }
     @State var items:[orderItem]
-    init (_ model:StateObject<ItemViewModel>, items: [orderItem]) {
-        self.model = model
+    init (_ model:StateObject<ItemViewModel>? = nil, items: [orderItem]) {
+//        self.model = model
         self.items = items
     }
     var body: some View {
@@ -128,7 +129,7 @@ struct PickUpView: View {
                     .cornerRadius(10)
                     .padding(.horizontal)
                     
-                    NavigationLink(destination: FinalView(model)) {
+                    NavigationLink(destination: FinalView(/*model*/)) {
                         Text("Place order")
                             .font(Font.custom("Lexend-Bold", size: 24))
                             .foregroundColor(.white)

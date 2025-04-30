@@ -120,7 +120,7 @@ struct blank:CustomStringConvertible , Hashable, Identifiable{
         self.record = record
     }
     init(record r:CKRecord) {
-        print("new blank")
+//        print("new blank")
         //["color", "sizes", "brandName"]
         record = r
         name = r["color"] as! String
@@ -197,8 +197,9 @@ struct itemPreview:View {
     //        item.images!.first!.fileURL
     //        return
     //    }}
-    var model:StateObject<ItemViewModel>
-    init (_ model:StateObject<ItemViewModel>, item:Item) {
+//    var model:StateObject<ItemViewModel>
+    @EnvironmentObject var model: ItemViewModel
+    init (_ model:StateObject<ItemViewModel>? = nil, item:Item) {
         self.item = item
         //        trendingItems = []//model.wrappedValue.getTasks()
         //        if model.wrappedValue.items.isEmpty {
@@ -209,12 +210,12 @@ struct itemPreview:View {
         //        }
         
         //        model.wrappedValue.getUser()
-        self.model = model
+//        self.model = model
     }
     var body: some View {
         VStack{
             NavigationLink {
-                IndividualItemView(model, item: item)
+                IndividualItemView(/*model, */item: item)
             } label: {
                 VStack {
                     ZStack{
@@ -294,8 +295,9 @@ class ic : Identifiable, Hashable{
 }
 ///ready to sell object
 @MainActor
+//@Observable
 class ItemViewModel: ObservableObject {
-    
+    var navPath: NavigationPath = .init()
     func qryItm(recordID: CKRecord.ID) -> Item? {
         var ret = nil as Item?
         self.database.fetch(withRecordID: recordID) { r,e in

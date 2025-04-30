@@ -3,11 +3,12 @@ import SwiftUI
 struct ProductsView: View {
     @State private var favoriteProducts: Set<UUID> = []
     @State private var cartProducts: Set<UUID> = []
-    var model: StateObject<ItemViewModel>
-    
-    init(_ model: StateObject<ItemViewModel>) {
-        self.model = model
-    }
+//    var model: StateObject<ItemViewModel>
+    @EnvironmentObject var model: ItemViewModel
+//
+//    init(_ model: StateObject<ItemViewModel>) {
+//        self.model = model
+//    }
     
     let product = [
         Product(name: "Nike Hersey Classic Hoodie", price: "$55"),
@@ -27,7 +28,7 @@ struct ProductsView: View {
     var body: some View {
         ScrollView {
             VStack {
-                NavigationLink(destination: HomeView(model)) {
+                NavigationLink(destination: HomeView(/*model*/)) {
                     Image("DawgPoundLogo")
                         .resizable()
                         .scaledToFit()

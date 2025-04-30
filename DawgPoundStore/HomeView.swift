@@ -2,10 +2,11 @@ import SwiftUI
 import CloudKit
 
 struct HomeView: View {
-    var model:StateObject<ItemViewModel>
+//    var model:StateObject<ItemViewModel>
+    @EnvironmentObject var model: ItemViewModel
     @State var colecs:[ic] = []
-    init (_ model:StateObject<ItemViewModel>) {
-        
+    init (_ model:StateObject<ItemViewModel>? = nil) {
+//        @Environment(model.self) var model
         //        trendingItems = []//model.wrappedValue.getTasks()
         //        if model.wrappedValue.colecs.isEmpty {
         //            model.wrappedValue.update()
@@ -17,7 +18,7 @@ struct HomeView: View {
         //        }
         
         //        model.wrappedValue.getUser()
-        self.model = model
+//        self.model = model
         
         UIRefreshControl.appearance().tintColor = UIColor.white
         UIRefreshControl.appearance().attributedTitle = NSAttributedString("Refreshing…")
@@ -63,14 +64,14 @@ struct HomeView: View {
                             .offset(x: 8, y: 15)
                         
                         HStack(spacing: 15) {
-                            NavigationLink(destination: CartView(model)) {
+                            NavigationLink(destination: CartView(/*model*/)) {
                                 Image(systemName: "cart")
                                     .font(.title)
                                     .foregroundColor(.white)
                                     .padding()
                                     .offset(y: 15)
                             }
-                            NavigationLink(destination: FavoritesView(model)) {
+                            NavigationLink(destination: FavoritesView(/*model*/)) {
                                 Image(systemName: "heart")
                                     .font(.title)
                                     .foregroundColor(.white)
@@ -81,7 +82,7 @@ struct HomeView: View {
                         .padding(.trailing)
                     }
                     
-                    HomeItems(model, $colecs)
+                    HomeItems(/*model, */$colecs)
                     // Featured Section
                     Text("Show your best Husky pride with Dawg Pound.")
                         .font(.custom("Lexend-Bold", size: 45))
@@ -134,15 +135,15 @@ struct HomeView: View {
             }
             .foregroundStyle(Color.clear)
             .frame(width: 30, height: 20).offset(x: 15, y: 15)
-            MenuView(model, isMenuOpen: $isMenuOpen).frame(alignment: .leading)
+            MenuView(/*model, */isMenuOpen: $isMenuOpen).frame(alignment: .leading)
         }
         .onAppear {
             refAct()
         }
     }
     func refAct() {
-        model.wrappedValue.update(true)
-        colecs = model.wrappedValue.homeColecs
+        _model.wrappedValue.update(true)
+        colecs = _model.wrappedValue.homeColecs
         print("update")
     }
 }
@@ -196,9 +197,11 @@ func toPrice(_ doub:Int) -> String {
 //    }
 //}
 struct HomeItems: View {
-    var model:StateObject<ItemViewModel>
+//    var model:StateObject<ItemViewModel>
+    @EnvironmentObject var model: ItemViewModel
     var itms:Binding<[ic]>
-    init (_ model:StateObject<ItemViewModel>,_ itms:Binding<[ic]>) {self.model = model
+    init (_ itms:Binding<[ic]>) {
+        //self.model = model
         //        print("{")
         self.itms = itms
         //        for i in model.wrappedValue.homeColecs {
@@ -242,7 +245,7 @@ struct HomeItems: View {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 16) {
                             ForEach(noeh.items, id: \.self) { item in
-                                itemPreview(model, item: item)
+                                itemPreview(/*model, */item: item)
                                 //                                        item.preview
                             }
                         }

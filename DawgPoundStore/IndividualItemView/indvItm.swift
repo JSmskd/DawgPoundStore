@@ -2,7 +2,8 @@ import SwiftUI
 import CloudKit
 
 struct IndividualItemView: View {
-    var model:StateObject<ItemViewModel>
+//    var model:StateObject<ItemViewModel>
+    @EnvironmentObject var model: ItemViewModel
     var curentItem:Item
     @State var showSizePicker = false
     @State var sizeNum = 0
@@ -65,9 +66,9 @@ struct IndividualItemView: View {
                                                 if sizes[i] == nil {sizes[i] = []}
                                                 $sizes.wrappedValue[i]!.append(g)
                                                 for iie in sizes.keys {
-                                                    print("\(iie.name):")
+//                                                    print("\(iie.name):")
                                                     for eei in sizes[iie]! {
-                                                        print("    \(eei.name)")
+//                                                        print("    \(eei.name)")
                                                     }
                                                 }
                                             }
@@ -130,13 +131,13 @@ struct IndividualItemView: View {
         //            }
         //        }
     }
-    init (_ model:StateObject<ItemViewModel>, item:Item) {
+    init (/*_ model:StateObject<ItemViewModel>, */item:Item) {
         curentItem = item
         //        trendingItems = []//model.wrappedValue.getTasks()
-        model.wrappedValue.update()
+//        model.wrappedValue.update()
         
         //        model.wrappedValue.getUser()
-        self.model = model
+//        self.model = model
         //        item.reference?.recordID ?? .init(recordName: "F527E4A8-2B46-4930-8535-D51E6CCDC31B")
         
     }
@@ -155,12 +156,13 @@ struct IndividualItemView: View {
         return ret
     }
     }
+    @State var navOpen = false
     var body: some View {
         ZStack {
             Color.black.ignoresSafeArea()
             
             NavigationLink {
-                HomeView(model)
+                HomeView(/*model*/)
             } label:
             {
                 Image("DawgPoundLogo")
@@ -284,38 +286,27 @@ struct IndividualItemView: View {
 
 
                     HStack(spacing: 10) {
-                        Button(action: {
-                            // Add to cart functionality
-                            
-//                            print(curentItem)
-                            
-                        }) {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 5)
-                                    .fill(Color.orange)
-                                    .frame(width: 300, height: 50)
-
-                                NavigationLink {
+                                NavigationLink(isActive: $navOpen) {
                                     if chosenStyle < styles.count {
                                         if sizes[styles[chosenStyle]] != nil {
                                             if chosenSize < sizes[styles[chosenStyle]]!.count {
                                                 let sty = styles[chosenStyle]
-                                                CartView(model, items: [.init(curentItem, Int64(exactly: quantity)!, sty, sizes[sty]![chosenSize] )])
+                                                CartView(/*model, */items: [.init(curentItem, Int64(exactly: quantity)!, sty, sizes[sty]![chosenSize] )])
                                             }
                                         }
                                     }
                                 } label: {
-                                    Text("Add to cart - \(toPrice(curentItem.price))")
-                                        .font(Font.custom("Lexend", size: 16))
-                                        .foregroundColor(.white)
+                                    ZStack {
+                                        ZStack{
+                                            RoundedRectangle(cornerRadius: 5)
+                                                .fill(Color.orange)
+                                                .frame(width: 300, height: 50)
+                                            Text("Add to cart - \(toPrice(curentItem.price))")
+                                                .font(Font.custom("Lexend", size: 16))
+                                                .foregroundColor(.white)
+                                        }
+                                    }
                                 }
-                                .onTapGesture {
-                                    print("hello")
-                                }
-
-                            }
-                        }
-
                         Button(action: {
                             //                            isFavorite.toggle()
                         }) {
