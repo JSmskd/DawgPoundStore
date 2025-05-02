@@ -130,10 +130,3 @@ struct FavoritesView: View {
         }
     }
 }
-
-//// Preview
-//struct FavoritesView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        FavoritesView()
-//    }
-//}

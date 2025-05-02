@@ -23,9 +23,7 @@ struct HomeView: View {
         UIRefreshControl.appearance().tintColor = UIColor.white
         UIRefreshControl.appearance().attributedTitle = NSAttributedString("Refreshing…")
     }
-    //    let trendingItems:[Item]// = [
-    ////        ("Nike Hersey Classic Hoodie", "$55"),
-    ////    ]
+
     @State var isMenuOpen = false
     let colors = customColors()
     var body: some View {
@@ -81,19 +79,22 @@ struct HomeView: View {
                         }
                         .padding(.trailing)
                     }
+
+
+
                     
-                    HomeItems(/*model, */$colecs)
+                    HomeItems($colecs)
                     // Featured Section
+
                     Text("Show your best Husky pride with Dawg Pound.")
                         .font(.custom("Lexend-Bold", size: 45))
                         .fontWeight(.bold)
                         .foregroundColor(.orange)
                         .multilineTextAlignment(.leading)
                         .padding(.horizontal)
-                    
-                    faq()
-                    
-                    // Footer
+
+                   faq()
+
                     Button(action: {
                         print("Email footer tapped")
                     }) {
@@ -189,13 +190,7 @@ func toPrice(_ doub:Int) -> String {
     //    let cents:Int = doub - (dollars * 10000)
     return "$\(dollars).\(cents)"
 }
-//
-//struct DawgPoundInteractiveView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        HomeView(StateObject(wrappedValue: ItemViewModel()))
-//            .previewDevice("iPad Pro (11-inch) (4th generation)")
-//    }
-//}
+
 struct HomeItems: View {
 //    var model:StateObject<ItemViewModel>
     @EnvironmentObject var model: ItemViewModel
@@ -258,7 +253,6 @@ struct HomeItems: View {
     }
 }
 struct faq: View {
-    //("question","answer")
     let questions:Array<(String,String)> = [
         ("Where do I get my order picked up?","Answer Etc. Etc."),
         ("Where do I get my order picked up?","Answer Etc. Etc."),
