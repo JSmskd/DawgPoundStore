@@ -295,18 +295,22 @@ struct IndividualItemView: View {
                                             }
                                         }
                                     }
-                                } label: {
-                                    ZStack {
-                                        ZStack{
-                                            RoundedRectangle(cornerRadius: 5)
-                                                .fill(Color.orange)
-                                                .frame(width: 300, height: 50)
-                                            Text("Add to cart - \(toPrice(curentItem.price))")
-                                                .font(Font.custom("Lexend", size: 16))
-                                                .foregroundColor(.white)
-                                        }
-                                    }
+                                } label: {}
+                        Button {
+                            navOpen = true
+                        } label: {
+                            ZStack {
+                                ZStack{
+                                    RoundedRectangle(cornerRadius: 5)
+                                        .fill(Color.orange)
+                                        .frame(width: 300, height: 50)
+                                    Text("Add to cart - \(toPrice(curentItem.price))")
+                                        .font(Font.custom("Lexend", size: 16))
+                                        .foregroundColor(.white)
                                 }
+                            }
+                        }
+
                         Button(action: {
                             //                            isFavorite.toggle()
                         }) {

@@ -12,11 +12,7 @@ struct YourApp: App {
     @StateObject var model = ItemViewModel()
     var body: some Scene {
         WindowGroup {
-            //      NavigationView {
-            ap()
-                .environmentObject(model)
-//                .environment(model)
-            //      }
+            ap().environmentObject(model)
         }
     }
 }
@@ -40,8 +36,6 @@ struct ap: View {
                             }
                         }
                     }.fire()
-                    //                      Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { t in
-                    //                      }
                 }
         }
     }

@@ -5,6 +5,7 @@
 //  Created by John Sencion on 12/13/24.
 //
 
+import SwiftData
 import SwiftUI
 import CloudKit
 
@@ -64,32 +65,32 @@ struct blankSize:Hashable, Identifiable, CustomStringConvertible {
         n = shortname
         record = rec
     }
-    init (_ reference:CKRecord.Reference) {
-        "".first! as! String
-        var shortname = ""
-        var longname = ""
-        var price = 0
-        var qty = 0
-        var rec = CKRecord(recordType: "blankSIZE", recordID: reference.recordID)
-        CKContainer.default().publicCloudDatabase.fetch(withRecordID: reference.recordID) { record, e in
-            rec = record ?? CKRecord(recordType: "blankSIZE", recordID: reference.recordID)
-            if record != nil {
-                let r = record.unsafelyUnwrapped
-                
-                shortname =  r["shortName"] as? String ?? "err"
-                longname = r["longName"] as? String ?? "error"
-                qty = r["quantity"] as? Int ?? 0
-                price = r["cost"] as? Int ?? 0
-            }
-            
-        }
-        //fetch(withRecordID: reference) { record, error in
-        record = rec
-        cost = price
-        quantity = qty
-        name = longname
-        n = shortname
-    }
+//    init (_ reference:CKRecord.Reference) {
+//        "".first! as! String
+//        var shortname = ""
+//        var longname = ""
+//        var price = 0
+//        var qty = 0
+//        var rec = CKRecord(recordType: "blankSIZE", recordID: reference.recordID)
+//        CKContainer.default().publicCloudDatabase.fetch(withRecordID: reference.recordID) { record, e in
+//            rec = record ?? CKRecord(recordType: "blankSIZE", recordID: reference.recordID)
+//            if record != nil {
+//                let r = record.unsafelyUnwrapped
+//                
+//                shortname =  r["shortName"] as? String ?? "err"
+//                longname = r["longName"] as? String ?? "error"
+//                qty = r["quantity"] as? Int ?? 0
+//                price = r["cost"] as? Int ?? 0
+//            }
+//            
+//        }
+//        //fetch(withRecordID: reference) { record, error in
+//        record = rec
+//        cost = price
+//        quantity = qty
+//        name = longname
+//        n = shortname
+//    }
     init (record r : CKRecord) {
         record = r
         n =  r["shortName"] as? String ?? "err"
@@ -98,6 +99,7 @@ struct blankSize:Hashable, Identifiable, CustomStringConvertible {
         cost = r["cost"] as? Int ?? 0
     }
 }
+
 struct blank:CustomStringConvertible , Hashable, Identifiable{
     var id : Int { get { hashValue}}
     var name:String
@@ -129,10 +131,10 @@ struct blank:CustomStringConvertible , Hashable, Identifiable{
 //        print(r["sizes"])
     }
     init(_ reference:CKRecord.ID) {
-        var NAME = "error"
-        var szs :[CKRecord.Reference] = []
-        name = NAME
-        sizes = szs
+//        var NAME = "error"
+//        var szs :[CKRecord.Reference] = []
+        name = "error" //NAME
+        sizes = [CKRecord.Reference].init() //szs
     }
 }
 struct orderItem:Identifiable, Hashable {
@@ -294,10 +296,15 @@ class ic : Identifiable, Hashable{
     }
 }
 ///ready to sell object
+@Model
 @MainActor
 //@Observable
 class ItemViewModel: ObservableObject {
-    var navPath: NavigationPath = .init()
+    @Published var order:[orderItem] = []
+    var navPath: NavigationPath = NavigationPath.init()
+    init() {
+
+    }
     func qryItm(recordID: CKRecord.ID) -> Item? {
         var ret = nil as Item?
         self.database.fetch(withRecordID: recordID) { r,e in
@@ -312,7 +319,7 @@ class ItemViewModel: ObservableObject {
     @Published var usr:user = user()
     @Published var cart:[orderItem] = []
     @Published var orders:[orderItem] = []
-    @Published var userCookie : String = "ADMIN"
+    @Published @AppStorage("username") var userCookie : String = "ADMIN"
     @Published var homeColecs:[ic] = []
     @Published var timedown:Int = 0
     private var isRequesting = false
