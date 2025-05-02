@@ -79,15 +79,13 @@ struct HomeView: View {
                         }
                         .padding(.trailing)
                     }
-<<<<<<< HEAD
 
-                    HomeItems(model)
 
-=======
+
                     
-                    HomeItems(/*model, */$colecs)
+                    HomeItems($colecs)
                     // Featured Section
->>>>>>> main
+
                     Text("Show your best Husky pride with Dawg Pound.")
                         .font(.custom("Lexend-Bold", size: 45))
                         .fontWeight(.bold)
