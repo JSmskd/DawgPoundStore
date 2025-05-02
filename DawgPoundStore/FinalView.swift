@@ -1,9 +1,10 @@
 import SwiftUI
 
 struct FinalView: View {
-    var model:StateObject<ItemViewModel>
-    init (_ model:StateObject<ItemViewModel>) {
-        self.model = model
+//    var model:StateObject<ItemViewModel>
+    @EnvironmentObject var model: ItemViewModel
+    init (/*_ model:StateObject<ItemViewModel>*/) {
+//        self.model = model
     }
     var body: some View {
         Text("Thank you for ordering!")
@@ -25,7 +26,7 @@ struct FinalView: View {
         
         
         NavigationLink {
-            HomeView(model)
+            HomeView(/*model*/)
         } label: {
             Text("Return to Home Page")
                 .font(Font.custom("Lexend-Regular", size: 24))

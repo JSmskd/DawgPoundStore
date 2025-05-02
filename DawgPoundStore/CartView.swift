@@ -1,7 +1,8 @@
 import SwiftUI
 
 struct CartView: View {
-    var model:StateObject<ItemViewModel>
+//    var model:StateObject<ItemViewModel>
+    @EnvironmentObject var model: ItemViewModel
     @State var cart: [orderItem]// = []
     ///cost multiplied by 100
     var itemTotal:Int { get {
@@ -17,8 +18,8 @@ struct CartView: View {
     }}
     
     
-    init (_ model:StateObject<ItemViewModel>) {
-        self.model = model
+    init (/*_ model:StateObject<ItemViewModel>? = nil*/) {
+//        self.model = model
         STATICCART = false
         //        model = []model.wrappedValue.getTasks()
         //        DispatchQueue.main.async {
@@ -28,17 +29,17 @@ struct CartView: View {
         cart = []
     }
     let STATICCART:Bool
-    init (_ model:StateObject<ItemViewModel>, items: [orderItem]) {
-        self.model = model
+    init (/*_ model:StateObject<ItemViewModel>? = nil, */items: [orderItem]) {
+//        self.model = model
         cart = items
         STATICCART = true
     }
     func reloadCart() {
         if STATICCART { return }
         
-        model.wrappedValue.update()
+        _model.wrappedValue.update()
         cart = []
-        model.wrappedValue.cart.forEach { i in
+        _model.wrappedValue.cart.forEach { i in
             cart.append(i)
         }
     }
@@ -116,7 +117,7 @@ struct CartView: View {
             .cornerRadius(10)
             .padding(.horizontal)
             
-            NavigationLink(destination: PickUpView(model)) {
+            NavigationLink(destination: PickUpView(/*model*/)) {
                 Text("Pick up")
                     .font(Font.custom("Lexend-Bold", size: 24))
                     .foregroundColor(.white)

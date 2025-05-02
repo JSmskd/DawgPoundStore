@@ -22,7 +22,9 @@ struct user:Hashable {
         itemsInCart = []
     }
 }
-struct blankSize:Hashable {
+struct blankSize:Hashable, Identifiable, CustomStringConvertible {
+    var description: String {get {name}}
+    var id : Int { get { hashValue}}
     var name:String
     var n:String
     ///cost multiplied my 10000 {10.423  ->  10423}
@@ -63,6 +65,7 @@ struct blankSize:Hashable {
         record = rec
     }
     init (_ reference:CKRecord.Reference) {
+        "".first! as! String
         var shortname = ""
         var longname = ""
         var price = 0
@@ -87,10 +90,27 @@ struct blankSize:Hashable {
         name = longname
         n = shortname
     }
+    init (record r : CKRecord) {
+        record = r
+        n =  r["shortName"] as? String ?? "err"
+        name = r["longName"] as? String ?? "error"
+        quantity = r["quantity"] as? Int ?? 0
+        cost = r["cost"] as? Int ?? 0
+    }
 }
-struct blank:CustomStringConvertible , Hashable{
+struct blank:CustomStringConvertible , Hashable, Identifiable{
+    var id : Int { get { hashValue}}
     var name:String
-    
+    func getCol() -> Color {
+        switch name {
+            case "orange":
+                return .orange
+            case "white":
+                return .white
+            default:
+                return.clear
+        }
+    }
     var sizes:[CKRecord.Reference]
     var record:CKRecord?
     var description: String {get {name}}
@@ -98,6 +118,15 @@ struct blank:CustomStringConvertible , Hashable{
         self.name = name
         self.sizes = sizes
         self.record = record
+    }
+    init(record r:CKRecord) {
+//        print("new blank")
+        //["color", "sizes", "brandName"]
+        record = r
+        name = r["color"] as! String
+//        print(r["color"] == nil)
+        sizes = r["sizes"] as! [CKRecord.Reference]
+//        print(r["sizes"])
     }
     init(_ reference:CKRecord.ID) {
         var NAME = "error"
@@ -168,8 +197,9 @@ struct itemPreview:View {
     //        item.images!.first!.fileURL
     //        return
     //    }}
-    var model:StateObject<ItemViewModel>
-    init (_ model:StateObject<ItemViewModel>, item:Item) {
+//    var model:StateObject<ItemViewModel>
+    @EnvironmentObject var model: ItemViewModel
+    init (_ model:StateObject<ItemViewModel>? = nil, item:Item) {
         self.item = item
         //        trendingItems = []//model.wrappedValue.getTasks()
         //        if model.wrappedValue.items.isEmpty {
@@ -180,12 +210,12 @@ struct itemPreview:View {
         //        }
         
         //        model.wrappedValue.getUser()
-        self.model = model
+//        self.model = model
     }
     var body: some View {
         VStack{
             NavigationLink {
-                IndividualItemView(model, item: item)
+                IndividualItemView(/*model, */item: item)
             } label: {
                 VStack {
                     ZStack{
@@ -265,8 +295,9 @@ class ic : Identifiable, Hashable{
 }
 ///ready to sell object
 @MainActor
+//@Observable
 class ItemViewModel: ObservableObject {
-    
+    var navPath: NavigationPath = .init()
     func qryItm(recordID: CKRecord.ID) -> Item? {
         var ret = nil as Item?
         self.database.fetch(withRecordID: recordID) { r,e in

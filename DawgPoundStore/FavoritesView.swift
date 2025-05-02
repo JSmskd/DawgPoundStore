@@ -2,9 +2,10 @@ import SwiftUI
 
 struct FavoritesView: View {
     // Sample Product Data
-    var model:StateObject<ItemViewModel>
-    init (_ model:StateObject<ItemViewModel>) {
-        self.model = model
+//    var model:StateObject<ItemViewModel>
+    @EnvironmentObject var model: ItemViewModel
+    init (_ model:StateObject<ItemViewModel>? = nil) {
+//        self.model = model
         //        trendingItems = []//model.wrappedValue.getTasks()
         //            model.wrappedValue.update()
         //        DispatchQueue.main.async {
@@ -33,7 +34,7 @@ struct FavoritesView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            NavigationLink(destination: HomeView(model)) {
+            NavigationLink(destination: HomeView(/*model*/)) {
                 Image("DawgPoundLogo")
                     .resizable()
                     .scaledToFit()
