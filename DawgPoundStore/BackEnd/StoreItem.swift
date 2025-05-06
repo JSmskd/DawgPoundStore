@@ -29,11 +29,11 @@ struct blankSize:Hashable, Identifiable, CustomStringConvertible {
     var name:String
     var n:String
     ///cost multiplied my 10000 {10.423  ->  10423}
-    var cost:Int
+    var price:Int
     var quantity:Int
     var record:CKRecord?
     init (shortName:String,longName:String,cost:Int,quantity:Int) {
-        self.cost = cost
+        self.price = cost
         self.quantity = quantity
         self.name = longName
         self.n = shortName
@@ -42,7 +42,7 @@ struct blankSize:Hashable, Identifiable, CustomStringConvertible {
         if record?.recordID == nil { print("fail"); return}
         var shortname = ""
         var longname = ""
-        var price = 0
+        var p = 0
         var qty = 0
         var rec = record
         CKContainer.default().publicCloudDatabase.fetch(withRecordID: record.unsafelyUnwrapped.recordID) { record, e in
@@ -54,12 +54,12 @@ struct blankSize:Hashable, Identifiable, CustomStringConvertible {
                 shortname =  r["shortName"] as? String ?? "err"
                 longname = r["longName"] as? String ?? "error"
                 qty = r["quantity"] as? Int ?? 0
-                price = r["cost"] as? Int ?? 0
+                p = r["cost"] as? Int ?? 0
             }
             
         }
         //fetch(withRecordID: reference) { record, error in
-        cost = price
+        price = p
         quantity = qty
         name = longname
         n = shortname
@@ -96,7 +96,7 @@ struct blankSize:Hashable, Identifiable, CustomStringConvertible {
         n =  r["shortName"] as? String ?? "err"
         name = r["longName"] as? String ?? "error"
         quantity = r["quantity"] as? Int ?? 0
-        cost = r["cost"] as? Int ?? 0
+        price = Int(truncatingIfNeeded:r["cost"] as? Int ?? 0)
     }
 }
 
@@ -115,11 +115,13 @@ struct blank:CustomStringConvertible , Hashable, Identifiable{
     }
     var sizes:[CKRecord.Reference]
     var record:CKRecord?
+    var price:Int
     var description: String {get {name}}
     init (name:String,sizes:[CKRecord.Reference], record:CKRecord? = nil) {
         self.name = name
         self.sizes = sizes
         self.record = record
+        price = 0
     }
     init(record r:CKRecord) {
 //        print("new blank")
@@ -129,20 +131,21 @@ struct blank:CustomStringConvertible , Hashable, Identifiable{
 //        print(r["color"] == nil)
         sizes = r["sizes"] as! [CKRecord.Reference]
 //        print(r["sizes"])
+        price = Int(truncatingIfNeeded: r["cost"] as? Int64 ?? 0)
     }
-    init(_ reference:CKRecord.ID) {
+//    init(_ reference:CKRecord.ID) {
 //        var NAME = "error"
 //        var szs :[CKRecord.Reference] = []
-        name = "error" //NAME
-        sizes = [CKRecord.Reference].init() //szs
-    }
+//        name = "error" //NAME
+//        sizes = [CKRecord.Reference].init() //szs
+//    }
 }
 struct orderItem:Identifiable, Hashable {
     var id:CKRecord.Reference?
-    var item:Item
+    var item:Item//price
     var quantity:Int64
-    var style:blank
-    var blnk:blankSize
+    var style:blank//
+    var blnk:blankSize//price
     init (_ ref:Item,_ qty:Int64, _ sty:blank, id:CKRecord.Reference? = nil, _ selected:blankSize) {
         //            itm = Item(reference: ref)
         quantity = qty
@@ -296,11 +299,11 @@ class ic : Identifiable, Hashable{
     }
 }
 ///ready to sell object
-@Model
+//@Model
 @MainActor
 //@Observable
 class ItemViewModel: ObservableObject {
-    @Published var order:[orderItem] = []
+    /*@Published*/ var order:[orderItem] = []
     var navPath: NavigationPath = NavigationPath.init()
     init() {
 
@@ -316,12 +319,12 @@ class ItemViewModel: ObservableObject {
     }
     var database = CKContainer.default().publicCloudDatabase
     //    @Published var items:[Item] = []
-    @Published var usr:user = user()
+    /*@Published */var usr:user = user()
     @Published var cart:[orderItem] = []
-    @Published var orders:[orderItem] = []
-    @Published @AppStorage("username") var userCookie : String = "ADMIN"
-    @Published var homeColecs:[ic] = []
-    @Published var timedown:Int = 0
+    /*@Published */var orders:[orderItem] = []
+    /*@Published */@AppStorage("username") var userCookie : String = "ADMIN"
+    /*@Published */var homeColecs:[ic] = []
+    /*@Published */var timedown:Int = 0
     private var isRequesting = false
     
     func update(_ force:Bool = false) {

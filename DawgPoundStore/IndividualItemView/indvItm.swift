@@ -291,13 +291,25 @@ struct IndividualItemView: View {
                                         if sizes[styles[chosenStyle]] != nil {
                                             if chosenSize < sizes[styles[chosenStyle]]!.count {
                                                 let sty = styles[chosenStyle]
-                                                CartView(/*model, */items: [.init(curentItem, Int64(exactly: quantity)!, sty, sizes[sty]![chosenSize] )])
+                                                CartView(nyItem: orderItem.init(curentItem, Int64(exactly: 1)!, sty, sizes[sty]![chosenSize]))
                                             }
+                                            
                                         }
                                     }
                                 } label: {}
                         Button {
-                            navOpen = true
+                            if chosenStyle < styles.count {
+                                if sizes[styles[chosenStyle]] != nil {
+                                    if chosenSize < sizes[styles[chosenStyle]]!.count {
+
+
+//                                        orderItem(<#T##ref: Item##Item#>, <#T##qty: Int64##Int64#>, <#T##sty: blank##blank#>, <#T##selected: blankSize##blankSize#>)
+
+//                                        model.cart.append()
+                                                                        navOpen = true
+                                    }
+                                }
+                            }
                         } label: {
                             ZStack {
                                 ZStack{

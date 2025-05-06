@@ -12,7 +12,8 @@ struct YourApp: App {
     @StateObject var model = ItemViewModel()
     var body: some Scene {
         WindowGroup {
-            ap().environmentObject(model)
+            ap()
+                .environmentObject(model)
         }
     }
 }
@@ -20,11 +21,7 @@ struct ap: View {
     /*(ItemViewModel.self)*/
     @EnvironmentObject var model: ItemViewModel
     var body: some View {
-        NavigationStack(path: Binding(get: {
-            model.navPath
-        }, set: { v in
-            model.navPath = v
-        })) {
+        NavigationStack {
             HomeView(/*model*/)
                 .onAppear {
                     Timer.init(timeInterval: 0.5 , repeats: true) { t in

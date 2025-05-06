@@ -1,12 +1,11 @@
 import SwiftUI
 import CloudKit
-
 struct HomeView: View {
-//    var model:StateObject<ItemViewModel>
+    //    var model:StateObject<ItemViewModel>
     @EnvironmentObject var model: ItemViewModel
     @State var colecs:[ic] = []
     init (_ model:StateObject<ItemViewModel>? = nil) {
-//        @Environment(model.self) var model
+        //        @Environment(model.self) var model
         //        trendingItems = []//model.wrappedValue.getTasks()
         //        if model.wrappedValue.colecs.isEmpty {
         //            model.wrappedValue.update()
@@ -18,12 +17,12 @@ struct HomeView: View {
         //        }
         
         //        model.wrappedValue.getUser()
-//        self.model = model
+        //        self.model = model
         
         UIRefreshControl.appearance().tintColor = UIColor.white
         UIRefreshControl.appearance().attributedTitle = NSAttributedString("Refreshing…")
     }
-
+    
     @State var isMenuOpen = false
     let colors = customColors()
     var body: some View {
@@ -79,39 +78,24 @@ struct HomeView: View {
                         }
                         .padding(.trailing)
                     }
-
-
-
+                    
+                    
+                    
                     
                     HomeItems($colecs)
                     // Featured Section
-
+                    
                     Text("Show your best Husky pride with Dawg Pound.")
                         .font(.custom("Lexend-Bold", size: 45))
                         .fontWeight(.bold)
                         .foregroundColor(.orange)
                         .multilineTextAlignment(.leading)
                         .padding(.horizontal)
-
-                   faq()
-
-                    Button(action: {
-                        print("Email footer tapped")
-                    }) {
-                        VStack {
-                            Text("Email us with any other questions at")
-                                .font(.footnote)
-                                .foregroundColor(.gray)
-                                .frame(maxWidth: .infinity, alignment: .center)
-                                .padding()
-                            
-                            Link("dawgpound@d214.org", destination: URL(string:"mailto:dawgpound@d214.org")!)
-                                .font(.footnote)
-                                .foregroundColor(.blue)
-                                .frame(maxWidth: .infinity, alignment: .center)
-                                .padding(.top, 3)
-                        }
-                    }
+                    
+                    faq()
+                    
+                    email()
+                    
                 }
             }.background(Color.black).refreshable {
                 refAct()
@@ -148,7 +132,6 @@ struct HomeView: View {
         print("update")
     }
 }
-
 
 struct ProductCard: View {
     let productName: String
@@ -295,6 +278,6 @@ struct faq: View {
     }
 }
 
-#Preview {
-    faq()
-}
+//#Preview {
+//    faq()
+//}
