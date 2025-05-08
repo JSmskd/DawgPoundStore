@@ -5,7 +5,7 @@ struct Blnk {
 }
 
 struct CartView: View {
-    @EnvironmentObject var model: ItemViewModel
+    var model: EnvironmentObject<ItemViewModel>
 //    @State var cart: [orderItem]
 
     let maintenanceFee: Int = 800 // $8.00
@@ -14,12 +14,14 @@ struct CartView: View {
 
 
     init(nyItem: orderItem) {
+        model = .init()// ItemViewModel
 //        STATICCART = false
 //        print(model)
         hasAdded = nyItem
     }
     init() {
-        
+        model = .init()
+//        @EnvironmentObject var model: ItemViewModel
     }
 
 //    init(items: [orderItem] = []) {
@@ -29,24 +31,25 @@ struct CartView: View {
 
     var itemTotal: Int {
         var t:Int = 0
-        for i in _model.projectedValue.order {
+        for i in model.projectedValue.order {
             t += (i.item.price.wrappedValue + i.style.price.wrappedValue + i.blnk.price.wrappedValue) * Int(truncatingIfNeeded: i.quantity.wrappedValue)
         }; return t
 //        cart.reduce(0) { $0 + $1.item.price * $1.blnk.cost }
     }
-
     var total: Int {
-        itemTotal + maintenanceFee
+        itemTotal + (maintenanceFee * 100)
     }
 
     func reloadCart() {
-        if hasAdded != nil {
-            _model.wrappedValue.cart.append(hasAdded!)
-            hasAdded = nil
-        }
+//        if hasAdded != nil {
+//            model.wrappedValue.objectWillChange.send()
+//            model.wrappedValue.order.append(hasAdded!)
+//            model.wrappedValue.objectWillChange.send()
+//            hasAdded = nil
+//        }
         if STATICCART { return }
-        _model.wrappedValue.update()
-//        _model.wrappedValue.cart
+        model.wrappedValue.update()
+//        model.wrappedValue.cart
     }
 
     var body: some View {
@@ -67,8 +70,12 @@ struct CartView: View {
                 // Cart Items
                 ScrollView {
                     VStack(spacing: 20) {
-                        ForEach(model.order.indices, id: \.self) { index in
-                            CartItemView(order: _model.projectedValue.order[index])
+                        ForEach(model.wrappedValue.order.indices, id: \.self) { index in
+                            CartItemView(order: Binding(get: {
+                                model.wrappedValue.order[index]
+                            }, set: { value in
+                                model.wrappedValue.order[index] = value
+                            }))
                         }
                     }
                     .padding(.horizontal)
@@ -81,11 +88,11 @@ struct CartView: View {
                         .foregroundColor(.white)
 
                     HStack {
-                        Text("Clothing cost (\(model.order.count))")
+                        Text("Clothing cost (\(model.wrappedValue.order.count))")
                             .font(Font.custom("Lexend-Thin", size: 15))
                             .foregroundColor(.white)
                         Spacer()
-                        Text(String(format: "$%.2f", Double(itemTotal) / 100.0))
+                        Text(toPrice(itemTotal))
                             .font(Font.custom("Lexend-Thin", size: 15))
                             .foregroundColor(.white)
                     }
@@ -95,7 +102,7 @@ struct CartView: View {
                             .font(Font.custom("Lexend-Thin", size: 15))
                             .foregroundColor(.white)
                         Spacer()
-                        Text(String(format: "$%.2f", Double(maintenanceFee) / 100.0))
+                        Text(String(toPrice(maintenanceFee * 100)))
                             .font(Font.custom("Lexend-Thin", size: 15))
                             .foregroundColor(.white)
                     }
@@ -107,7 +114,7 @@ struct CartView: View {
                             .font(Font.custom("Lexend-Bold", size: 24))
                             .foregroundColor(.white)
                         Spacer()
-                        Text(String(format: "$%.2f", Double(total) / 100.0))
+                        Text(String(toPrice(total)))
                             .font(Font.custom("Lexend-Bold", size: 24))
                             .foregroundColor(.white)
                     }
@@ -161,10 +168,11 @@ struct CartItemView: View {
                 Text(order.item.title)
                     .font(.system(size: 15, weight: .bold))
                     .foregroundColor(.white)
-                Text(order.item.description)
-                    .font(.system(size: 10))
-                    .foregroundColor(.white)
-                Text("Size \(order.item.Itemdescription)")
+                VStack {
+                    Text(toPrice(order.item.price))
+                    Text("Size \(order.item.Itemdescription)")
+                    Text("\(order.style.name) : \(order.blnk.name)")
+                }
                     .font(.system(size: 10))
                     .foregroundColor(.white)
             }
@@ -174,8 +182,8 @@ struct CartItemView: View {
             VStack {
                 HStack(spacing: 20) {
                     Button(action: {
-                        if order.quantity > 1 {
-                            order.quantity -= 1
+                        if $order.quantity.wrappedValue > 1 {
+                            $order.quantity.wrappedValue -= 1
                             // update cart array in parent view
                         }
                     }) {
@@ -184,12 +192,12 @@ struct CartItemView: View {
                             .foregroundColor(Color.gray)
                     }
 
-                    Text("\(order.quantity)")
+                    Text("\($order.quantity.wrappedValue)")
                         .font(.system(size: 20))
                         .foregroundColor(Color.gray)
 
                     Button(action: {
-                        order.quantity += 1
+                        $order.quantity.wrappedValue += 1
                         // update cart array in parent view
                     }) {
                         Text("+")

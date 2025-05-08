@@ -3,15 +3,16 @@ import SwiftUI
 struct PickUpView: View {
 //    var model:StateObject<ItemViewModel>
     @EnvironmentObject var model: ItemViewModel
-    init (_ model:StateObject<ItemViewModel>? = nil) {
+    init(){}
+//    init (_ model:StateObject<ItemViewModel>? = nil) {
 //        self.model = model
-        items = []
-    }
-    @State var items:[orderItem]
-    init (_ model:StateObject<ItemViewModel>? = nil, items: [orderItem]) {
+//        items = []
+//    }
+//    @State var items:[orderItem]
+//    init (_ model:StateObject<ItemViewModel>? = nil, items: [orderItem]) {
 //        self.model = model
-        self.items = items
-    }
+//        self.items = items
+//    }
     var body: some View {
         @AppStorage("email") var email: String = ""
         @AppStorage("time") var time: String = ""

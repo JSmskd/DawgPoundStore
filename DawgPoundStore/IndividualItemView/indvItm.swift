@@ -305,8 +305,8 @@ struct IndividualItemView: View {
 
 //                                        orderItem(<#T##ref: Item##Item#>, <#T##qty: Int64##Int64#>, <#T##sty: blank##blank#>, <#T##selected: blankSize##blankSize#>)
 
-//                                        model.cart.append()
-                                                                        navOpen = true
+                                        model.order.append(orderItem.init(curentItem, Int64(exactly: 1)!, styles[chosenStyle], sizes[styles[chosenStyle]]![chosenSize]))
+                                        navOpen = true
                                     }
                                 }
                             }
