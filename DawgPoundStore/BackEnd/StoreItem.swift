@@ -303,7 +303,6 @@ class ic : Identifiable, Hashable{
 @MainActor
 //@Observable
 class ItemViewModel: ObservableObject {
-    /*@Published*/ var order:[orderItem] = []
     var navPath: NavigationPath = NavigationPath.init()
     init() {
 
@@ -320,7 +319,8 @@ class ItemViewModel: ObservableObject {
     var database = CKContainer.default().publicCloudDatabase
     //    @Published var items:[Item] = []
     /*@Published */var usr:user = user()
-    @Published var cart:[orderItem] = []
+    @Published var order:[orderItem] = []
+//    @Published var cart:[orderItem] = []
 
 //Gone until further notice    /*@Published */var orders:[orderItem] = []
     /*@Published */@AppStorage("username") var userCookie : String = "ADMIN"

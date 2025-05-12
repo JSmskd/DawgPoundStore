@@ -47,7 +47,7 @@ struct PickUpView: View {
 
                 // Cart Items
                 List{
-                    ForEach(_model.projectedValue.cart, id:\.self) { i in
+                    ForEach(_model.projectedValue.order, id:\.self) { i in
                         VStack(spacing: 20) {
                             HStack {
                                 Image(systemName: "photo")

@@ -12,22 +12,31 @@ struct FinalView: View {
             .font(.custom("Lexend-Regular", size: 24))
             .padding()
             .onAppear {
+
                 var total:[CKRecord.Reference] = []
-                for r in model.cart {
+                for r in model.order {
                     var o:CKRecord = .init(recordType: "orderItem")
-                    o.setObject(r.item.reference!, forKey: "Item")//reference
+                    o.setObject(CKRecord.Reference(record: r.item.record!, action: .deleteSelf), forKey: "Item")//reference
+                    o.setObject(CKRecord.Reference(record: r.blnk.record!, action: .deleteSelf), forKey: "blankSize")//reference
                     o.setObject(r.quantity as __CKRecordObjCValue, forKey: "quantity")
 //                    o.setObject(r.blnk.record!.recordID.recordName, forKey: "blankSize")//refrence
 //                    o.setObject("", forKey: "style")//String
                     let x = CKRecord.Reference.init(record: o, action:.none)
-                    print(x)
+
                     total.append(x)
-                    model.database.save(o, completionHandler: { _, _ in
+
+                    model.database.save(o, completionHandler: { r, e in
+                        print(e)
                     })
                 }
                 var o:CKRecord = .init(recordType: "Order")
+//                o.setObject(, forKey: "user")
+
+                o.setObject(total as __CKRecordObjCValue, forKey: "itemsOrdered")
+                o.setObject("Carter Gym" as __CKRecordObjCValue, forKey: "pickupLocation")
                 DispatchQueue.main.schedule {
-                    model.database.save(o, completionHandler: { _, _ in
+                    model.database.save(o, completionHandler: { r, e in
+                        print(e)
                     })
                 }
             }
