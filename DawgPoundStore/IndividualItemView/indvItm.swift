@@ -184,8 +184,10 @@ struct IndividualItemView: View {
                     //                        .resizable()
                     //                        .aspectRatio(contentMode: .fit)
                     //                        .frame(maxWidth: 500, maxHeight: 500)
+                }.onTapGesture(count: 3) {
+                    reloadSizes()
                 }
-                
+
                 VStack(alignment: .leading, spacing: 20) {
                     Text("DAWG\nPOUND")
                         .font(Font.custom("Lexend", size: 36).weight(.bold))
@@ -239,7 +241,7 @@ struct IndividualItemView: View {
                     
                     Button(action: {
                         showSizePicker.toggle()
-                        reloadSizes()
+//                        reloadSizes()
                     }) {
                         ZStack {
                             RoundedRectangle(cornerRadius: 5)

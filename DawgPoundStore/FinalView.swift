@@ -34,6 +34,7 @@ struct FinalView: View {
 
                 o.setObject(total as __CKRecordObjCValue, forKey: "itemsOrdered")
                 o.setObject("Carter Gym" as __CKRecordObjCValue, forKey: "pickupLocation")
+                o.setObject(model.usr.email as __CKRecordObjCValue, forKey: "pickupIdentifier")
                 DispatchQueue.main.schedule {
                     model.database.save(o, completionHandler: { r, e in
                         print(e)
