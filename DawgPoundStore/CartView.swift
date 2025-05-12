@@ -8,7 +8,6 @@ struct CartView: View {
     var model: EnvironmentObject<ItemViewModel>
 //    @State var cart: [orderItem]
 
-    let maintenanceFee: Int = 800 // $8.00
     let STATICCART: Bool = false
     @State var hasAdded:orderItem?
 
@@ -37,7 +36,7 @@ struct CartView: View {
 //        cart.reduce(0) { $0 + $1.item.price * $1.blnk.cost }
     }
     var total: Int {
-        itemTotal + (maintenanceFee * 100)
+        itemTotal + (model.wrappedValue.maintenanceFee * 100)
     }
 
     func reloadCart() {
@@ -102,7 +101,7 @@ struct CartView: View {
                             .font(Font.custom("Lexend-Thin", size: 15))
                             .foregroundColor(.white)
                         Spacer()
-                        Text(String(toPrice(maintenanceFee * 100)))
+                        Text(String(toPrice(model.wrappedValue.maintenanceFee * 100)))
                             .font(Font.custom("Lexend-Thin", size: 15))
                             .foregroundColor(.white)
                     }

@@ -4,9 +4,20 @@ struct PickUpView: View {
     //    var model:StateObject<ItemViewModel>
     @EnvironmentObject var model: ItemViewModel
     init(){}
+    var itemTotal: Int {
+        var t:Int = 0
+        for i in model.order {
+            t += (i.item.price + i.style.price + i.blnk.price) * Int(truncatingIfNeeded: i.quantity)
+        }; return t
+        //        cart.reduce(0) { $0 + $1.item.price * $1.blnk.cost }
+    }
+    var total: Int {
+        itemTotal + (model.maintenanceFee * 100)
+    }
+
+    @State var email: String = ""
+//    @AppStorage("time") var time: String = ""
     var body: some View {
-        @AppStorage("email") var email: String = ""
-        @AppStorage("time") var time: String = ""
         ZStack {
             Color.black.edgesIgnoringSafeArea(.all) // Background color
 
@@ -27,12 +38,18 @@ struct PickUpView: View {
                         .foregroundColor(.white)
                         .padding()
                     VStack(spacing: 16) {
-                        TextField("Email (e.g. jhersey1234@stu.d214.org): ", text: $email)
+                        TextField("Email (e.g. jhersey1234@stu.d214.org): ", text: Binding(get: {
+                            email
+                        }, set: { v in
+                            $email.wrappedValue = v
+                            model.usr.email = v
+                        }))//.disabled(true)
+                            .tint(.white).foregroundStyle(.white)
                             .padding()
                             .background(Color.gray.opacity(0.2))
                             .cornerRadius(25)
                             .foregroundColor(.white)
-                        TextField("Time (e.g. 2/25/25 @ 12 pm): ", text: $time)
+                        TextField("Time (e.g. 2/25/25 @ 12 pm): ", text: .constant("NOW")).disabled(true)
                             .padding()
                             .background(Color.gray.opacity(0.2))
                             .cornerRadius(25)
@@ -79,6 +96,7 @@ struct PickUpView: View {
                         }
                     }
                 }
+
                 // Order Summary
                 VStack(alignment: .leading, spacing: 10) {
                     Text("Order Summary")
@@ -86,23 +104,24 @@ struct PickUpView: View {
                         .foregroundColor(.white)
 
                     HStack {
-                        Text("Clothing cost (2)")
+                        Text("Clothing cost (\(model.order.count))")
                             .font(Font.custom("Lexend-Thin", size: 15))
                             .foregroundColor(.white)
                         Spacer()
-                        Text("$90")
+                        Text(toPrice(itemTotal))
                             .font(Font.custom("Lexend-Thin", size: 15))
                             .foregroundColor(.white)
                     }
-
-                    HStack {
-                        Text("Maintenance fee")
-                            .font(Font.custom("Lexend-Thin", size: 15))
-                            .foregroundColor(.white)
-                        Spacer()
-                        Text("$8")
-                            .font(Font.custom("Lexend-Thin", size: 15))
-                            .foregroundColor(.white)
+                    if model.maintenanceFee > 0 {
+                        HStack {
+                            Text("Maintenance fee")
+                                .font(Font.custom("Lexend-Thin", size: 15))
+                                .foregroundColor(.white)
+                            Spacer()
+                            Text(String(toPrice(model.maintenanceFee * 100)))
+                                .font(Font.custom("Lexend-Thin", size: 15))
+                                .foregroundColor(.white)
+                        }
                     }
 
                     Divider()

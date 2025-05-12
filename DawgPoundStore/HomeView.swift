@@ -41,10 +41,16 @@ struct HomeView: View {
                             Text("The")
                                 .foregroundColor(.white ?? .black)
                                 .offset(y: 80)
-                            
+                                .onTapGesture(count: 3) {
+                                    model.JDebugMode = true
+                                }
+
                             Text("Pound.")
                                 .foregroundColor(colors["orange"] ?? .black)
                                 .offset(y: 30)
+                                .onTapGesture(count: 3) {
+                                    model.JDebugMode = false
+                                }
                         }
                         .font(.custom("Lexend-Bold", size: 130))
                         .padding(.leading)

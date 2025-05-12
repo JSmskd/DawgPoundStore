@@ -1,311 +1,19 @@
 //
-//  StoreItem.swift
+//  viewModel.swift
 //  DawgPoundStore
 //
-//  Created by John Sencion on 12/13/24.
+//  Created by John Sencion on 5/12/25.
 //
-
-import SwiftData
 import SwiftUI
+import SwiftData
 import CloudKit
-
-struct user:Hashable {
-    var id:CKRecord.ID?
-    var whishes :[CKRecord.Reference]
-    var email:String
-    var accountStatus:String
-    var itemsInCart:[Item?]
-    init() {
-        id = nil
-        whishes = []
-        email = ""
-        accountStatus = ""
-        itemsInCart = []
-    }
-}
-struct blankSize:Hashable, Identifiable, CustomStringConvertible {
-    var description: String {get {name}}
-    var id : Int { get { hashValue}}
-    var name:String
-    var n:String
-    ///cost multiplied my 10000 {10.423  ->  10423}
-    var price:Int
-    var quantity:Int
-    var record:CKRecord?
-    init (shortName:String,longName:String,cost:Int,quantity:Int) {
-        self.price = cost
-        self.quantity = quantity
-        self.name = longName
-        self.n = shortName
-    }
-    mutating func updateSelf () {
-        if record?.recordID == nil { print("fail"); return}
-        var shortname = ""
-        var longname = ""
-        var p = 0
-        var qty = 0
-        var rec = record
-        CKContainer.default().publicCloudDatabase.fetch(withRecordID: record.unsafelyUnwrapped.recordID) { record, e in
-            
-            if record != nil {
-                rec = record.unsafelyUnwrapped
-                let r = record.unsafelyUnwrapped
-                
-                shortname =  r["shortName"] as? String ?? "err"
-                longname = r["longName"] as? String ?? "error"
-                qty = r["quantity"] as? Int ?? 0
-                p = r["cost"] as? Int ?? 0
-            }
-            
-        }
-        //fetch(withRecordID: reference) { record, error in
-        price = p
-        quantity = qty
-        name = longname
-        n = shortname
-        record = rec
-    }
-//    init (_ reference:CKRecord.Reference) {
-//        "".first! as! String
-//        var shortname = ""
-//        var longname = ""
-//        var price = 0
-//        var qty = 0
-//        var rec = CKRecord(recordType: "blankSIZE", recordID: reference.recordID)
-//        CKContainer.default().publicCloudDatabase.fetch(withRecordID: reference.recordID) { record, e in
-//            rec = record ?? CKRecord(recordType: "blankSIZE", recordID: reference.recordID)
-//            if record != nil {
-//                let r = record.unsafelyUnwrapped
-//                
-//                shortname =  r["shortName"] as? String ?? "err"
-//                longname = r["longName"] as? String ?? "error"
-//                qty = r["quantity"] as? Int ?? 0
-//                price = r["cost"] as? Int ?? 0
-//            }
-//            
-//        }
-//        //fetch(withRecordID: reference) { record, error in
-//        record = rec
-//        cost = price
-//        quantity = qty
-//        name = longname
-//        n = shortname
-//    }
-    init (record r : CKRecord) {
-        record = r
-        n =  r["shortName"] as? String ?? "err"
-        name = r["longName"] as? String ?? "error"
-        quantity = r["quantity"] as? Int ?? 0
-        price = Int(truncatingIfNeeded:r["cost"] as? Int ?? 0)
-    }
-}
-
-struct blank:CustomStringConvertible , Hashable, Identifiable{
-    var id : Int { get { hashValue}}
-    var name:String
-    func getCol() -> Color {
-        switch name {
-            case "orange":
-                return .orange
-            case "white":
-                return .white
-            default:
-                return.clear
-        }
-    }
-    var sizes:[CKRecord.Reference]
-    var record:CKRecord?
-    var price:Int
-    var description: String {get {name}}
-    init (name:String,sizes:[CKRecord.Reference], record:CKRecord? = nil) {
-        self.name = name
-        self.sizes = sizes
-        self.record = record
-        price = 0
-    }
-    init(record r:CKRecord) {
-//        print("new blank")
-        //["color", "sizes", "brandName"]
-        record = r
-        name = r["color"] as! String
-//        print(r["color"] == nil)
-        sizes = r["sizes"] as! [CKRecord.Reference]
-//        print(r["sizes"])
-        price = Int(truncatingIfNeeded: r["cost"] as? Int64 ?? 0)
-    }
-//    init(_ reference:CKRecord.ID) {
-//        var NAME = "error"
-//        var szs :[CKRecord.Reference] = []
-//        name = "error" //NAME
-//        sizes = [CKRecord.Reference].init() //szs
-//    }
-}
-struct orderItem:Identifiable, Hashable {
-    var id:CKRecord.Reference?
-    var item:Item//price
-    var quantity:Int64
-    var style:blank//
-    var blnk:blankSize//price
-    init (_ ref:Item,_ qty:Int64, _ sty:blank, id:CKRecord.Reference? = nil, _ selected:blankSize) {
-        //            itm = Item(reference: ref)
-        quantity = qty
-        style = sty
-        item = ref
-        blnk = selected
-    }
-}
-
-struct Item:Identifiable, CustomStringConvertible, Hashable/*, Codable*/ {
-    var description: String {
-        return "\(title) : \(price)"
-    }
-    var id: CKRecord.ID? {get {
-        record?.recordID
-    }}
-    var record:CKRecord?
-    var title:String
-    var Itemdescription:String
-    var reference:CKRecord.Reference?
-    var images:[CKAsset]?
-    var price:Int
-    //    var dollar:Int {get {price / 100}}
-    //    var cent:Int {get {price - (dollar * 1000)}}
-    init(title: String, description: String, price: Int, images: [CKAsset]? = [], id: CKRecord? = nil,reference: CKRecord.Reference? = nil) {
-        self.record = id
-        self.title = title
-        self.Itemdescription = description
-        self.images = images
-        self.price = price
-        self.reference = reference
-    }
-    init(_ title: String, _ description: String, _ price: Int, images: [CKAsset]? = [], id: CKRecord? = nil, reference: CKRecord.Reference? = nil) {
-        self.record = id
-        self.title = title
-        self.Itemdescription = description
-        self.images = images
-        self.price = price
-        self.reference = reference
-    }
-}
-
-struct itemPreview:View {
-    var item:Item
-    var previewImage:UIImage { get {
-        var ret:UIImage = .dawgPoundLogo
-        if item.images != nil { if item.images!.first != nil { if item.images!.first!.fileURL != nil {
-            ret = UIImage.init(data:NSData(contentsOf: item.images!.first!.fileURL.unsafelyUnwrapped.absoluteURL)! as Data) ?? ret
-        } } }
-        return ret
-    }
-    }
-    //    var previewImage:UIImage? { get {
-    //        item.images!.first!.fileURL
-    //        return
-    //    }}
-//    var model:StateObject<ItemViewModel>
-    @EnvironmentObject var model: ItemViewModel
-    init (_ model:StateObject<ItemViewModel>? = nil, item:Item) {
-        self.item = item
-        //        trendingItems = []//model.wrappedValue.getTasks()
-        //        if model.wrappedValue.items.isEmpty {
-        //            model.wrappedValue.update()
-        //        DispatchQueue.main.async {
-        //            model.wrappedValue.timedown -= 0
-        //        }
-        //        }
-        
-        //        model.wrappedValue.getUser()
-//        self.model = model
-    }
-    var body: some View {
-        VStack{
-            NavigationLink {
-                IndividualItemView(/*model, */item: item)
-            } label: {
-                VStack {
-                    ZStack{
-                        Rectangle()
-                            .fill(Color.gray)
-                            .frame(width: 140, height: 140)
-                            .cornerRadius(8)
-                        Image(uiImage:previewImage) //item.images)
-                            .resizable()
-                    }
-                    .frame(width: 140, height: 140)
-                    .cornerRadius(8)
-                    //                    .onAppear {
-                    ////                        item.images!.first!.fileURL
-                    ////                        print(<#T##items: Any...##Any#>)
-                    ////                        print("hi")
-                    ////                        print(item.images?.first?.fileURL)
-                    //                    }
-                    Text(item.title)
-                        .font(.subheadline)
-                        .foregroundColor(.white)
-                        .multilineTextAlignment(.center)
-                        .lineLimit(2)
-                        .padding(.top, 5)
-                    
-                    Text(toPrice(item.price))
-                        .font(.footnote)
-                        .foregroundColor(.gray)
-                }
-                .frame(width: 140, height: 160)
-            }
-        }
-    }
-}
-///item collection
-class ic : Identifiable, Hashable{
-    var name:String
-    var desc:String
-    var items:[Item] = []
-    var id: String { "\(name):\(desc)" }
-    init(name: String, desc: String, itemRefs:[CKRecord.ID]) {
-        self.name = name
-        self.desc = desc
-    }
-    init (_ cloudkitRecord:CKRecord) {
-        //        print(cloudkitRecord)
-        name = cloudkitRecord["Name"] as! String
-        desc = cloudkitRecord["collectionDescription"] as! String
-        //        cloudkitRecord.recordID.recordName
-        //        print(cloudkitRecord["items"] as! [CKRecord.Reference])
-        for i in cloudkitRecord["items"] as! [CKRecord.Reference] {
-            CKContainer.default().publicCloudDatabase.fetch(withRecordID: i.recordID) { o,e in
-                //                print(o)
-                if o == nil {
-                    //                    print("\(i.recordID.recordName) = nil")
-                } else {
-                    //                    print("\(self.name)")
-                    //                    Item.init(String, String, Double, images: [CKAsset]?, id: CKRecord?, reference: CKRecord.Reference?)
-                    var useit:Item = .init(o!["title"] as! String, o!["description"] as! String, (o!["cost"] as! Int), images: o!["images"] as? Array<CKAsset>,id: o)
-                    //                        print(useit)
-                    DispatchQueue.main.async {
-                        self.items.append(useit)
-                    }
-                }
-            }
-        }
-    }
-    static func != (lhs:ic,rhs:ic) -> Bool {
-        !(lhs == rhs)
-    }
-    static func == (lhs:ic,rhs:ic) -> Bool {
-        lhs.id == rhs.id
-    }
-    func hash(into hasher: inout Hasher) {
-        id.hash(into: &hasher)
-    }
-}
-///ready to sell object
 //@Model
 @MainActor
 //@Observable
 class ItemViewModel: ObservableObject {
     var navPath: NavigationPath = NavigationPath.init()
     init() {
-
+        self.usr.email = "jsencion7366@stu.d214.org"
     }
     func qryItm(recordID: CKRecord.ID) -> Item? {
         var ret = nil as Item?
@@ -317,17 +25,19 @@ class ItemViewModel: ObservableObject {
         return ret
     }
     var database = CKContainer.default().publicCloudDatabase
+    var maintenanceFee : Int = 800
     //    @Published var items:[Item] = []
     /*@Published */var usr:user = user()
     @Published var order:[orderItem] = []
-//    @Published var cart:[orderItem] = []
-
-//Gone until further notice    /*@Published */var orders:[orderItem] = []
+    //    @Published var cart:[orderItem] = []
+    //Gone until further notice    /*@Published */var orders:[orderItem] = []
     /*@Published */@AppStorage("username") var userCookie : String = "ADMIN"
     /*@Published */var homeColecs:[ic] = []
     /*@Published */var timedown:Int = 0
     private var isRequesting = false
-    
+
+    @Published var JDebugMode:Bool = false
+
     func update(_ force:Bool = false) {
         //items.isEmpty
         //            print("START OF REQUESTS")
@@ -344,7 +54,7 @@ class ItemViewModel: ObservableObject {
         let homeRecordNames: [String] = [
             "7D64CC49-2D7C-4191-A987-063BD0D9DF15"
         ]
-        
+
         for i in homeRecordNames{
             self.database.fetch(withQuery: .init(recordType: "itemCollection", predicate: .init(format: "___recordID == %@",CKRecord.ID(recordName: i)))) { [self] results in
                 //                                print(results)
@@ -377,28 +87,28 @@ class ItemViewModel: ObservableObject {
                 }
             }
             //            print("go")
-            
+
         }
         let sideRecordNames: [String] = [
             "8032DBAA-2AAD-4597-AFF7-E2D8F42D3CD5"
         ]
     }
     func addTask(taskItem: inout Item) {
-        
+
         let record = CKRecord(recordType: "Item")
         taskItem.record = record
         record.setObject(taskItem.title as CKRecordValue, forKey: "title")
         record.setObject(taskItem.description as CKRecordValue, forKey: "description")
         record.setObject((taskItem.images ?? []) as CKRecordValue, forKey: "images")
         record.setObject(taskItem.price as CKRecordValue, forKey: "price")
-        
+
         database.save(record) { (record, error) in
             if error != nil {
                 print(error as Any)
             } else {
-                
+
                 print("There")
-                
+
             }
         }
     }
@@ -423,22 +133,22 @@ class ItemViewModel: ObservableObject {
         temp.accountStatus = ""
         //format: "schoolEmail == 'jsension7366@stu.d214.org'"
         let predicate = NSPredicate(format: "userCookie == '\(cookie)'")
-        
+
         let query = CKQuery(recordType: "account", predicate: predicate)
         self.database.fetch(withQuery: query) { [self] results in
             results.map {
                 //                var name = ""
                 var newItems:[Item] = []
                 $0.matchResults.map{$0.1.map { record in
-                    
+
                     //                    temp.email
                     //                    temp.accountStatus
                     //                    temp.accountStatus
                     temp.id = record.recordID
-                    
+
                     for iter in record["cart"] as! [CKRecord.Reference] {
                         //                        database.
-                        
+
                         //                        print("recordName == '\(iter.recordID.recordName)'")//"iter.recordID.recordName.self)
                         //                        let q = CKQuery(recordType: "Item", predicate: NSPredicate(format: "___recordID == %@", iter.recordID))
                         //                        print("\(q.recordType);  \(q.predicate)")
@@ -471,10 +181,10 @@ class ItemViewModel: ObservableObject {
                                 temp.whishes.append(r!["Item"] as! CKRecord.Reference)
                                 //                                }
                             }
-                            
+
                         }
                         //                        fetch(withRecordID: iter.,completionHandler: @escaping (CKRecord?, (any Error)?) -> Void)
-                        
+
                     }
                 }
                 }
@@ -490,7 +200,7 @@ class ItemViewModel: ObservableObject {
         //        let queryOperation = CKQueryOperation(query: query)
         database.fetch(withQuery: query) { results in
             //            print("start of fetch")
-            
+
             results.map {//var newItems:[Item] = []
                 $0.matchResults.map({$0.1.map { record in
                     //                print("<STARTRECORD")
@@ -509,7 +219,7 @@ class ItemViewModel: ObservableObject {
             }
             //            print(results)
         }
-        
+
         //                queryOperation.queryResultBlock = { results in
         //                    print(results)
         //                }
@@ -521,7 +231,7 @@ class ItemViewModel: ObservableObject {
         //        let queryOperation = CKQueryOperation(query: query)
         database.fetch(withQuery: query) { results in
             //            print("start of fetch")
-            
+
             results.map {var newItems:[Item] = []
                 $0.matchResults.map({$0.1.map { record in
                     //                print("<STARTRECORD")
@@ -539,7 +249,7 @@ class ItemViewModel: ObservableObject {
             }
             //            print(results)
         }
-        
+
         //        queryOperation.queryResultBlock = { results in
         //            print(results)
         //        }
