@@ -61,12 +61,12 @@ struct VOrder: View {
         //        let queryOperation = CKQueryOperation(query: query)
         var newItems:[order] = []
         model.database.fetch(withQuery: query) { results in
-                        print("start of fetch")
+            print("start of fetch")
 
             results.map {
                 $0.matchResults.map({$0.1.map { record in
                     newItems.append(order(record))
-//                    print("newItem")
+                    //                    print("newItem")
 
                 }
                 })
@@ -148,7 +148,7 @@ struct VOI: View {
     }
 }
 struct order:Hashable/*:Identifiable*/ {
-//    var id: CKRecord.Reference = .init(record: "Order", action: .none)
+    //    var id: CKRecord.Reference = .init(record: "Order", action: .none)
     var record:CKRecord
     var itemsOrdered:[CKRecord.Reference] {get {
         record["itemsOrdered"] as? [CKRecord.Reference] ?? []
@@ -166,9 +166,9 @@ struct order:Hashable/*:Identifiable*/ {
         record["pickupIdentifier"] = newValue
     }}
     init(_ r:CKRecord) {
-//        id = ref
+        //        id = ref
         record = r
-//        print(r)
+        //        print(r)
     }
     static func == (lhs: order, rhs: order) -> Bool {
         lhs.record.recordID == rhs.record.recordID
