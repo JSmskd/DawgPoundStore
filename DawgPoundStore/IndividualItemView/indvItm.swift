@@ -215,7 +215,13 @@ struct IndividualItemView: View {
                         Text("Color")
                             .font(Font.custom("Lexend-Bold", size: 16).weight(.light))
                             .foregroundColor(.white)
-                        
+                        VStack{
+                            if styles.count > chosenStyle {
+                                Text(styles[chosenStyle].name)
+                            } else {
+                                Text("none selected")
+                            }
+                        }.foregroundStyle(.white).font(.caption)
                         HStack(spacing: 15) {
                             ForEach(0..<styles.count , id: \.self) { n in
                                 Circle()

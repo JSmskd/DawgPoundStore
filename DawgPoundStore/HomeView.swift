@@ -219,6 +219,8 @@ struct HomeItems: View {
             //                }
             //            }
             ForEach(itms.wrappedValue, id:\.self) { noeh in
+                Rectangle()
+                    .frame(width: 10,height: 23).foregroundStyle(.clear)
                 VStack(alignment: .leading) {
                     Text(noeh.name)
                         .font(.custom("Lexend-Regular", size: 25))
@@ -244,7 +246,7 @@ struct HomeItems: View {
 struct faq: View {
     let questions:Array<(String,String)> = [
         ("Where do I get my order picked up?","Answer Etc. Etc."),
-        ("Where do I get my order picked up?","Answer Etc. Etc."),
+        ("Is there a support email?","Answer Etc. Etc."),
         ("Where do I get my order picked up?","Answer Etc. Etc."),
         ("Where do I get my order picked up?","Answer Etc. Etc."),
         ("Where do I get my order picked up?","Answer Etc. Etc."),

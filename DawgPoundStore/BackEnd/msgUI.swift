@@ -20,14 +20,15 @@ struct email: View {
         }) {
             VStack {
                 Text("Email us with any other questions at")
-                    .font(.footnote)
-                    .foregroundColor(.gray)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .padding()
+//                    .font(.footnote)
+//                    .foregroundColor(.gray)
+//                    .frame(maxWidth: .infinity, alignment: .center)
+//                    .padding()
 
                 //                            Link("dawgpound@d214.org", destination: URL(string:"mailto:dawgpound@d214.org")!)
                     .font(.footnote)
                     .foregroundColor(.blue)
+                    .tint(.blue)
                     .frame(maxWidth: .infinity, alignment: .center)
                     .padding(.top, 3)
             }

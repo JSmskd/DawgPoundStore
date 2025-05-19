@@ -14,6 +14,7 @@ struct SizePicker: View {
     var body: some View {
         if chosenStyle < styles.count {
             Picker("Select Size", selection: $chosenSize) {
+//                Text("\(chosenSize)")
                 if sizes[styles[chosenStyle]] != nil {
                     let use = sizes[styles[chosenStyle]].unsafelyUnwrapped
                     ForEach(0 ..< use.count, id:\.self) { s in
