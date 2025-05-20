@@ -146,10 +146,11 @@ struct ProductCard: View {
     var body: some View {
         VStack {
             Rectangle()
-                .fill(Color.gray)
+//                .fill(Color.gray)
                 .frame(width: 140, height: 140)
                 .cornerRadius(8)
-            
+                .foregroundStyle(.gray)
+
             Text(productName)
                 .font(.subheadline)
                 .foregroundColor(.white)
@@ -180,112 +181,3 @@ func toPrice(_ doub:Int) -> String {
     return "$\(dollars).\(cents)"
 }
 
-struct HomeItems: View {
-//    var model:StateObject<ItemViewModel>
-    @EnvironmentObject var model: ItemViewModel
-    var itms:Binding<[ic]>
-    init (_ itms:Binding<[ic]>) {
-        //self.model = model
-        //        print("{")
-        self.itms = itms
-        //        for i in model.wrappedValue.homeColecs {
-        //            //            print(i.name)
-        //            //            for o in i.items {
-        //            ////                print(o)
-        //            //            }
-        //        }
-        //        print("}")
-    }
-    var body: some View {
-        // Trending Section
-        VStack{
-            //            ForEach(0..<model.wrappedValue.homeColecs.count, id:\.self) { noeh in
-            //                VStack(alignment: .leading) {
-            //                    Text("Trending now")
-            //                        .font(.custom("Lexend-Regular", size: 25))
-            //                        .foregroundColor(.white)
-            //                        .padding(.horizontal)
-            //                        .offset(x: 8, y: 15)
-            //
-            //                    ScrollView(.horizontal, showsIndicators: false) {
-            //                        HStack(spacing: 16) {
-            //                            ForEach(0..<min(5,(model.wrappedValue.homeColecs)[noeh].items.count), id: \.self) { item in
-            //                                itemPreview(model, item: (model.wrappedValue.homeColecs)[noeh].items[item])
-            //                                //                                        item.preview
-            //                            }
-            //                        }
-            //                        .padding(.horizontal)
-            //                    }
-            //                }
-            //            }
-            ForEach(itms.wrappedValue, id:\.self) { noeh in
-                Rectangle()
-                    .frame(width: 10,height: 23).foregroundStyle(.clear)
-                VStack(alignment: .leading) {
-                    Text(noeh.name)
-                        .font(.custom("Lexend-Regular", size: 25))
-                        .foregroundColor(.white)
-                        .padding(.horizontal)
-                    //                        .offset(x: 8, y: 15)
-                    
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 16) {
-                            ForEach(noeh.items, id: \.self) { item in
-                                itemPreview(/*model, */item: item)
-                                //                                        item.preview
-                            }
-                        }
-                        .padding(.horizontal)
-                    }
-                }
-            }
-        }
-        .navigationBarBackButtonHidden()
-    }
-}
-struct faq: View {
-    let questions:Array<(String,String)> = [
-        ("Where do I get my order picked up?","Answer Etc. Etc."),
-        ("Is there a support email?","Answer Etc. Etc."),
-        ("Where do I get my order picked up?","Answer Etc. Etc."),
-        ("Where do I get my order picked up?","Answer Etc. Etc."),
-        ("Where do I get my order picked up?","Answer Etc. Etc."),
-        ("Where do I get my order picked up?","Answer Etc. Etc.")
-    ]
-    var body: some View {
-        // FAQ Section
-        VStack(alignment: .leading, spacing: 20) {
-            Text("FAQ")
-                .font(.title2)
-                .fontWeight(.bold)
-                .foregroundColor(.white)
-                .padding(.horizontal)
-            
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 16), count: 2), spacing: 20) {
-                ForEach(0..<questions.count, id: \.self) { index in
-                    Button(action: {
-                        print("FAQ \(index) tapped")
-                    }) {
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text(questions[index].0)
-                                .font(.headline)
-                                .foregroundColor(.white)
-                            
-                            Text(questions[index].1)
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
-                        }
-                        .padding()
-                        .background(Color(.systemGray6).opacity(0.2))
-                        .cornerRadius(10)
-                    }
-                }
-            }
-            .padding(.horizontal)
-        }
-    }
-}
-
-//#Preview {
-//    faq()
-//}
