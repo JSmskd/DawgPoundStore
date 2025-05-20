@@ -4,21 +4,7 @@ struct HomeView: View {
     //    var model:StateObject<ItemViewModel>
     @EnvironmentObject var model: ItemViewModel
     @State var colecs:[ic] = []
-    init (_ model:StateObject<ItemViewModel>? = nil) {
-        //        @Environment(model.self) var model
-        //        trendingItems = []//model.wrappedValue.getTasks()
-        //        if model.wrappedValue.colecs.isEmpty {
-        //            model.wrappedValue.update()
-        //        }
-        //        model.wrappedValue.update()
-        //        DispatchQueue.main.async {
-        //            print("-10")
-        //            model.wrappedValue.timedown -= 1
-        //        }
-        
-        //        model.wrappedValue.getUser()
-        //        self.model = model
-        
+    init () {
         UIRefreshControl.appearance().tintColor = UIColor.white
         UIRefreshControl.appearance().attributedTitle = NSAttributedString("Refreshing…")
     }

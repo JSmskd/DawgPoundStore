@@ -41,17 +41,11 @@ struct faq: View {
                             .padding()
                             .background(Color(.systemGray6).opacity(0.2))
                             .cornerRadius(10)
-//                            .fixedSize().frame(width: size.size.width / 4, height: 64)
 
                         }
                     }
                     .padding(.horizontal)
-                //}.padding(.horizontal)
             }
         }
     }
 }
-
-//#Preview {
-//    faq()
-//}

@@ -14,23 +14,13 @@ struct email: View {
     @State private var alertMessage: String?
     @State private var alertIsPresented: Bool = false
     var body: some View {
-        Button(action: {
-            print("Email footer tapped")
-            show.toggle()
-        }) {
+        Button(action: {show.toggle()}) {
             VStack {
                 Text("Email us with any other questions at")
-//                    .font(.footnote)
-//                    .foregroundColor(.gray)
-//                    .frame(maxWidth: .infinity, alignment: .center)
-//                    .padding()
-
-                //                            Link("dawgpound@d214.org", destination: URL(string:"mailto:dawgpound@d214.org")!)
                     .font(.footnote)
-                    .foregroundColor(.blue)
                     .tint(.blue)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .padding(.top, 3)
+                    .frame(alignment: .center)
+                    .padding(.vertical, 6)
             }
             .disabled(!MailView.canSendMail())
             .sheet(isPresented: $show) {

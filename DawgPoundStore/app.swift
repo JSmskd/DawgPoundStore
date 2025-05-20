@@ -22,7 +22,7 @@ struct ap: View {
     @EnvironmentObject var model: ItemViewModel
     var body: some View {
         NavigationStack {
-            HomeView(/*model*/)
+            HomeView()
                 .onAppear {
                     Timer.init(timeInterval: 0.5 , repeats: true) { t in
                         print("hi")
