@@ -45,8 +45,7 @@ class ic : Identifiable, Hashable{
                 if o == nil {
                     //                    print("\(i.recordID.recordName) = nil")
                 } else {
-                    
-                    let useit:Item = .init(o!["title"] as! String, o!["description"] as! String, (o!["cost"] as! Int), images: o!["images"] as? Array<CKAsset>,id: o)
+                    let useit:Item = .init(o!)
                     //                        print(useit)
                     DispatchQueue.main.async {
                         self.items.append(useit)

@@ -31,7 +31,10 @@ struct CartView: View {
     var itemTotal: Int {
         var t:Int = 0
         for i in model.projectedValue.order {
-            t += (i.item.price.wrappedValue + i.style.price.wrappedValue + i.blnk.price.wrappedValue) * Int(truncatingIfNeeded: i.quantity.wrappedValue)
+            let a = i.wrappedValue.item.price
+            let b = i.wrappedValue.style.price
+            let c = i.wrappedValue.blnk.price
+            t += (a + b + c) * Int(truncatingIfNeeded: i.wrappedValue.quantity)
         }; return t
 //        cart.reduce(0) { $0 + $1.item.price * $1.blnk.cost }
     }
@@ -181,7 +184,7 @@ struct CartItemView: View {
             VStack {
                 HStack(spacing: 20) {
                     Button(action: {
-                        if $order.quantity.wrappedValue > 1 {
+                        if $order.wrappedValue.quantity > 1 {
                             $order.quantity.wrappedValue -= 1
                             // update cart array in parent view
                         }
@@ -191,12 +194,12 @@ struct CartItemView: View {
                             .foregroundColor(Color.gray)
                     }
 
-                    Text("\($order.quantity.wrappedValue)")
+                    Text("\($order.wrappedValue.quantity)")
                         .font(.system(size: 20))
                         .foregroundColor(Color.gray)
 
                     Button(action: {
-                        $order.quantity.wrappedValue += 1
+                        $order.wrappedValue.quantity += 1
                         // update cart array in parent view
                     }) {
                         Text("+")

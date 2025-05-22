@@ -16,8 +16,8 @@ struct FinalView: View {
                 var total:[CKRecord.Reference] = []
                 for r in model.order {
                     var o:CKRecord = .init(recordType: "orderItem")
-                    o.setObject(CKRecord.Reference(record: r.item.record!, action: .deleteSelf), forKey: "Item")//reference
-                    o.setObject(CKRecord.Reference(record: r.blnk.record!, action: .deleteSelf), forKey: "blankSize")//reference
+                    o.setObject(CKRecord.Reference(record: r.item.record, action: .deleteSelf), forKey: "Item")//reference
+                    o.setObject(CKRecord.Reference(record: r.blnk.record, action: .deleteSelf), forKey: "blankSize")//reference
                     o.setObject(r.quantity as __CKRecordObjCValue, forKey: "quantity")
 //                    o.setObject(r.blnk.record!.recordID.recordName, forKey: "blankSize")//refrence
 //                    o.setObject("", forKey: "style")//String

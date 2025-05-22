@@ -19,7 +19,7 @@ class ItemViewModel: ObservableObject {
         var ret = nil as Item?
         self.database.fetch(withRecordID: recordID) { r,e in
             if let record = r {
-                ret = Item(title: record["title"] as! String, description: record["description"] as! String, price: record["price"] as! Int, images: record["images"] as? [CKAsset] , id: record, reference: CKRecord.Reference.init(recordID: record.recordID, action: .none))
+                ret = Item(record)
             }
         }
         return ret
@@ -214,7 +214,7 @@ class ItemViewModel: ObservableObject {
                     //                print("------------------------")
                     //                print("------------------------")
                     //                print(record)
-                    newItems.append(Item(title: record["title"] as! String, description: record["description"] as! String, price: /*record["price"] as! Int*/0, images: record["images"] as? [CKAsset] , id: record, reference: CKRecord.Reference.init(recordID: record.recordID, action: .none)))
+                    newItems.append(Item(record))
                     //                print("------------------------")
                     //                print("------------------------")
                     //                print("ENDRECORD>")

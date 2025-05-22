@@ -7,7 +7,7 @@
 import CloudKit
 import SwiftUI
 import SwiftData
-struct order:Hashable/*:Identifiable*/ {
+struct order:JSRecord {
     //    var id: CKRecord.Reference = .init(record: "Order", action: .none)
     var record:CKRecord
     var itemsOrdered:[CKRecord.Reference] {get {
@@ -34,55 +34,68 @@ struct order:Hashable/*:Identifiable*/ {
         lhs.record.recordID == rhs.record.recordID
     }
 }
-struct orderItem:Identifiable, Hashable {
-    var id:CKRecord.Reference?
+struct orderItem:JSRecord {
+    
+    var record: CKRecord
+    
+//    var id:CKRecord.Reference
     var item:Item
-    var quantity:Int64
+    var quantity:Int64 { get {record["quantity"] as? Int64 ??  1} set {record["quantity"] = newValue}}
     var style:blank
     var blnk:blankSize
-    init (_ ref:Item,_ qty:Int64, _ sty:blank, id:CKRecord.Reference? = nil, _ selected:blankSize) {
-        quantity = qty
+    init (_ rec:CKRecord,_ ref:Item, _ sty:blank, _ selected:blankSize) {
         style = sty
         item = ref
         blnk = selected
+        record = rec
+    }
+    init (_ ref:Item, _ sty:blank, _ selected:blankSize) {
+        style = sty
+        item = ref
+        blnk = selected
+        record = CKRecord.init(recordType: "orderItem")
+        record.setValue(1, forKey: "quantity")
     }
 }
 
-struct Item:Identifiable, CustomStringConvertible, Hashable/*, Codable*/ {
+struct Item:JSRecord {
+
+    var record: CKRecord
+    
     var description: String {
         return "\(title) : \(price)"
     }
-    var id: CKRecord.ID? {get {
-        record?.recordID
-    }}
-    var record:CKRecord?
-    var title:String
-    var Itemdescription:String
-    var reference:CKRecord.Reference?
-    var images:[CKAsset]?
-    var price:Int
+
+    var title:String { get {record["title"] as? String ?? "" } set {record["title"] = newValue}}
+    var Itemdescription:String { get { record["description"] as? String ?? ""} set{record["description"] = newValue}}
+    var images:[CKAsset]? { get { record["images"] as? Array<CKAsset>}}
+    var price:Int { get { (record["cost"] as? Int ?? -1)} set {record["cost"] = newValue}}
     //    var dollar:Int {get {price / 100}}
     //    var cent:Int {get {price - (dollar * 1000)}}
-    init(title: String, description: String, price: Int, images: [CKAsset]? = [], id: CKRecord? = nil,reference: CKRecord.Reference? = nil) {
-        self.record = id
-        self.title = title
-        self.Itemdescription = description
-        self.images = images
-        self.price = price
-        self.reference = reference
-    }
-    init(_ title: String, _ description: String, _ price: Int, images: [CKAsset]? = [], id: CKRecord? = nil, reference: CKRecord.Reference? = nil) {
-        self.record = id
-        self.title = title
-        self.Itemdescription = description
-        self.images = images
-        self.price = price
-        self.reference = reference
+//    init(title: String, description: String, price: Int, images: [CKAsset]? = [], id: CKRecord? = nil,reference: CKRecord.Reference? = nil) {
+//        self.title = title
+//        self.Itemdescription = description
+//        self.images = images
+//        self.price = price
+//        self.reference = reference
+//    }
+//    init(_ title: String, _ description: String, _ price: Int, images: [CKAsset]? = [], id: CKRecord? = nil, reference: CKRecord.Reference? = nil) {
+//        self.title = title
+//        self.Itemdescription = description
+//        self.images = images
+//        self.price = price
+//        self.reference = reference
+//    }
+    init (_ record:CKRecord) {
+        self.record = record
     }
 }
 
-struct blank:CustomStringConvertible , Hashable, Identifiable{
-    var id : Int { get { hashValue}}
+struct blank:JSRecord{
+
+    var record: CKRecord
+    
+//    var id : Int { get { hashValue}}
     var name:String
     func getCol() -> Color {
         switch name {
@@ -95,10 +108,9 @@ struct blank:CustomStringConvertible , Hashable, Identifiable{
         }
     }
     var sizes:[CKRecord.Reference]
-    var record:CKRecord?
     var price:Int
     var description: String {get {name}}
-    init (name:String,sizes:[CKRecord.Reference], record:CKRecord? = nil) {
+    init (name:String,sizes:[CKRecord.Reference], record:CKRecord) {
         self.name = name
         self.sizes = sizes
         self.record = record
@@ -114,53 +126,25 @@ struct blank:CustomStringConvertible , Hashable, Identifiable{
 
 
 
-struct blankSize:Hashable, Identifiable, CustomStringConvertible {
+struct blankSize:JSRecord {
+    var record: CKRecord
+    
     var description: String {get {name}}
-    var id : Int { get { hashValue}}
-    var name:String
-    var n:String
+
+    var name:String { get { record["longName"] as? String ?? "error"}}
+    var n:String { get { record["shortName"] as? String ?? "err"}}
     ///cost multiplied my 10000 {10.423  ->  10423}
-    var price:Int
-    var quantity:Int
-    var record:CKRecord?
-    init (shortName:String,longName:String,cost:Int,quantity:Int) {
-        self.price = cost
-        self.quantity = quantity
-        self.name = longName
-        self.n = shortName
-    }
+    var price:Int { get { Int(truncatingIfNeeded:record["cost"] as? Int ?? 0)}}
+    var quantity:Int { get {record["quantity"] as? Int ?? 0 }}
     mutating func updateSelf () {
-        if record?.recordID == nil { print("fail"); return}
-        var shortname = ""
-        var longname = ""
-        var p = 0
-        var qty = 0
         var rec = record
-        CKContainer.default().publicCloudDatabase.fetch(withRecordID: record.unsafelyUnwrapped.recordID) { record, e in
-
-            if record != nil {
-                rec = record.unsafelyUnwrapped
-                let r = record.unsafelyUnwrapped
-
-                shortname =  r["shortName"] as? String ?? "err"
-                longname = r["longName"] as? String ?? "error"
-                qty = r["quantity"] as? Int ?? 0
-                p = r["cost"] as? Int ?? 0
-            }
-
+        CKContainer.default().publicCloudDatabase.fetch(withRecordID: record.recordID) { record, e in
+            if record != nil { rec = record.unsafelyUnwrapped }
         }
-        price = p
-        quantity = qty
-        name = longname
-        n = shortname
         record = rec
     }
     init (record r : CKRecord) {
         record = r
-        n =  r["shortName"] as? String ?? "err"
-        name = r["longName"] as? String ?? "error"
-        quantity = r["quantity"] as? Int ?? 0
-        price = Int(truncatingIfNeeded:r["cost"] as? Int ?? 0)
     }
 }
 

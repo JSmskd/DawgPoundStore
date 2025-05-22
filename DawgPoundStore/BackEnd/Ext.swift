@@ -18,7 +18,12 @@ extension CKRecord {
 }
 ///all of the classes/structs should have this
 protocol JSRecord:Identifiable, Hashable, Equatable {
-    var id:CKRecord.Reference { get }
+    var id:CKRecord.ID { get }
     var record:CKRecord { get set }
 }
 
+extension JSRecord {
+    var id:CKRecord.ID { get {
+        return record.recordID
+    } }
+}

@@ -24,63 +24,59 @@ struct IndividualItemView: View {
     @State var activeReloading = false
     func reloadSizes() {
         if !activeReloading { activeReloading = true
-//            print(styles)
-//            print(sizes)
+            //            print(styles)
+            //            print(sizes)
             sizes = [:]
-//            print(curentItem.record?.allKeys())
-            if curentItem.record != nil {
-                if curentItem.record!["blanks"] != nil {
-                    let refs = curentItem.record!["blanks"]! as? [CKRecord.Reference] ?? []
-                    //                    var innerLayer : [[CKRecord.Reference]] = []
-                    //                    var layer:[blank] = []
-//                    print("ref \(refs.count)")
-                    for ref in refs {
+            //            print(curentItem.record?.allKeys())
+            let refs = curentItem.record["blanks"]! as? [CKRecord.Reference] ?? []
+            //                    var innerLayer : [[CKRecord.Reference]] = []
+            //                    var layer:[blank] = []
+            //                    print("ref \(refs.count)")
+            for ref in refs {
 
-                        CKContainer.default().publicCloudDatabase.fetch(withRecordID: ref.recordID) { record, e in
-                            if record != nil {
-                                let r = record.unsafelyUnwrapped
-                                //                                print("we have an r")
-                                //                                r["sizes"]
-                                var ta : [blankSize] = []
-                                var i = blank(record: r)
-                                sizes[i] = []
-                                for ref in i.sizes {
-                                    CKContainer.default().publicCloudDatabase.fetch(withRecordID: ref.recordID) { record, e in
-                                        //                                            print(e)
-                                        if record != nil {
-                                            let r = record.unsafelyUnwrapped
-                                            //                                                print("we have an r2")
-                                            //                                                r["sizes"]
-                                            let g = blankSize(record: r)
-                                            //                                                print(g)
-                                            DispatchQueue.main.async {
-                                                if sizes[i] == nil {sizes[i] = []}
-                                                $sizes.wrappedValue[i]!.append(g)
-                                                for iie in sizes.keys {
-//                                                    print("\(iie.name):")
-                                                    for eei in sizes[iie]! {
-//                                                        print("    \(eei.name)")
-                                                    }
-                                                }
+                CKContainer.default().publicCloudDatabase.fetch(withRecordID: ref.recordID) { record, e in
+                    if record != nil {
+                        let r = record.unsafelyUnwrapped
+                        //                                print("we have an r")
+                        //                                r["sizes"]
+                        var ta : [blankSize] = []
+                        var i = blank(record: r)
+                        sizes[i] = []
+                        for ref in i.sizes {
+                            CKContainer.default().publicCloudDatabase.fetch(withRecordID: ref.recordID) { record, e in
+                                //                                            print(e)
+                                if record != nil {
+                                    let r = record.unsafelyUnwrapped
+                                    //                                                print("we have an r2")
+                                    //                                                r["sizes"]
+                                    let g = blankSize(record: r)
+                                    //                                                print(g)
+                                    DispatchQueue.main.async {
+                                        if sizes[i] == nil {sizes[i] = []}
+                                        $sizes.wrappedValue[i]!.append(g)
+                                        for iie in sizes.keys {
+                                            //                                                    print("\(iie.name):")
+                                            for eei in sizes[iie]! {
+                                                //                                                        print("    \(eei.name)")
                                             }
                                         }
                                     }
-                                }//refs
-//                                    DispatchQueue.main.async {
-//                                        styles.append(i)
-                                        //                                            sizes.wrappedValue[i]!.append(ta)
+                                }
+                            }//refs
+                            //                                    DispatchQueue.main.async {
+                            //                                        styles.append(i)
+                            //                                            sizes.wrappedValue[i]!.append(ta)
 
-//                                        print("styles now has \(styles.count)")
-//                                    }
+                            //                                        print("styles now has \(styles.count)")
+                            //                                    }
 
-                            }//pull
-                        }//for
+                        }//pull
+                    }//for
 
-                    }
                 }
 
             }
-//            print("done loading")
+            //            print("done loading")
             activeReloading = false
         }
         //        sizes = []
@@ -290,7 +286,8 @@ struct IndividualItemView: View {
                                         if sizes[styles[chosenStyle]] != nil {
                                             if chosenSize < sizes[styles[chosenStyle]]!.count {
                                                 let sty = styles[chosenStyle]
-                                                CartView(nyItem: orderItem.init(curentItem, Int64(exactly: 1)!, sty, sizes[sty]![chosenSize]))
+
+                                                CartView(nyItem: orderItem(curentItem, sty, sizes[sty]![chosenSize]))
                                             }
                                             
                                         }
@@ -304,7 +301,7 @@ struct IndividualItemView: View {
 
 //                                        orderItem(<#T##ref: Item##Item#>, <#T##qty: Int64##Int64#>, <#T##sty: blank##blank#>, <#T##selected: blankSize##blankSize#>)
 
-                                        model.order.append(orderItem.init(curentItem, Int64(exactly: 1)!, styles[chosenStyle], sizes[styles[chosenStyle]]![chosenSize]))
+                                        model.order.append(orderItem.init(curentItem, styles[chosenStyle], sizes[styles[chosenStyle]]![chosenSize]))
                                         navOpen = true
                                     }
                                 }
