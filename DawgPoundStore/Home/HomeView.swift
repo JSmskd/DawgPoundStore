@@ -84,7 +84,7 @@ struct HomeView: View {
                         .multilineTextAlignment(.leading)
                         .padding(.horizontal)
                     
-                    faq()
+                    faqs()
                     
                     email()
                     

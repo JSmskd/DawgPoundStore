@@ -58,10 +58,10 @@ class ItemViewModel: ObservableObject {
         for i in homeRecordNames{
             self.database.fetch(withQuery: .init(recordType: "itemCollection", predicate: .init(format: "___recordID == %@",CKRecord.ID(recordName: i)))) { [self] results in
                 //                                print(results)
-                results.map { (matchResults: [(CKRecord.ID, Result<CKRecord, any Error>)], queryCursor: CKQueryOperation.Cursor?) in
+                let _ = results.map { (matchResults: [(CKRecord.ID, Result<CKRecord, any Error>)], queryCursor: CKQueryOperation.Cursor?) in
                     if matchResults.count > 0{
                         let uperUse = matchResults.first!.1
-                        uperUse.map { r in
+                        let _ = uperUse.map { r in
                             DispatchQueue.main.async {
                                 //                                print()
                                 var use = true
@@ -76,8 +76,7 @@ class ItemViewModel: ObservableObject {
                                         touse = .init(r)
                                     }
                                     DispatchQueue.main.async{
-                                        //                                        print(touse.desc)
-                                        //                                        print("inners")
+
                                         self.homeColecs.append(touse)
                                     }
                                 }
@@ -89,9 +88,9 @@ class ItemViewModel: ObservableObject {
             //            print("go")
 
         }
-        let sideRecordNames: [String] = [
-            "8032DBAA-2AAD-4597-AFF7-E2D8F42D3CD5"
-        ]
+//        let sideRecordNames: [String] = [
+//            "8032DBAA-2AAD-4597-AFF7-E2D8F42D3CD5"
+//        ]
     }
     func addTask(taskItem: inout Item) {
 
@@ -136,10 +135,8 @@ class ItemViewModel: ObservableObject {
 
         let query = CKQuery(recordType: "account", predicate: predicate)
         self.database.fetch(withQuery: query) { [self] results in
-            results.map {
-                //                var name = ""
-                var newItems:[Item] = []
-                $0.matchResults.map{$0.1.map { record in
+            let _ = results.map {
+                $0.matchResults.map{let _ = $0.1.map { record in
 
                     //                    temp.email
                     //                    temp.accountStatus
@@ -158,32 +155,11 @@ class ItemViewModel: ObservableObject {
                             if r == nil {
                                 print("sad :(")
                             } else {
-                                //                                print(r!)
-                                //                                print(r!.allKeys())
-                                //                                print(r!["quantity"] as! Int64)
-                                //                                print(r!["style"] as! String)
-                                var q = r!["quantity"] as! Int64
-                                var s = r!["style"] as! String
-                                var ordItem:Item?
-                                //                                self.database.fetch(withRecordID: (r!["Item"] as! CKRecord.Reference).recordID) { itm,e in
-                                //                                    if r == nil {
-                                //                                        print("sad :(")
-                                //                                    } else {
-                                //                                        //
-                                //                                        print(itm?.recordType)
-                                //                                        print(itm!.allKeys())
-                                //                                        ordItem = .init(itm!["title"] as! String, itm!["description"] as! String, itm!["price"] as! Double, id: itm!.recordID, reference: r!["Item"] as! CKRecord.Reference)
-                                //                                    }
-                                //                                }
-                                //                                if ordItem == nil {
-                                //                                    print(":(")
-                                //                                } else {
-                                temp.whishes.append(r!["Item"] as! CKRecord.Reference)
+                                // get User Orders
                                 //                                }
                             }
 
                         }
-                        //                        fetch(withRecordID: iter.,completionHandler: @escaping (CKRecord?, (any Error)?) -> Void)
 
                     }
                 }
@@ -201,7 +177,7 @@ class ItemViewModel: ObservableObject {
         database.fetch(withQuery: query) { results in
             //            print("start of fetch")
 
-            results.map {//var newItems:[Item] = []
+            let _ = results.map {//var newItems:[Item] = []
                 $0.matchResults.map({$0.1.map { record in
                     //                print("<STARTRECORD")
                     //                print("------------------------")
