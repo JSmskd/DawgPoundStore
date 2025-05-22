@@ -24,7 +24,7 @@ class ItemViewModel: ObservableObject {
         }
         return ret
     }
-    var database = CKContainer.default().publicCloudDatabase
+    public let database = CKContainer.default().publicCloudDatabase
     var maintenanceFee : Int = 800
     //    @Published var items:[Item] = []
     /*@Published */var usr:user = user()
@@ -178,7 +178,7 @@ class ItemViewModel: ObservableObject {
             //            print("start of fetch")
 
             let _ = results.map {//var newItems:[Item] = []
-                $0.matchResults.map({$0.1.map { record in
+                let _ = $0.matchResults.map({let _ = $0.1.map { record in
                     //                print("<STARTRECORD")
                     //                print("------------------------")
                     //                print("------------------------")
@@ -208,8 +208,8 @@ class ItemViewModel: ObservableObject {
         database.fetch(withQuery: query) { results in
             //            print("start of fetch")
 
-            results.map {var newItems:[Item] = []
-                $0.matchResults.map({$0.1.map { record in
+            let _ = results.map {var newItems:[Item] = []
+                let _ = $0.matchResults.map({let _ = $0.1.map { record in
                     //                print("<STARTRECORD")
                     //                print("------------------------")
                     //                print("------------------------")

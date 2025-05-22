@@ -51,21 +51,20 @@ struct MenuView: View {
                             
                             menuItem(title: "ACCESSORIES", color: .white)
                             menuItem(title: "OTHER", color: .white)
-                            if model.JDebugMode {
-                                NavigationLink {
-                                    GODMODE()
-                                } label: {
-                                    Text("John's special secret Menu")
-                                        .font(.custom("Lexend-Bold", size: 22))
-                                        .foregroundColor(.black)
-                                        .frame(maxWidth: .infinity)
-                                        .padding()
-                                        .background(Color.white)
-                                }
-
-                            }
+                            //                            if model.JDebugMode {
+                            //                                NavigationLink {
+                            //                                    GODMODE()
+                            //                                } label: {
+                            //                                    Text("John's special secret Menu")
+                            //                                }
+                            //
+                            //                            }
                         }
-                        
+                        .font(.custom("Lexend-Bold", size: 22))
+                        .foregroundColor(.black)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.white)
                         Spacer()
                     }
                     .padding()

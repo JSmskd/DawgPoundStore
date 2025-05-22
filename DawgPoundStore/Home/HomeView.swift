@@ -25,7 +25,7 @@ struct HomeView: View {
                         
                         VStack(alignment: .leading) {
                             Text("The")
-                                .foregroundColor(.white ?? .black)
+                                .foregroundColor(.white)
                                 .offset(y: 80)
                                 .onTapGesture(count: 3) {
                                     model.JDebugMode = true

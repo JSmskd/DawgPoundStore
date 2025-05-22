@@ -39,8 +39,8 @@ struct IndividualItemView: View {
                         let r = record.unsafelyUnwrapped
                         //                                print("we have an r")
                         //                                r["sizes"]
-                        var ta : [blankSize] = []
-                        var i = blank(record: r)
+//                        var ta : [blankSize] = []
+                        let i = blank(record: r)
                         sizes[i] = []
                         for ref in i.sizes {
                             CKContainer.default().publicCloudDatabase.fetch(withRecordID: ref.recordID) { record, e in
@@ -54,11 +54,10 @@ struct IndividualItemView: View {
                                     DispatchQueue.main.async {
                                         if sizes[i] == nil {sizes[i] = []}
                                         $sizes.wrappedValue[i]!.append(g)
-                                        for iie in sizes.keys {
+                                        for _/*iie*/ in sizes.keys {
                                             //                                                    print("\(iie.name):")
-                                            for eei in sizes[iie]! {
-                                                //                                                        print("    \(eei.name)")
-                                            }
+//                                            for eei in sizes[iie]! {
+//                                            }
                                         }
                                     }
                                 }
@@ -281,18 +280,6 @@ struct IndividualItemView: View {
 
 
                     HStack(spacing: 10) {
-                                NavigationLink(isActive: $navOpen) {
-                                    if chosenStyle < styles.count {
-                                        if sizes[styles[chosenStyle]] != nil {
-                                            if chosenSize < sizes[styles[chosenStyle]]!.count {
-                                                let sty = styles[chosenStyle]
-
-                                                CartView(nyItem: orderItem(curentItem, sty, sizes[sty]![chosenSize]))
-                                            }
-                                            
-                                        }
-                                    }
-                                } label: {}
                         Button {
                             if chosenStyle < styles.count {
                                 if sizes[styles[chosenStyle]] != nil {
@@ -318,6 +305,18 @@ struct IndividualItemView: View {
                                 }
                             }
                         }
+                        .navigationDestination(isPresented: $navOpen, destination: {
+                            if chosenStyle < styles.count {
+                            if sizes[styles[chosenStyle]] != nil {
+                                if chosenSize < sizes[styles[chosenStyle]]!.count {
+                                    let sty = styles[chosenStyle]
+
+                                    CartView(nyItem: orderItem(curentItem, sty, sizes[sty]![chosenSize]))
+                                }
+
+                            }
+                        }
+                        })
 
                         Button(action: {
                             //                            isFavorite.toggle()

@@ -17,7 +17,7 @@ extension CKRecord {
     }
 }
 ///all of the classes/structs should have this
-protocol JSRecord:Identifiable, Hashable, Equatable {
+protocol JSRecord:Identifiable, Hashable, Equatable,CustomStringConvertible, CustomDebugStringConvertible {
     var id:CKRecord.ID { get }
     var record:CKRecord { get set }
 }
@@ -26,4 +26,9 @@ extension JSRecord {
     var id:CKRecord.ID { get {
         return record.recordID
     } }
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.id == rhs.id
+    }
+    var description: String {get {record.description}}
+    var debugDescription: String {get {id.recordName}}
 }

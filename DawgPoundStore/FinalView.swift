@@ -15,7 +15,7 @@ struct FinalView: View {
 
                 var total:[CKRecord.Reference] = []
                 for r in model.order {
-                    var o:CKRecord = .init(recordType: "orderItem")
+                    let o:CKRecord = .init(recordType: "orderItem")
                     o.setObject(CKRecord.Reference(record: r.item.record, action: .deleteSelf), forKey: "Item")//reference
                     o.setObject(CKRecord.Reference(record: r.blnk.record, action: .deleteSelf), forKey: "blankSize")//reference
                     o.setObject(r.quantity as __CKRecordObjCValue, forKey: "quantity")
@@ -26,10 +26,12 @@ struct FinalView: View {
                     total.append(x)
 
                     model.database.save(o, completionHandler: { r, e in
-                        print(e)
+                        if e != nil {
+                            print(e.debugDescription)
+                        }
                     })
                 }
-                var o:CKRecord = .init(recordType: "Order")
+                let o:CKRecord = .init(recordType: "Order")
 //                o.setObject(, forKey: "user")
 
                 o.setObject(total as __CKRecordObjCValue, forKey: "itemsOrdered")
@@ -37,7 +39,9 @@ struct FinalView: View {
                 o.setObject(model.usr.email as __CKRecordObjCValue, forKey: "pickupIdentifier")
                 DispatchQueue.main.schedule {
                     model.database.save(o, completionHandler: { r, e in
-                        print(e)
+                        if e != nil {
+                            print(e.debugDescription)
+                        }
                     })
                 }
             }
