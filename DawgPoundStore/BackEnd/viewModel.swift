@@ -13,7 +13,7 @@ import CloudKit
 class ItemViewModel: ObservableObject {
     var navPath: NavigationPath = NavigationPath.init()
     init() {
-        self.usr.email = "jsencion7366@stu.d214.org"
+//        self.usr.email = "jsencion7366@stu.d214.org"
     }
     func qryItm(recordID: CKRecord.ID) -> Item? {
         var ret = nil as Item?
