@@ -29,6 +29,7 @@ class ItemViewModel: ObservableObject {
     //    @Published var items:[Item] = []
     /*@Published */var usr:user = user()
     @Published var order:[orderItem] = []
+    @Published var loginpromt: Bool = true
     //    @Published var cart:[orderItem] = []
     //Gone until further notice    /*@Published */var orders:[orderItem] = []
     /*@Published */@AppStorage("username") var userCookie : String = "ADMIN"

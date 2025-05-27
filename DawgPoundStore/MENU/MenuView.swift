@@ -51,6 +51,8 @@ struct MenuView: View {
                             
                             menuItem(title: "ACCESSORIES", color: .white)
                             menuItem(title: "OTHER", color: .white)
+
+
                             //                            if model.JDebugMode {
                             //                                NavigationLink {
                             //                                    GODMODE()
@@ -59,6 +61,19 @@ struct MenuView: View {
                             //                                }
                             //
                             //                            }
+
+                            Button {
+                                model.loginpromt = true
+                            } label: {
+                                Text("Log Out")
+                                    .font(.custom("Lexend-Regular", size: 18))
+                                    .foregroundColor(.gray)
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 5)
+                                    .background(Color.white.opacity(0.8))
+                            }.disabled(false)
+//                            .transition(.opacity)
+//                            .animation(.easeInOut, value: expandedCategory)
                         }
                         .font(.custom("Lexend-Bold", size: 22))
                         .foregroundColor(.black)
@@ -128,10 +143,3 @@ struct MenuView: View {
         .animation(.easeInOut, value: expandedCategory)
     }
 }
-
-// Preview
-//struct MenuView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        MenuView(isMenuOpen: .constant(true))
-//    }
-//}
