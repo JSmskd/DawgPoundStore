@@ -222,6 +222,7 @@ func initDevice(_ r:CKRecord) {
     //make the local user sync to the remote user
     //get the COOKIE thingy
     @EnvironmentObject var model: ItemViewModel
+    
 }
 func Login(_ u:String, _ p:String, ace:Optional<(r:CKRecord?, e:Optional<any Error>)>=nil) -> (r:CKRecord?, e:Optional<any Error>) {
     var ac = ace ?? accExists(u, p)

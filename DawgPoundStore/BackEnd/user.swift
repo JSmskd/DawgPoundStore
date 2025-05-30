@@ -9,19 +9,47 @@ import SwiftData
 import SwiftUI
 import CloudKit
 
-struct user:Hashable {
-    var id:CKRecord.ID?
-    var whishes :[CKRecord.Reference]
-    var email:String
-    var accountStatus:String
-    var itemsInCart:[Item?]
-    init() {
-        id = nil
-        whishes = []
-        email = "jsenicon7366@stu.d214.org"
-        accountStatus = ""
-        itemsInCart = []
+struct user {
+    @AppStorage("uuid") public var id:String = ""
+    public var whishes :[CKRecord.ID] { get {
+        var output:[CKRecord.ID] = []
+        for i in wish.split(separator: ",") {
+            output.append(CKRecord.ID(recordName: id))
+        }
+        return output
     }
+    set {
+        var save:String = ""
+        for i in newValue {
+            save += i.recordName
+        }
+        wish = save
+    }}
+    @AppStorage("wish") private var wish:String = ""
+    @AppStorage("email") public var email:String = ""
+    @AppStorage("acStatus") public var accountStatus:String = ""
+    public var itemsInCart:[CKRecord.ID] {get {
+        var output:[CKRecord.ID] = []
+        for i in wish.split(separator: ",") {
+            output.append(CKRecord.ID(recordName: id))
+        }
+        return output
+    } set {
+        var save:String = ""
+        for i in newValue {
+            save += i.recordName
+        }
+        cart = save
+    }}
+    @AppStorage("cart") private var cart:String = ""
+    init() {}
+//    init() {
+//        id = ""
+//        whishes = []
+//        email = ""
+//        accountStatus = ""
+//        itemsInCart = []
+//    }
 }
 ///item collection
 class ic : Identifiable, Hashable{
