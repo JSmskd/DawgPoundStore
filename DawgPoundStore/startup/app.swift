@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import CloudKit
 @main
 struct YourApp: App {
     @StateObject var model = ItemViewModel()
@@ -38,7 +38,28 @@ struct ap: View {
                     }
             }
         } else {
-            account()
+            Text(model.usr.id)
+            account().disabled(model.usr.id != "").onAppear {
+                model.database.fetch(withQuery: CKQuery(recordType: "account", predicate: NSPredicate(format: "userCookie == '\(model.usr.id)'"))) { a in
+                    do {
+                        var b = try a.get().matchResults
+                        if b.count == 0 {
+                            throw CKError(.unknownItem)
+                        }
+                        var c = try b.first!.1.get()
+                        initDevice(_model, c)
+
+                    } catch {
+                        if (error as? CKError)?.code == CKError.unknownItem {
+                            DispatchQueue.main.async {
+                                model.usr.id = ""
+                            }
+                        }
+                        print(error)
+                    }
+
+                }
+            }
 
         }
     }

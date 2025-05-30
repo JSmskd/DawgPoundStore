@@ -32,7 +32,6 @@ class ItemViewModel: ObservableObject {
     @Published var loginpromt: Bool = true
     //    @Published var cart:[orderItem] = []
     //Gone until further notice    /*@Published */var orders:[orderItem] = []
-    /*@Published */@AppStorage("username") var userCookie : String = "ADMIN"
     /*@Published */var homeColecs:[ic] = []
     /*@Published */var timedown:Int = 0
     private var isRequesting = false
@@ -44,7 +43,7 @@ class ItemViewModel: ObservableObject {
         //            print("START OF REQUESTS")
         getTasks()
         //           int("tasks received")
-        getUser(userCookie)
+        getUser(self.usr.id)
         //           int("user received")
         getActiveCart()
         //            print("activeCart received")
@@ -127,7 +126,7 @@ class ItemViewModel: ObservableObject {
     func getUser(_ cookie:String = "") {
         //        print("usera")
         var temp = user()
-        temp.id = nil
+        temp.id = cookie
         temp.whishes = []
         temp.email = ""
         temp.accountStatus = ""
@@ -142,7 +141,7 @@ class ItemViewModel: ObservableObject {
                     //                    temp.email
                     //                    temp.accountStatus
                     //                    temp.accountStatus
-                    temp.id = record.recordID
+                    temp.id = record.recordID.recordName
 
                     for iter in record["cart"] as! [CKRecord.Reference] {
                         //                        database.
